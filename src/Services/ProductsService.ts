@@ -9,15 +9,15 @@ class ProductsService{
         // פונקציה לקבלת מוצר יחיד
     // }
 
-    async getAllProducts():Promise<IProductModel[]>{
-        let response = await axios.get<IProductModel[]>( appConfig.products );
-        return response.data;
-    }
+    // async getAllProducts():Promise<IProductModel[]>{
+    //     let response = await axios.get<IProductModel[]>( appConfig.products );
+    //     return response.data;
+    // }
 
-    async addProduct( product:IProductModel ):Promise<IProductModel>{
-        let response = await axios.post( appConfig.products, product );
-        return response.data;
-    }
+    // async addProduct( product:IProductModel ):Promise<IProductModel>{
+    //     let response = await axios.post( appConfig.products, product );
+    //     return response.data;
+    // }
     
     // 04
     // async updateProduct( product:IProductModel ):Promise<IProductModel>{

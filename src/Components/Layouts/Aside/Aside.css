@@ -1,0 +1,18 @@
+aside ul{
+    padding: 0;
+}
+
+aside ul li{
+    list-style: none;
+    padding-bottom: 10px ;
+}
+
+aside ul li a{
+    text-decoration: unset;
+    color: brown;
+}
+
+aside ul li a.active{
+    font-weight: bold;
+}
+

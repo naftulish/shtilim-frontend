@@ -1,6 +1,6 @@
-interface IClass{
+interface Group{
     id:string,
     teacher: string,
     name: string,
 }
-export default IClass;
+export default Group;

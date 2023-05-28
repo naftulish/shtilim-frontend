@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import IUsersModel from "../../Models/IUsersModel";
+import IUsersModel from "../../Models/IUserModel";
 import usersService from "../../Services/UsersService";
 
 function Users():JSX.Element{

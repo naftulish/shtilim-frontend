@@ -1,4 +1,4 @@
-interface IStudentsModel{
+interface IStudentModel{
     _id: string,
     firstName: string,
     lastName: string,
@@ -6,4 +6,4 @@ interface IStudentsModel{
     plans: string[],
     group: string
 }
-export default IStudentsModel;
+export default IStudentModel;

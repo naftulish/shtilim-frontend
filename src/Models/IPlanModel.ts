@@ -2,7 +2,7 @@ interface IPlanModel{
     _id: number,
     name: string,
     description: string,
-    tipe: Type,
+    type: Type,
     gradeDescription: string[],
     reportingTime :number,
     reportingType :ReportingType,

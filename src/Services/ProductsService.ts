@@ -4,27 +4,29 @@ import appConfig from "../Utils/Config";
 
 class ProductsService{
 
-    // 01
-    // async getOneProduct():Promise<IProductModel[]>{
-        // פונקציה לקבלת מוצר יחיד
-    // }
+    01\
 
-    // async getAllProducts():Promise<IProductModel[]>{
-    //     let response = await axios.get<IProductModel[]>( appConfig.products );
-    //     return response.data;
-    // }
-
-    // async addProduct( product:IProductModel ):Promise<IProductModel>{
-    //     let response = await axios.post( appConfig.products, product );
-    //     return response.data;
-    // }
     
-    // 04
-    // async updateProduct( product:IProductModel ):Promise<IProductModel>{
-        // הוספת פונקציה לעדכון
-    // }
+    async getOneProduct():Promise<IProductModel[]>{
+        פונקציה לקבלת מוצר יחיד
+    }
 
-    // הוספת פונקציה למחיקת מוצר
+    async getAllProducts():Promise<IProductModel[]>{
+        let response = await axios.get<IProductModel[]>( appConfig.products );
+        return response.data;
+    }
+
+    async addProduct( product:IProductModel ):Promise<IProductModel>{
+        let response = await axios.post( appConfig.products, product );
+        return response.data;
+    }
+    
+    04
+    async updateProduct( product:IProductModel ):Promise<IProductModel>{
+        הוספת פונקציה לעדכון
+    }
+
+    הוספת פונקציה למחיקת מוצר
 
 
 }

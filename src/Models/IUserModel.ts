@@ -1,8 +1,10 @@
 interface IUserModel{
     _id: string,
-    name: string,
-    age: number,
+    firstName: string,
+    lastName: string,
+    email: string,
     role: Role
+
 }
 export default IUserModel;
 

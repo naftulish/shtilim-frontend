@@ -4,8 +4,9 @@ import Home from "../Home/Home";
 //import Products from "../../Products/Products/Products";
 //import AddProducts from "../../Products/AddProduct/AddProducts";
 //import EditProduct from "../../Products/EditProduct/EditProduct";
-import Login from "../../Users/Login/Login";
-import Signup from "../../Users/Signup/Signup";
+import Login from "../../Settings/Users/Login/Login";
+import Signup from "../../Settings/Users/Signup/Signup";
+import AddUser from "../../Settings/Users/AddUser";
 
 function Main():JSX.Element {
 
@@ -17,6 +18,7 @@ function Main():JSX.Element {
                 {/* <Route path="/edit-product/:id" element={<EditProduct /> } /> */}
                 <Route path="/login" element={<Login /> } />
                 <Route path="/signup" element={<Signup /> } />
+                <Route path="/adduser" element={<AddUser /> } />
                 {/* <Route path="/users/:id" element={<Users /> } /> */}
             </Routes>
         </main>

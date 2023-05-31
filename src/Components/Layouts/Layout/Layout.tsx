@@ -20,6 +20,7 @@ import GroupsIcon from '@mui/icons-material/Groups';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import SettingsIcon from '@mui/icons-material/Settings';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import Main from "../Main/Main";
 
 const drawerWidth = 240;
 
@@ -160,12 +161,7 @@ export  function Layout() {
         </Drawer>
         <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
           <DrawerHeader />
-          <Typography paragraph>
-            
-          </Typography>
-          <Typography paragraph>
-           
-          </Typography>
+          <Main/>
         </Box>
       </Box>
     </div>

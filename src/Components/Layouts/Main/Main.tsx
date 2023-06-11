@@ -7,6 +7,8 @@ import Home from "../Home/Home";
 import Login from "../../Settings/Users/Login/Login";
 import Signup from "../../Settings/Users/Signup/Signup";
 import AddUser from "../../Settings/Users/AddUser";
+import Users from "../../Settings/Users/Users";
+import NewStudent from "../../Students/NewStudent/NewStudent";
 
 function Main():JSX.Element {
 
@@ -18,7 +20,9 @@ function Main():JSX.Element {
                 {/* <Route path="/edit-product/:id" element={<EditProduct /> } /> */}
                 <Route path="/login" element={<Login /> } />
                 <Route path="/signup" element={<Signup /> } />
+                <Route path="/users" element={<Users /> } />
                 <Route path="/adduser" element={<AddUser /> } />
+                <Route path="/addstudent" element={<NewStudent /> } />
                 {/* <Route path="/users/:id" element={<Users /> } /> */}
             </Routes>
         </main>

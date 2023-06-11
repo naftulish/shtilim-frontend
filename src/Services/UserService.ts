@@ -1,3 +1,4 @@
+// first version
 import axios from "axios";
 import appConfig from "../Utils/Config";
 import IUserModel from "../Models/IUserModel";
@@ -30,7 +31,7 @@ class UserServise {
         return response.data;
     }
 
-    async addUser(user: IUserModel): Promise<void> {
+    async addUser(user: IUserModel): Promise<boolean> {
        let response = await axios.post(appConfig.users, user);
        return response.data;
     }
@@ -38,3 +39,5 @@ class UserServise {
 }
 const userServise = new UserServise();
 export default userServise;
+
+

@@ -9,9 +9,8 @@ function Aside():JSX.Element {
             <nav>
                 <ul>
                     <li> <NavLink to='/'>Home</NavLink> </li>
-                    <li> <NavLink to='/products'>Products</NavLink> </li>
-                    <li> <NavLink to='/add-products'>Add Product</NavLink> </li>
                     <li> <NavLink to='/users'>Users</NavLink> </li>
+                    <li> <NavLink to='/adduser'>Add User</NavLink> </li>
                 </ul>
             </nav>
         </aside>

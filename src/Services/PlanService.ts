@@ -24,7 +24,7 @@ class PlanServise {
         }
 
     async addPlan(plan: IPlanModel): Promise<void> {
-       await axios.put<IPlanModel[]>(appConfig.plans, plan);
+       await axios.post<IPlanModel[]>(appConfig.plans, plan);
     }
 
 }

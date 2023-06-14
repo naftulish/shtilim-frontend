@@ -24,7 +24,7 @@ class UserServise {
         }
 
     async addUser(user: IUserModel): Promise<void> {
-       await axios.put<IUserModel[]>(appConfig.users, user);
+       await axios.post<IUserModel[]>(appConfig.users, user);
     }
 
 }

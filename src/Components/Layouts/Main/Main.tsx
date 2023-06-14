@@ -6,18 +6,25 @@ import Home from "../Home/Home";
 //import EditProduct from "../../Products/EditProduct/EditProduct";
 import Login from "../../Users/Login/Login";
 import Signup from "../../Users/Signup/Signup";
+import NewStudent from "../../Students/NewStudent/NewStudent";
+import AddPlan from "../../Plans/AddPlan";
 
 function Main():JSX.Element {
 
     return (
         <main>
             <Routes>
-                <Route path="/" element={<Home /> } />
+                {/* <Route path="/" element={<Home /> } /> */}
                 {/* <Route path="/add-products" element={<AddProducts /> } /> */}
                 {/* <Route path="/edit-product/:id" element={<EditProduct /> } /> */}
-                <Route path="/login" element={<Login /> } />
-                <Route path="/signup" element={<Signup /> } />
+                {/* <Route path="/login" element={<Login /> } /> */}
+                {/* <Route path="/signup" element={<Signup /> } /> */}
+                
+                <Route path="/students" element={<NewStudent /> } />
+                <Route path="/plans" element={<AddPlan /> } />
+
                 {/* <Route path="/users/:id" element={<Users /> } /> */}
+
             </Routes>
         </main>
     )

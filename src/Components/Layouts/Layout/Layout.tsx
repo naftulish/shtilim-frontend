@@ -140,7 +140,7 @@ export  function Layout() {
           </DrawerHeader>
           <Divider />
 
-         <Box sx={{ width: '20px', marginTop: '20px' }}>
+         <Box sx={{ width: '60px', marginTop: '20px' }}>
              <List>
                  {['תלמידים', 'תוכניות', 'הוספת תלמידים', 'הגדרות'].map((text, index) => (
                     <ListItem key={text} disablePadding>
@@ -161,7 +161,12 @@ export  function Layout() {
         </Drawer>
         <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
           <DrawerHeader />
-          <Main/>
+          <Typography paragraph>
+            
+          </Typography>
+          <Typography paragraph>
+           
+          </Typography>
         </Box>
       </Box>
     </div>
@@ -169,3 +174,39 @@ export  function Layout() {
 }
 
 export default Layout;
+
+
+
+{/* <Button
+type="submit"
+variant="contained"
+onClick={() => navigate('/adduser')}
+sx={{ mt: 3, mb: 2, flexShrink: 0, width: '11%' }}
+>
+הגדרות &nbsp;<GroupsIcon />
+</Button>
+
+<Button
+type="submit"
+variant="contained"
+onClick={() => navigate('/adduser')}
+sx={{ mt: 3, mb: 2, flexShrink: 0, width: '11%' }}
+>
+הוספת תלמידים &nbsp;<AssignmentIcon />
+</Button>
+<Button
+type="submit"
+variant="contained"
+onClick={() => navigate('/adduser')}
+sx={{ mt: 3, mb: 2, flexShrink: 0, width: '11%' }}
+>
+תוכניות &nbsp;<PersonAddIcon />
+</Button>
+<Button
+type="submit"
+variant="contained"
+onClick={() => navigate('/adduser')}
+sx={{ mt: 3, mb: 2, flexShrink: 0, width: '11%' }}
+>
+הגדרות &nbsp;<SettingsIcon />
+</Button> */}

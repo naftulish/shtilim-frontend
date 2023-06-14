@@ -25,7 +25,7 @@ class ActivityService {
         }
 
     async addActivity(activity: IActivityModel): Promise<void> {
-       await axios.put<IActivityModel[]>(appConfig.activities, activity);
+       await axios.post<IActivityModel[]>(appConfig.activities, activity);
     }
 
 }

@@ -24,7 +24,7 @@ class GroupServise {
         }
 
     async addGroup(group: IGroupModel): Promise<void> {
-       await axios.put<IGroupModel[]>(appConfig.groups, group);
+       await axios.post<IGroupModel[]>(appConfig.groups, group);
     }
 
 }

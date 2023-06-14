@@ -31,8 +31,12 @@ class UserServise {
     }
 
     async addUser(user: IUserModel): Promise<void> {
+<<<<<<< HEAD
+       await axios.post<IUserModel[]>(appConfig.users, user);
+=======
        let response = await axios.post(appConfig.users, user);
        return response.data;
+>>>>>>> a0012ee44d92ab2748a7321db169205af0989e5b
     }
 
 }

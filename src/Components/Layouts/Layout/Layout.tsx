@@ -161,12 +161,7 @@ export  function Layout() {
         </Drawer>
         <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
           <DrawerHeader />
-          <Typography paragraph>
-            
-          </Typography>
-          <Typography paragraph>
-           
-          </Typography>
+          <Main/>
         </Box>
       </Box>
     </div>

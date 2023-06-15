@@ -7,12 +7,8 @@
     "@emotion/styled": "^11.11.0",
     "@mui/icons-material": "^5.11.16",
     "@mui/lab": "^5.0.0-alpha.131",
-<<<<<<< HEAD
     "@mui/material": "^5.13.3",
-=======
-    "@mui/material": "^5.13.2",
-    "@mui/x-data-grid": "^6.5.0",
->>>>>>> a0012ee44d92ab2748a7321db169205af0989e5b
+    "@mui/x-data-grid": "^6.6.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",

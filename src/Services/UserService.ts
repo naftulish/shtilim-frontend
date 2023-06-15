@@ -1,3 +1,4 @@
+// first version
 import axios from "axios";
 import appConfig from "../Utils/Config";
 import IUserModel from "../Models/IUserModel";
@@ -10,8 +11,8 @@ class UserServise {
     }
 
     async getUser(_id: string): Promise<IUserModel> {
-        let response = await axios.get<IUserModel>(appConfig.users + _id);
-        return response.data;
+        let response = await axios.get<IUserModel[]>(appConfig.users + _id);
+        return response.data[0];
     }
 
     // The function getUserByEmail gets a user object from the backend API by their email address.
@@ -31,14 +32,13 @@ class UserServise {
     }
 
     async addUser(user: IUserModel): Promise<void> {
-<<<<<<< HEAD
-       await axios.post<IUserModel[]>(appConfig.users, user);
-=======
        let response = await axios.post(appConfig.users, user);
        return response.data;
->>>>>>> a0012ee44d92ab2748a7321db169205af0989e5b
+
     }
 
 }
 const userServise = new UserServise();
 export default userServise;
+
+

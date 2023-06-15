@@ -26,7 +26,7 @@ class StudentsServise {
         }
 
     async addStudent(student: IStudentModel): Promise<void> {
-       await axios.put<IStudentModel[]>(appConfig.students, student);
+       await axios.post<IStudentModel[]>(appConfig.students, student);
     }
 
 }

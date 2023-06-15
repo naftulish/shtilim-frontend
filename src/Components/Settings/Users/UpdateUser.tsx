@@ -442,22 +442,38 @@ import { green } from '@mui/material/colors';
 import { useForm } from 'react-hook-form';
 import IUserModel, { Role } from '../../../Models/IUserModel';
 import UserService from '../../../Services/UserService';
+import userServise from '../../../Services/UserService';
 
 const defaultTheme = createTheme();
 
 const UpdateUser = () => {
-  const { id } = useParams<{ id: string | undefined }>();
-  const [user, setUser] = useState<IUserModel | null>(null);
+  const { id } = useParams();
+  const [user, setUser] = useState<IUserModel>({
+    _id: '',
+    firstName: '',
+    lastName: '',
+    email: '',
+    active: false,
+    role: Role.user,
+  });
+
+  console.log(user);
+  
 
   const navigate = useNavigate();
-  const { register, handleSubmit, setValue } = useForm<IUserModel>({});
+  const { register, handleSubmit, setValue } = useForm<IUserModel>();
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
         if (id) {
           const fetchedUser = await UserService.getUser(id);
-          setUser(fetchedUser);
+          setUser( fetchedUser );
+          setValue('firstName', fetchedUser.firstName);
+          setValue('lastName', fetchedUser.lastName);
+          setValue('email', fetchedUser.email);
+          setValue('active', fetchedUser.active);
+          setValue('role', fetchedUser.role);
         }
       } catch (error) {
         console.log(error);
@@ -466,15 +482,9 @@ const UpdateUser = () => {
     };
 
     fetchUser();
-  }, [id]);
+  }, []);
 
-  if (user) {
-    setValue('firstName', user.firstName);
-    setValue('lastName', user.lastName);
-    setValue('email', user.email);
-    setValue('active', user.active);
-    setValue('role', user.role);
-  }
+  
 
   const handleFormSubmit = async (data: IUserModel) => {
     try {
@@ -487,7 +497,7 @@ const UpdateUser = () => {
         role: data.role,
       };
 
-      await UserService.updateUser(updatedUser);
+      await userServise.updateUser(user._id, updatedUser);
       alert('You have successfully updated the user!');
       navigate('/users');
     } catch (error) {

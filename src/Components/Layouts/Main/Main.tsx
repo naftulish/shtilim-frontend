@@ -9,6 +9,7 @@ import Signup from "../../Settings/Users/Signup/Signup";
 import AddUser from "../../Settings/Users/AddUser";
 import Users from "../../Settings/Users/Users";
 import NewStudent from "../../Students/NewStudent/NewStudent";
+import UpdateUser from "../../Settings/Users/UpdateUser";
 
 function Main():JSX.Element {
 
@@ -22,6 +23,7 @@ function Main():JSX.Element {
                 <Route path="/signup" element={<Signup /> } />
                 <Route path="/users" element={<Users /> } />
                 <Route path="/adduser" element={<AddUser /> } />
+                <Route path="/update-user/:id" element={<UpdateUser /> } />
                 <Route path="/addstudent" element={<NewStudent /> } />
                 {/* <Route path="/users/:id" element={<Users /> } /> */}
             </Routes>

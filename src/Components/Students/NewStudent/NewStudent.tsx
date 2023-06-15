@@ -45,7 +45,7 @@ const NewStudent = () => {
                 <Container component="main" maxWidth="xs">
                     <CssBaseline />
 
-                    {/* <div className="button" >
+                    <div className="button" >
                         <Button
                             type="submit"
                             fullWidth
@@ -53,7 +53,7 @@ const NewStudent = () => {
                             onClick={onButton}
                             sx={{ mt: 3, mb: 2 }}
                         >  חזרה לרשימת התלמידים </Button>
-                    </div> */}
+                    </div>
 
                     <Box
                         sx={{

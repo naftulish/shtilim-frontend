@@ -372,9 +372,10 @@
 
 
 import React, { useEffect, useState } from 'react';
-import { DataGrid, GridColDef, GridCellParams, GridRowParams } from '@mui/x-data-grid';
+import { DataGrid, GridColDef, GridCellParams } from '@mui/x-data-grid';
 import { Button, IconButton, Snackbar } from '@mui/material';
 import { Link } from 'react-router-dom';
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Dialog from '@mui/material/Dialog';
@@ -383,6 +384,8 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import IUserModel, { Role } from '../../../Models/IUserModel';
 import UserService from '../../../Services/UserService';
+import { useNavigate } from 'react-router-dom';
+
 
 const Users = () => {
 
@@ -391,6 +394,7 @@ const Users = () => {
   const [deleteConfirmationOpen, setDeleteConfirmationOpen] = useState(false);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -402,9 +406,6 @@ const Users = () => {
     fetchUsers();
   }, []);
 
-  const handleEditUser = (user: IUserModel) => {
-    setSelectedUser(user);
-  };
 
   const handleDeleteUser = (user: IUserModel) => {
     setSelectedUser(user);
@@ -463,7 +464,7 @@ const Users = () => {
       field: 'active',
       headerName: 'Status',
       width: 150,
-      valueGetter: (params: GridCellParams) => (params.row.active ? 'ACTIVE' : 'INACTIVE'),
+      valueGetter: (params: GridCellParams) => (params.row.active ? 'Active' : 'Inactive'),
     },
     {
       field: 'actions',
@@ -487,7 +488,19 @@ const Users = () => {
   
 
   return (
-    <div>
+    
+    <div style={{ height: 400, width: '100%' }}>
+        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '1rem' }}>
+          <h1 style={{ flex: 1 }}>רשימת משתמשים</h1>
+          <Button
+            type="submit"
+            variant="contained"
+            onClick={() => navigate('/adduser')}
+            sx={{ mt: 3, mb: 2, flexShrink: 0, width: '11%' }}
+          >
+            הוספת משתמש &nbsp;<PersonAddIcon />
+          </Button>
+        </div>  
       <DataGrid rows={users} columns={columns} />
       <Snackbar open={snackbarOpen} message={snackbarMessage} onClose={handleSnackbarClose} />
       <Dialog open={deleteConfirmationOpen} onClose={handleCancelDelete}>

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
-import authService from '../../../../Services/AuthService';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import authService from '../../../Services/AuthService';
 import Button from '@mui/material/Button';
 import Avatar from '@mui/material/Avatar';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -16,44 +16,28 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Copyright } from '@mui/icons-material';
-import userServise from '../../../../Services/UserService';
 
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
 
-const Signup = () => {
+const Login = () => {
   const navigate = useNavigate();
-
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  async function isUserInDatabase(email: string): Promise<boolean> {
-    // TODO return back after DB will work
-    // const user = await userServise.getUserByEmail(email);
-    // TODO change to "return user";
-    return false;
-  };
-  
-  const onSubmit = async (e: React.FormEvent) => {
+  const onLogin = (e: React.FormEvent) => {
     e.preventDefault();
-  
-    const isUserInDatabase2 = await isUserInDatabase(email);
-  
-    if (!isUserInDatabase2) {
-      alert("You are not permitted to Sign up");
-      return;
-    }
-
-    try {
-      const userCredential = await createUserWithEmailAndPassword(authService.auth, email, password);
-      const user = userCredential.user;
-      console.log(user);
-      navigate('/home');
-    } catch (error:any) {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      console.log(errorCode, errorMessage);
-    }
+    signInWithEmailAndPassword(authService.auth, email, password)
+      .then((userCredential) => {
+        // Signed in
+        const user = userCredential.user;
+        navigate('/home');
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log(errorCode, errorMessage);
+      });
   };
 
   return (
@@ -72,7 +56,7 @@ const Signup = () => {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign up
+            Login
           </Typography>
           <Box component="form" 
           // onSubmit={handleSubmit} 
@@ -101,16 +85,31 @@ const Signup = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
+            <FormControlLabel
+              control={<Checkbox value="remember" color="primary" />}
+              label="Remember me"
+            />
             <Button
               type="submit"
               fullWidth
               variant="contained"
-              onClick={onSubmit}
+              onClick={onLogin}
               sx={{ mt: 3, mb: 2 }}
             >
-              Sign In
+              Login
             </Button>
-            
+            <Grid container>
+              <Grid item xs>
+                <Link href="#" variant="body2">
+                  Forgot password?
+                </Link>
+              </Grid>
+              <Grid item>
+                <NavLink to="/signup">
+                  {"Don't have an account? Sign Up"}
+                </NavLink>
+              </Grid>
+            </Grid>
           </Box>
         </Box>
         {/* <Copyright sx={{ mt: 8, mb: 4 }} /> */}
@@ -119,8 +118,4 @@ const Signup = () => {
   );
 };
 
-export default Signup;
-
-
-
-
+export default Login;

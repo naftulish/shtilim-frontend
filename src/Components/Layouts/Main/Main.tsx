@@ -9,7 +9,7 @@ import { Login } from "@mui/icons-material";
 import Students from "../../Students/Students";
 import UpdateStudent from "../../Students/UpdateStudent";
 import StudentPlans from "../../Students/StudentPlans";
-import Plans from "../../Plans/Plans";
+import Plans from "../../Plans/Plans/Plans";
 
 
 function Main():JSX.Element {

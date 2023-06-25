@@ -21,11 +21,17 @@ class PlanServise {
     async updatePlan(_id: string ,plan: IPlanModel): Promise<IPlanModel> {
         let response = await axios.put<IPlanModel>(appConfig.plans + _id, plan);
         return response.data;
-        }
+    }
 
     async addPlan(plan: IPlanModel): Promise<void> {
        await axios.post<IPlanModel[]>(appConfig.plans, plan);
     }
+
+    // async getPlansByStudentId(studentId: string): Promise<IPlanModel[]> {
+    //     const response = await axios.get<IPlanModel[]>(`${appConfig.plans}?studentId=${studentId}`);
+    //     return response.data;
+    //   }
+      
 
 }
 const planServise = new PlanServise();

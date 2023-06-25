@@ -1,12 +1,17 @@
-interface IPlanModel{
-    _id: number,
+interface IPlanModel {
+    _id: string,
     name: string,
     description: string,
-    type: Type,
-    gradeDescription: string[],
-    reportingTime :number,
-    reportingType :ReportingType,
-    WhatIsSuccess :number
+    reportingTime: number,
+    reportingType: ReportingType,
+    WhatIsSuccess: number,
+    quiz: QuizModel[]
+}
+
+export class QuizModel {
+    title: string = "";
+    type: Type = Type.booleany;
+    answer: string[] = [];
 }
 export default IPlanModel;
 
@@ -23,33 +28,8 @@ export enum ReportingType {
     // hours  = "HOURLY",
     // minutes = "MINUTELY"
 
-        days = "יומי",
-    hours  = "שעתי",
+    days = "יומי",
+    hours = "שעתי",
     minutes = "דקתי"
 
 }
-
-
-
-
-// enum Type {
-//     booleany = "BOOLEAN",
-//     scalar = "SCALAR",
-// }
-
-// enum ReportingType {
-//     days = "DAILY",
-//     hours  = "HOURLY",
-//     minutes = "MINUTELY"
-// }
-
-// // 1. interface
-// export interface IPlansModel extends mongoose.Document{
-//     name: string,
-//     description: string,
-//     type: Type,
-//     gradeDescription: string[],
-//     reportingTime :number,
-//     reportingType :ReportingType,
-//     WhatIsSuccess :number
-// }

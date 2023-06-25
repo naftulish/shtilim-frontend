@@ -1,7 +1,7 @@
 // first version
 import axios from "axios";
 import appConfig from "../Utils/Config";
-import IUserModel from "../Models/IUserModel";
+import IUserModel, { Role } from "../Models/IUserModel";
 
 class UserServise {
 
@@ -21,6 +21,11 @@ class UserServise {
         return response.data;
     }
     
+
+    async getUserByRole(role: Role): Promise<IUserModel[]> {
+        let response = await axios.get<IUserModel[]>(appConfig.users + "?role=" + role);
+        return response.data;
+    }
 
     async deleteUser(_id: string): Promise<void> {
         await axios.delete<void>(appConfig.users + _id);

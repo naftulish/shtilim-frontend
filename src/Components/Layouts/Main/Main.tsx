@@ -10,6 +10,9 @@ import Students from "../../Students/Students";
 import UpdateStudent from "../../Students/UpdateStudent";
 import StudentPlans from "../../Students/StudentPlans";
 import Plans from "../../Plans/Plans";
+import Groups from "../../Groups/Groups";
+import AddGroup from "../../Groups/AddGroup";
+import UpdateGroup from "../../Groups/UpdateGroup";
 
 
 function Main():JSX.Element {
@@ -20,14 +23,20 @@ function Main():JSX.Element {
                 <Route path="/login" element={<Login /> } />
                 <Route path="/signup" element={<Signup /> } />
                 <Route path="/users" element={<Users /> } />
-                
                 <Route path="/adduser" element={<AddUser /> } />
                 <Route path="/update-user/:id" element={<UpdateUser /> } />
+
                 <Route path="/students" element={<Students /> } />
                 <Route path="/update-student/:id" element={<UpdateStudent /> } />
                 <Route path="/addstudent" element={<AddStudent /> } />
                 <Route path="/student-plans/:id" element={<StudentPlans />} />
+
                 <Route path="/plans" element={<Plans /> } />
+
+                <Route path="/groups" element={<Groups /> } />
+                <Route path="/addgroup" element={<AddGroup /> } />
+                <Route path="/update-group/:id" element={<UpdateGroup /> } />
+                
             </Routes>
         </main>
     )

@@ -103,7 +103,8 @@ import { TextField, Button, Box, Container, Typography, Avatar, CssBaseline } fr
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import IUserModel, { Role } from '../../../Models/IUserModel';
 import userServise from '../../../Services/UserService';
-import { ArrowBack, PersonAddAlt } from '@mui/icons-material';
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import { ArrowBack } from '@mui/icons-material';
 import { green } from '@mui/material/colors';
 import { useNavigate } from 'react-router-dom';
 
@@ -153,8 +154,8 @@ const AddUser = () => {
       <ThemeProvider theme={defaultTheme}>
         <Container component="main" maxWidth="xs">
           <Box sx={{ marginTop: 8, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            <Avatar sx={{ m: 3, bgcolor: green[500], width: 88, height: 88 }}>
-              <PersonAddAlt color="action" fontSize="large" />
+            <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+              <PersonAddIcon />
             </Avatar>
             <Typography component="h1" variant="h5">
               Add User

@@ -140,14 +140,30 @@ const UpdateStudent = () => {
                   shrink: true,
                 }}
               />
-              <TextField
+
+              <FormControl margin="normal" required fullWidth>
+                <InputLabel id="gender-label">מין</InputLabel>
+                <Select
+                  labelId="gender-label"
+                  id="gender"
+                  {...register('gender')}
+                  defaultValue={student.gender}
+                  label="מין"
+                >
+                  <MenuItem value="זכר">זכר</MenuItem>
+                  <MenuItem value="נקבה">נקבה</MenuItem>
+                </Select>
+              </FormControl>
+
+              {/* <TextField
                 margin="normal"
                 fullWidth
                 id="gender"
                 label="Gender"
                 defaultValue={student.gender}
                 {...register('gender')}
-              />
+              /> */}
+              
               <TextField
                 margin="normal"
                 fullWidth

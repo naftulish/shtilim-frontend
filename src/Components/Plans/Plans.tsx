@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { DataGrid, GridColDef, GridCellParams } from '@mui/x-data-grid';
 import { Button, IconButton, Snackbar } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Dialog from '@mui/material/Dialog';
@@ -17,12 +17,17 @@ const Plans = () => {
   const [deleteConfirmationOpen, setDeleteConfirmationOpen] = useState(false);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchPlans = async () => {
       try {
         const fetchedPlans = await PlanService.getAllPlans();
-        setPlans(fetchedPlans);
+        const plansWithIds = fetchedPlans.map((plan, index) => ({
+          ...plan,
+          id: plan._id,
+        }));
+        setPlans(plansWithIds);
       } catch (error: any) {
         // Handle the error appropriately (e.g., show an error message)
         console.error('Failed to fetch plans:', error);
@@ -90,7 +95,7 @@ const Plans = () => {
               <EditIcon />
             </IconButton>
             <IconButton onClick={() => handleDeletePlan(params.row as IPlanModel)}>
-              <DeleteIcon />
+              <DeleteIcon style={{ color: 'red' }} />
             </IconButton>
           </div>
         ),
@@ -105,8 +110,6 @@ const Plans = () => {
         rows={plans}
         columns={columns}
         autoHeight
-        checkboxSelection
-        disableRowSelectionOnClick
       />
       <Dialog open={deleteConfirmationOpen} onClose={handleCancelDelete}>
         <DialogTitle>Delete Plan</DialogTitle>

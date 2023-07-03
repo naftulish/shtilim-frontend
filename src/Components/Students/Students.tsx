@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { DataGrid, GridColDef, GridCellParams } from '@mui/x-data-grid';
 import { Button, IconButton, Snackbar } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
@@ -14,12 +15,14 @@ import IStudentModel from '../../Models/IStudentModel';
 
 
 
+
 const Students = () => {
   const [students, setStudents] = useState<IStudentModel[]>([]);
   const [selectedStudent, setSelectedStudent] = useState<IStudentModel | null>(null);
   const [deleteConfirmationOpen, setDeleteConfirmationOpen] = useState(false);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchStudents = async () => {
@@ -27,7 +30,7 @@ const Students = () => {
           const fetchedStudents = await StudentService.getAllStudents();
           const studentsWithIds = fetchedStudents.map((student, index) => ({
             ...student,
-            id: index + 1,
+            id: student._id,
           }));
           setStudents(studentsWithIds);
         } catch (error: any) {
@@ -135,7 +138,19 @@ const Students = () => {
   ];
 
   return (
-    <div>
+    <div style={{ height: 400, width: '100%' }}>
+        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '1rem' }}>
+          <h1 style={{ flex: 1 }}>רשימת תלמידים</h1>
+          <Button
+            type="submit"
+            variant="contained"
+            onClick={() => navigate('/addstudent')}
+            sx={{ mt: 3, mb: 2, flexShrink: 0, width: '11%' }}
+          >
+            הוספת תלמיד &nbsp;<PersonAddAltIcon />
+          </Button>
+        </div>  
+      
       <DataGrid rows={students} columns={columns} />
       <Snackbar open={snackbarOpen} message={snackbarMessage} onClose={handleSnackbarClose} />
       <Dialog open={deleteConfirmationOpen} onClose={handleCancelDelete}>

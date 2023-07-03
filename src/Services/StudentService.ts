@@ -44,8 +44,8 @@ class StudentService {
   }
 
   async getStudent(_id: string): Promise<IStudentModel> {
-    const response = await axios.get<IStudentModel>(appConfig.students + _id);
-    return response.data;
+    const response = await axios.get<IStudentModel[]>(appConfig.students + _id);
+    return response.data[0];
   }
 
   async deleteStudent(_id: string): Promise<void> {

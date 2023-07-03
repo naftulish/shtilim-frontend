@@ -1,5 +1,5 @@
 interface Group{
-    id:string,
+    _id:string,
     teacher: string,
     name: string,
 }

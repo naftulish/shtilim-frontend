@@ -395,12 +395,19 @@ const Users = () => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
+  const [rows, setRows] = useState([]);
 
   useEffect(() => {
     const fetchUsers = async () => {
-      const fetchedUsers = await UserService.getAllUsers();
-      const usersWithIds = fetchedUsers.map((user, index) => ({ ...user, id: index + 1 }));
-      setUsers(usersWithIds);
+      try{
+        const fetchedUsers = await UserService.getAllUsers();
+        const usersWithIds = fetchedUsers.map((user, index) => ({ ...user, id: index + 1 }));
+        setUsers(usersWithIds);
+      } catch (error: any) {
+        // Handle the error appropriately (e.g., show an error message)
+        console.error('Failed to fetch users:', error);
+      }
     };
 
     fetchUsers();

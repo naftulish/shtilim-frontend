@@ -28,10 +28,11 @@ const Signup = () => {
   const [password, setPassword] = useState('');
 
   async function isUserInDatabase(email: string): Promise<boolean> {
-    // TODO return back after DB will work
+    
     // const user = await userServise.getUserByEmail(email);
     // TODO change to "return user";
     return false;
+    // return user;
   };
   
   const onSubmit = async (e: React.FormEvent) => {

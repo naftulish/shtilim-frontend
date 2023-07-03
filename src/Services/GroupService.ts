@@ -10,8 +10,8 @@ class GroupServise {
     }
 
     async getGroup(_id: string): Promise<IGroupModel> {
-        let response = await axios.get<IGroupModel>(appConfig.groups + _id);
-        return response.data;
+        let response = await axios.get<IGroupModel[]>(appConfig.groups + _id);
+        return response.data[0];
     }
 
     async deleteGroup(_id: string): Promise<void> {

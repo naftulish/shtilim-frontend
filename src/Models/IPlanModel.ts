@@ -7,13 +7,13 @@ interface IPlanModel {
     WhatIsSuccess: number,
     quiz: QuizModel[]
 }
+export default IPlanModel;
 
 export class QuizModel {
     title: string = "";
     type: Type = Type.booleany;
     answer: string[] = [];
 }
-export default IPlanModel;
 
 export enum Type {
     // booleany = "BOOLEAN",
@@ -24,9 +24,6 @@ export enum Type {
 }
 
 export enum ReportingType {
-    // days = "DAILY",
-    // hours  = "HOURLY",
-    // minutes = "MINUTELY"
 
     days = "יומי",
     hours = "שעתי",

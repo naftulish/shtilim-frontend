@@ -8,8 +8,8 @@ import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
-import PlanService from '../../Services/PlanService';
-import IPlanModel, { QuizModel, ReportingType, Type } from '../../Models/IPlanModel';
+import PlanService from '../../../Services/PlanService';
+import IPlanModel, { QuizModel, ReportingType, Type } from '../../../Models/IPlanModel';
 
 const Plans = () => {
   const [plans, setPlans] = useState<IPlanModel[]>([]);

@@ -18,7 +18,8 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import { FormControlLabel, Grid, Radio, RadioGroup, ToggleButton, ToggleButtonGroup } from '@mui/material';
 import { title } from 'process';
-import IPlanModel, { QuizModel, Type } from '../../../Models/IPlanModel';
+import IPlanModel, { QuizModel, ReportingType, Type } from '../../../Models/IPlanModel';
+import planServise from '../../../Services/PlanService';
 
 const defaultTheme = createTheme();
 
@@ -36,12 +37,15 @@ const AddPlan = () => {
 
   useEffect(() => {
     setSelectedOption('option1');
-  }, []);
+    }, []);
+
 
   const [quizes, setQuizes] = useState<QuizModel[]>([]);
 
   const addQuiz = () => {
     const newQuiz = new QuizModel();
+    newQuiz.answer = ["נכשל", "הצליח"];
+
     const updatedQuizes = [...quizes, newQuiz];
     setQuizes(updatedQuizes);
     setValue('quiz', updatedQuizes);
@@ -85,7 +89,7 @@ const AddPlan = () => {
       .then(() => {
         alert('תוכנית נשמרה בהצלחה');
       })
-      .catc((error: { message: string; }) => {
+      .catch((error: { message: string; }) => {
         // console.log(plan)
         alert('שגיאה בשמירת התוכנית: ' + error.message);
       });
@@ -137,13 +141,22 @@ const AddPlan = () => {
                 required
                 fullWidth
               />
+
               <TextField
-                label="מהי הצלחה"
-                {...register("WhatIsSuccess")}
+                select
+                label="סוג דיווח"
+                {...register("reportingType")}
                 margin="normal"
                 required
                 fullWidth
-              />
+              >
+                {Object.values(ReportingType).map((type) => (
+                  <MenuItem key={type} value={type}>
+                    {type}
+                  </MenuItem>
+                ))}
+              </TextField>
+
 
               {quizes.map((quiz, index) => (
                 <Box key={index} sx={{ border: '1px solid #ddd', borderRadius: '4px', padding: '16px', marginTop: '16px' }}>

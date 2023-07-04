@@ -6,8 +6,7 @@ class AppConfig {
   public groups: string = this.apiUrl + "groups/";
   public plans: string = this.apiUrl + "plans/";
   public activities: string = this.apiUrl + "activities/";
-
-
+  // public Add: string = this.apiUrl + "plans/";
 }
 
 const appConfig = new AppConfig();

@@ -4,7 +4,6 @@ interface IPlanModel {
     description: string,
     reportingTime: number,
     reportingType: ReportingType,
-    WhatIsSuccess: number,
     quiz: QuizModel[]
 }
 export default IPlanModel;

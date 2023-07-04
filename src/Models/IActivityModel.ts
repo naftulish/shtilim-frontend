@@ -1,8 +1,8 @@
 interface IActivityModel{
     _id:string,
     description: string,
-    plan: string,
-    student: string,
+    planId: string,
+    studentId: string,
     grade: number,
 }
 export default IActivityModel;

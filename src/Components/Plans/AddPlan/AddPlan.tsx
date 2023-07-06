@@ -59,6 +59,8 @@ const AddPlan = () => {
 
   const addQuiz = () => {
     const newQuiz = new QuizModel();
+    newQuiz.answer = ["נכשל", "הצליח"];
+
     const updatedQuizes = [...quizes, newQuiz];
     setQuizes(updatedQuizes);
     setValue('quiz', updatedQuizes);

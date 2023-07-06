@@ -1,31 +1,3 @@
-//         <TextField
-//           margin="normal"
-//           fullWidth
-//           id="active"
-//           label="Status"
-//           value={user.active ? 'Active' : 'Inactive'}
-//           disabled
-//           {...register('active')}
-//         />
-//               <Box sx={{ display: 'flex', justifyContent: 'space-between', marginTop: 2 }}>
-//                 <Button type="submit" variant="contained" color="primary">
-//                   Update
-//                 </Button>
-//                 <Button variant="contained" onClick={handleGoBack}>
-//                   Cancel
-//                 </Button>
-//               </Box>
-//             </form>
-//           )}
-//         </Box>
-//       </Container>
-//     </ThemeProvider>
-//   );
-// };
-
-// export default UpdateUser;
-
-
 
 
 // import React, { useState, useEffect } from 'react';
@@ -47,9 +19,11 @@
 // import { Edit as EditIcon } from '@mui/icons-material';
 // import { green } from '@mui/material/colors';
 // import { useForm } from 'react-hook-form';
-// import IUserModel, { Role } from '../../Models/IUserModel';
-// import UserService from '../../Services/UserService';
-// import userServise from '../../Services/UserService';
+// import IUserModel, { Role } from '../../../Models/IUserModel';
+// import UserService from '../../../Services/UserService';
+// import userServise from '../../../Services/UserService';
+
+
 
 // const defaultTheme = createTheme();
 
@@ -64,9 +38,6 @@
 //     role: Role.user,
 //   });
 
-//   console.log(user);
-  
-
 //   const navigate = useNavigate();
 //   const { register, handleSubmit, setValue } = useForm<IUserModel>();
 
@@ -74,8 +45,8 @@
 //     const fetchUser = async () => {
 //       try {
 //         if (id) {
-//           const fetchedUser = await UserService.getUser(id);
-//           setUser( fetchedUser );
+//           const fetchedUser = await UserService.getUserById(id);
+//           setUser(fetchedUser);
 //           setValue('firstName', fetchedUser.firstName);
 //           setValue('lastName', fetchedUser.lastName);
 //           setValue('email', fetchedUser.email);
@@ -91,12 +62,10 @@
 //     fetchUser();
 //   }, []);
 
-  
-
 //   const handleFormSubmit = async (data: IUserModel) => {
 //     try {
 //       const updatedUser = {
-//         _id: user!._id,
+//         _id: user._id,
 //         firstName: data.firstName,
 //         lastName: data.lastName,
 //         email: data.email,
@@ -105,12 +74,17 @@
 //       };
 
 //       await userServise.updateUser(user._id, updatedUser);
-//       alert('You have successfully updated the user!');
-//       navigate('/users');
-//     } catch (error) {
-//       console.log(error);
+//     alert('You have successfully updated the user!');
+//     navigate('/users');
+//   } catch (error) {
+//     if ((error as any).response) {
+//       console.log('Error response:', (error as any).response.data);
+//       console.log('Error status code:', (error as any).response.status);
+//     } else {
+//       console.log('Error:', (error as any).message);
 //     }
-//   };
+//   }
+// };
 
 //   const handleGoBack = () => {
 //     navigate('/users');
@@ -201,6 +175,8 @@
 
 // export default UpdateUser;
 
+
+
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
@@ -219,12 +195,10 @@ import {
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Edit as EditIcon } from '@mui/icons-material';
 import { green } from '@mui/material/colors';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import IUserModel, { Role } from '../../../Models/IUserModel';
 import UserService from '../../../Services/UserService';
 import userServise from '../../../Services/UserService';
-
-
 
 const defaultTheme = createTheme();
 
@@ -246,7 +220,7 @@ const UpdateUser = () => {
     const fetchUser = async () => {
       try {
         if (id) {
-          const fetchedUser = await UserService.getUser(id);
+          const fetchedUser = await UserService.getUserById(id);
           setUser(fetchedUser);
           setValue('firstName', fetchedUser.firstName);
           setValue('lastName', fetchedUser.lastName);
@@ -261,7 +235,7 @@ const UpdateUser = () => {
     };
 
     fetchUser();
-  }, []);
+  }, [id, setValue]);
 
   const handleFormSubmit = async (data: IUserModel) => {
     try {
@@ -277,15 +251,15 @@ const UpdateUser = () => {
       await userServise.updateUser(user._id, updatedUser);
     alert('You have successfully updated the user!');
     navigate('/users');
-  } catch (error) {
-    if ((error as any).response) {
-      console.log('Error response:', (error as any).response.data);
-      console.log('Error status code:', (error as any).response.status);
+  } catch (error: any) {
+    if (error.response) {
+      console.log('Error response:', error.response.data);
+      console.log('Error status code:', error.response.status);
     } else {
-      console.log('Error:', (error as any).message);
+      console.log('Error:', error.message);
     }
-  }
-};
+    }
+  };
 
   const handleGoBack = () => {
     navigate('/users');
@@ -348,6 +322,24 @@ const UpdateUser = () => {
                   <MenuItem value="Inactive">Inactive</MenuItem>
                 </Select>
               </FormControl>
+              {/* <Controller
+                name="active"
+                control={control}
+                defaultValue={user.active ? 'Active' : 'Inactive'}
+                render={({ field }) => (
+                  <FormControl fullWidth margin="normal">
+                    <InputLabel id="active-label">Status</InputLabel>
+                    <Select
+                      id="active"
+                      labelId="active-label"
+                      {...field}
+                    >
+                      <MenuItem value="Active">Active</MenuItem>
+                      <MenuItem value="Inactive">Inactive</MenuItem>
+                    </Select>
+                  </FormControl>
+                )}
+              /> */}
               <FormControl fullWidth margin="normal">
                 <InputLabel id="role-label">Role</InputLabel>
                 <Select
@@ -375,6 +367,3 @@ const UpdateUser = () => {
 };
 
 export default UpdateUser;
-
-
-

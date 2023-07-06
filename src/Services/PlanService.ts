@@ -1,6 +1,7 @@
 import axios from "axios";
 import appConfig from "../Utils/Config";
-import IPlanModel from "../Models/IPlanModel";
+import { IPlanModel } from "../Models/IPlanModel";
+
 
 class PlanServise {
 
@@ -10,7 +11,7 @@ class PlanServise {
     }
 
     async getPlan(_id: string): Promise<IPlanModel> {
-        let response = await axios.get<IPlanModel>(appConfig.plans + _id);
+        let response = await axios.get<IPlanModel>(appConfig.plans + "plan-by-id/" + _id);
         return response.data;
     }
 

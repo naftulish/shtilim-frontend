@@ -128,7 +128,7 @@ const AddPlan = () => {
               alignItems: 'center',
             }}
           >
-            <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+            git <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
               <AssignmentIcon />
             </Avatar>
             <Typography component="h1" variant="h5">
@@ -184,15 +184,20 @@ const AddPlan = () => {
                 <MenuItem value={ReportingType.days}>יומי</MenuItem>
                 <MenuItem value={ReportingType.hours}>שעתי</MenuItem>
                 <MenuItem value={ReportingType.minutes}>דקתי</MenuItem>
+                {/* {Object.values(ReportingType).map((type) => (
+                  <MenuItem key={type} value={type}>
+                    {type}
+                  </MenuItem>
+                ))} */}
               </Select>
-            </FormControl>
-            <TextField
-              label="זמן דיווח"
-              {...register('reportingTime')}
-              margin="normal"
-              required
-              fullWidth
-            />
+              </FormControl>
+              <TextField
+                label="זמן דיווח"
+                {...register('reportingTime')}
+                margin="normal"
+                required
+                fullWidth
+              />
               
               
               {/* <TextField

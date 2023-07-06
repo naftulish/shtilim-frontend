@@ -194,11 +194,12 @@ import IStudentModel from '../../Models/IStudentModel';
 import StudentService from '../../Services/StudentService';
 import PlanService from '../../Services/PlanService';
 import GroupService from '../../Services/GroupService';
-import IPlanModel from '../../Models/IPlanModel';
+
 import IGroupModel from '../../Models/IGroupModel';
 
 
 import { useNavigate } from 'react-router-dom';
+import { IPlanModel } from '../../Models/IPlanModel';
 
 const defaultTheme = createTheme();
 
@@ -290,6 +291,7 @@ const AddStudent = () => {
 
               <TextField
                     margin="normal"
+                    required
                     fullWidth
                     id="dateOfBirth"
                     label="תאריך לידה"
@@ -315,7 +317,7 @@ const AddStudent = () => {
                 </Select>
               </FormControl>
 
-              <FormControl margin="normal" required fullWidth>
+              <FormControl margin="normal" fullWidth>
                 <InputLabel id="plans-label">תוכנית</InputLabel>
                 <Select
                 id="plans"
@@ -372,3 +374,5 @@ const AddStudent = () => {
 };
 
 export default AddStudent;
+
+

@@ -8,11 +8,13 @@ import UpdateUser from "../../Settings/Users/UpdateUser";
 import { Login } from "@mui/icons-material";
 import Students from "../../Students/Students";
 import UpdateStudent from "../../Students/UpdateStudent";
-import StudentPlans from "../../Students/StudentPlans";
-import Plans from "../../Plans/Plans";
+import StudentPlans from "../../Activities/StudentPlans";
+
 import Groups from "../../Groups/Groups";
 import AddGroup from "../../Groups/AddGroup";
 import UpdateGroup from "../../Groups/UpdateGroup";
+import Plans from "../../Plans/Plans/Plans";
+import AddPlan from "../../Plans/AddPlan/AddPlan";
 
 
 function Main():JSX.Element {
@@ -32,6 +34,8 @@ function Main():JSX.Element {
                 <Route path="/student-plans/:id" element={<StudentPlans />} />
 
                 <Route path="/plans" element={<Plans /> } />
+                <Route path="/addplan" element={<AddPlan /> } />
+
 
                 <Route path="/groups" element={<Groups /> } />
                 <Route path="/addgroup" element={<AddGroup /> } />

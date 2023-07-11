@@ -6,7 +6,7 @@ interface IStudentModel{
     dateOfBirth: Date,
     gender: string,
     address: string,
-    readonly createdIn?: Date;
+    // readonly createdIn?: Date;
     // createdIn: Date // not in frontend
     plans: string[],
     group: string

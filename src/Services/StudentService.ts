@@ -52,8 +52,8 @@ class StudentService {
     await axios.delete<void>(appConfig.students + _id);
   }
 
-  async updateStudent(_id: string, student: IStudentModel): Promise<IStudentModel> {
-    const response = await axios.put<IStudentModel>(appConfig.students + _id, student);
+  async updateOneStudent(_id: string, student: IStudentModel): Promise<IStudentModel> {
+    const response = await axios.put<IStudentModel>(appConfig.students + "update-by-id/" + _id, student);
     return response.data;
   }
 

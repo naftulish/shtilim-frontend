@@ -5,7 +5,7 @@ import AddUser from "../../Settings/Users/AddUser";
 import Users from "../../Settings/Users/Users";
 import AddStudent from "../../Students/AddStudent";
 import UpdateUser from "../../Settings/Users/UpdateUser";
-import { Login } from "@mui/icons-material";
+import Login from "../../Settings/Login/Login";
 import Students from "../../Students/Students";
 import UpdateStudent from "../../Students/UpdateStudent";
 import StudentPlans from "../../Activities/StudentPlans";

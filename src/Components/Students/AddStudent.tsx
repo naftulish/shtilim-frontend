@@ -268,6 +268,7 @@ const AddStudent = () => {
             marginTop: '100px',
             marginLeft: '100px',
             whiteSpace: 'nowrap',
+            direction: 'rtl'
           }}
         >
           <ArrowBack />

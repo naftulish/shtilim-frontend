@@ -24,10 +24,12 @@ import {
   ReportingTime,
   defaultReportingTime,
 } from '../../../Models/IPlanModel';
+import { Directions } from '@mui/icons-material';
 
 
 
-const defaultTheme = createTheme();
+const defaultTheme = createTheme(  {direction: 'rtl',}
+);
 
 interface IPlanModelExtended extends IPlanModel {
   maxReportingTime: {
@@ -36,6 +38,7 @@ interface IPlanModelExtended extends IPlanModel {
 }
 
 const AddPlan = () => {
+  
   // const { register, handleSubmit, setValue } = useForm<IPlanModel>();
   const { register, handleSubmit, setValue, watch } = useForm<IPlanModel>();
   const [selectedOption, setSelectedOption] = useState('');
@@ -152,6 +155,7 @@ const AddPlan = () => {
                 fullWidth
                 {...register("description")}
               />
+
 
               {/* <FormControl required fullWidth margin="normal">
               <InputLabel id="reporting-type-label">זמן דיווח</InputLabel>

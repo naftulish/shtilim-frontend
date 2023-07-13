@@ -36,25 +36,14 @@ bady{
 .delete-button path  {
   fill: red  !important ;
 }
-.MuiInputBase-input {
-  direction: rtl;
-}
-.MuiOutlinedInput-input
+
+.css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input
 {
-  direction: rtl;
-}
-.MuiBox-root{
-  direction: rtl;
+  direction: rtl !important;
 
 }
-.MuiOutlinedInput-notchedOutline{
-  direction: rtl;
 
-}
-.MuiFormControl-fullWidth{
-  direction: rtl;
 
-}
 /* class="MuiInputBase-input MuiOutlinedInput-input css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input" */
 
 /* width */
@@ -76,3 +65,4 @@ bady{
 ::-webkit-scrollbar-thumb:hover {
   background: #555; 
 }
+

@@ -510,17 +510,21 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
+
 import GroupsIcon from "@mui/icons-material/Groups";
 import AssignmentIcon from "@mui/icons-material/Assignment";
 import SettingsIcon from "@mui/icons-material/Settings";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import logo from "../../../Assets/logo.png";
 import logokivun from "../../../Assets/logo_kivun.png";
+import PeopleIcon from '@mui/icons-material/People'
 
 import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
 
 import Main from "../Main/Main";
 import { Box } from "@mui/material";
+import { PeopleRounded, SchoolRounded } from "@mui/icons-material";
+
 
 const drawerWidth = 240;
 
@@ -610,10 +614,12 @@ export function Layout() {
           <Box sx={{ width: "60px", marginTop: "20px" }}>
             <List>
               {[
-                { text: "תלמידים", path: "/students", icon: <GroupsIcon /> },
-                { text: "תוכניות", path: "/plans", icon: <AssignmentIcon /> },
-                { text: "הוספת תלמידים", path: "/addstudent", icon: <PersonAddIcon /> },
-                { text: "הגדרות", path: "/settings", icon: <SettingsIcon /> }
+
+                { text: 'תלמידים', path: '/students', icon: <SchoolRounded /> },
+                { text: 'משתמשים', path: '/users', icon: <PeopleRounded /> },
+                { text: 'תוכניות', path: '/plans', icon: <AssignmentIcon /> },
+                { text: 'קבוצות', path: '/groups', icon: <GroupsIcon /> },
+                { text: 'הגדרות', path: '/settings', icon: <SettingsIcon /> },
               ].map((item) => (
                 <ListItem key={item.text} disablePadding>
                   <ListItemButton

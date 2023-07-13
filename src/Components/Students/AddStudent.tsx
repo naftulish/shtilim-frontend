@@ -364,7 +364,7 @@ const AddStudent = () => {
               />
 
               <Button variant="contained" type="submit" fullWidth sx={{ mt: 3, mb: 2 }}>
-                Save
+                שמור
               </Button>
             </Box>
           </Box>

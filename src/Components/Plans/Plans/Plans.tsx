@@ -221,12 +221,12 @@ const Plans = () => {
   const columns: GridColDef[] = [
     {
       field: 'name',
-      headerName: 'Plan Name',
+      headerName: 'שם תוכנית',
       width: 200,
     },
     {
       field: 'numberOfQuestions',
-      headerName: 'Number of Questions',
+      headerName: 'מספר שאלות',
       width: 200,
       valueGetter: (params: GridCellParams) => {
         const plan = params.row as IPlanModel;
@@ -235,7 +235,7 @@ const Plans = () => {
     },
     {
       field: 'actions',
-      headerName: 'Actions',
+      headerName: 'פעולות',
       width: 120,
       sortable: false,
       filterable: false,

@@ -186,6 +186,7 @@
 
 // export default Students;
 
+
 import React, { useEffect, useState } from 'react';
 import { DataGrid, GridColDef, GridCellParams } from '@mui/x-data-grid';
 import { Button, IconButton, Snackbar } from '@mui/material';
@@ -201,6 +202,8 @@ import PlaylistAddCheckIcon from '@mui/icons-material/PlaylistAddCheck';
 import StudentService from '../../Services/StudentService';
 import IStudentModel from '../../Models/IStudentModel';
 import GroupService from '../../Services/GroupService';
+import './Students.css'; 
+
 
 const Students = () => {
   const [students, setStudents] = useState<IStudentModel[]>([]);
@@ -333,7 +336,9 @@ const Students = () => {
             <EditIcon />
           </IconButton>
           <IconButton onClick={() => handleDeleteStudent(params.row as IStudentModel)}>
-            <DeleteIcon style={{ color: 'red' }} />
+          <DeleteIcon className="delete-button"/>
+
+            {/* <DeleteIcon style={{ color: 'red' }} /> */}
           </IconButton>
         </div>
       ),

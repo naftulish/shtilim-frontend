@@ -31,6 +31,8 @@ const Login = () => {
       .then((userCredential) => {
         // Signed in
         const user = userCredential.user;
+        console.log(user);
+        localStorage.setItem("userToken", JSON.stringify(user));
         navigate('/home');
       })
       .catch((error) => {

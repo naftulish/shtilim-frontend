@@ -193,10 +193,12 @@ import GroupsIcon from '@mui/icons-material/Groups';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import SettingsIcon from '@mui/icons-material/Settings';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import PeopleIcon from '@mui/icons-material/People'
 
 import { Routes, Route, useNavigate } from 'react-router-dom';
 
 import Main from "../Main/Main";
+import { PeopleRounded, SchoolRounded } from "@mui/icons-material";
 
 const drawerWidth = 240;
 
@@ -323,10 +325,11 @@ export function Layout() {
           <Box sx={{ width: '60px', marginTop: '20px' }}>
             <List>
               {[
-                { text: 'תלמידים', path: '/students', icon: <GroupsIcon /> },
+                { text: 'תלמידים', path: '/students', icon: <SchoolRounded /> },
+                { text: 'משתמשים', path: '/users', icon: <PeopleRounded /> },
                 { text: 'תוכניות', path: '/plans', icon: <AssignmentIcon /> },
-                { text: 'הוספת תלמידים', path: '/addstudent', icon: <PersonAddIcon /> },
-                { text: 'הגדרות', path: '/settings', icon: <SettingsIcon /> }
+                { text: 'קבוצות', path: '/groups', icon: <GroupsIcon /> },
+                { text: 'הגדרות', path: '/settings', icon: <SettingsIcon /> },
               ].map((item) => (
                 <ListItem key={item.text} disablePadding>
                   <ListItemButton onClick={() => handleMenuItemClick(item.path)}>

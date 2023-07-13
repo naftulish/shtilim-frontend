@@ -296,7 +296,8 @@ const AddStudent = () => {
                     id="dateOfBirth"
                     label="תאריך לידה"
                     type="date"
-                    defaultValue=""
+                    // defaultValue=""
+                    defaultValue={undefined}
                     {...register('dateOfBirth')}
                     InputLabelProps={{
                       shrink: true,

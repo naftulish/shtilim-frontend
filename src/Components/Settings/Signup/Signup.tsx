@@ -29,10 +29,10 @@ const Signup = () => {
 
   async function isUserInDatabase(email: string): Promise<boolean> {
     
-    // const user = await userServise.getUserByEmail(email);
+    const user = await userServise.getUserExistsByEmail(email);
     // TODO change to "return user";
-    return false;
-    // return user;
+    // return false;
+    return user;
   };
   
   const onSubmit = async (e: React.FormEvent) => {

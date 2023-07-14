@@ -269,14 +269,14 @@ const Plans = () => {
       <div>
         <DataGrid rows={plans} columns={columns} autoHeight />
         <Dialog open={deleteConfirmationOpen} onClose={handleCancelDelete}>
-          <DialogTitle>Delete Plan</DialogTitle>
+          <DialogTitle>מחק תוכנית</DialogTitle>
           <DialogContent>
-            Are you sure you want to delete this plan?
+          אתה בטוח שברצונך למחוק את התוכנית הזו?
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleCancelDelete}>Cancel</Button>
+            <Button onClick={handleCancelDelete}>ביטול</Button>
             <Button onClick={handleConfirmDelete} autoFocus>
-              Delete
+              מחיקה
             </Button>
           </DialogActions>
         </Dialog>

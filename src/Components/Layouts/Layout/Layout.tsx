@@ -170,7 +170,7 @@
 
 // export default Layout;
 
-
+import axios, {AxiosRequestConfig, InternalAxiosRequestConfig} from "axios";
 import * as React from "react";
 import { styled, useTheme, Theme, CSSObject } from "@mui/material/styles";
 import Box from "@mui/material/Box";
@@ -272,9 +272,16 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 export function Layout() {
+  
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const navigate = useNavigate();
+
+  axios.interceptors.request.use( ( request ) => {
+    const token = localStorage.getItem("token");
+    if (token) request.headers.Authorization = "Bearer " + token
+    return request;
+  });
 
   const handleDrawerOpen = () => {
     setOpen(true);

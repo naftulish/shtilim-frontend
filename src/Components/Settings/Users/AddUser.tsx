@@ -99,7 +99,7 @@
 
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import { TextField, Button, Box, Container, Typography, Avatar, CssBaseline } from '@mui/material';
+import { TextField, Button, Box, Container, Typography, Avatar, CssBaseline, InputLabel, Select, FormControl, MenuItem } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import IUserModel, { Role } from '../../../Models/IUserModel';
 import userServise from '../../../Services/UserService';
@@ -114,11 +114,11 @@ const AddUser = () => {
   const { register, handleSubmit } = useForm<IUserModel>();
   const navigate = useNavigate();
 
-  const save = async (p: IUserModel) => {
-    p.role = Role.user;
-    p.active = true;
+  const save = async (user: IUserModel) => {
+    // console.log(user);
+    // return;
     try {
-      await userServise.addUser(p);
+      await userServise.addUser(user);
       alert('You have successfully added the new user!');
     } catch (error) {
       console.error(error);
@@ -164,6 +164,31 @@ const AddUser = () => {
               <TextField margin="normal" required fullWidth id="firstName" label="First name" {...register('firstName')} />
               <TextField margin="normal" required fullWidth id="lastName" label="Last name" {...register('lastName')} />
               <TextField margin="normal" required fullWidth id="email" label="Email" {...register('email')} />
+              <TextField margin="normal" required fullWidth id="password" label="Password" {...register('password')} />
+              <FormControl fullWidth margin="normal">
+                <InputLabel id="active-label">סטטוס</InputLabel>
+                <Select
+                  id="active"
+                  labelId="active-label"
+                  defaultValue=""
+                  {...register('active')}
+                >
+                  <MenuItem value="true">פעיל</MenuItem>
+                  <MenuItem value="false">לא פעיל</MenuItem>
+                </Select>
+              </FormControl>
+              <FormControl fullWidth margin="normal">
+                <InputLabel id="role-label">תפקיד</InputLabel>
+                <Select
+                  id="role"
+                  labelId="role-label"
+                  defaultValue=""
+                  {...register('role')}
+                >
+                  <MenuItem value={Role.admin}>מנהל</MenuItem>
+                  <MenuItem value={Role.user}>משתמש</MenuItem>
+                </Select>
+              </FormControl>
               <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
                 Save
               </Button>

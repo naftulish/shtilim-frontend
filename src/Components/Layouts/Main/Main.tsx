@@ -1,6 +1,6 @@
 import react from "react";
 import { Routes, Route } from 'react-router-dom';
-import Signup from "../../Settings/Signup/Signup";
+
 import AddUser from "../../Settings/Users/AddUser";
 import Users from "../../Settings/Users/Users";
 import AddStudent from "../../Students/AddStudent";
@@ -23,7 +23,7 @@ function Main():JSX.Element {
         <main>
             <Routes>
                 <Route path="/login" element={<Login /> } />
-                <Route path="/signup" element={<Signup /> } />
+           
                 <Route path="/users" element={<Users /> } />
                 <Route path="/adduser" element={<AddUser /> } />
                 <Route path="/update-user/:id" element={<UpdateUser /> } />

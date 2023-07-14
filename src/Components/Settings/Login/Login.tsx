@@ -1,7 +1,51 @@
+// import React, { useState } from 'react';
+// import { NavLink, useNavigate } from 'react-router-dom';
+// import { signInWithEmailAndPassword } from 'firebase/auth';
+// import authService from '../../../Services/AuthService';
+// import Button from '@mui/material/Button';
+// import Avatar from '@mui/material/Avatar';
+// import CssBaseline from '@mui/material/CssBaseline';
+// import TextField from '@mui/material/TextField';
+// import FormControlLabel from '@mui/material/FormControlLabel';
+// import Checkbox from '@mui/material/Checkbox';
+// import Link from '@mui/material/Link';
+// import Grid from '@mui/material/Grid';
+// import Box from '@mui/material/Box';
+// import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+// import Typography from '@mui/material/Typography';
+// import Container from '@mui/material/Container';
+// import { createTheme, ThemeProvider } from '@mui/material/styles';
+// import { Copyright } from '@mui/icons-material';
+
+// // TODO remove, this demo shouldn't need to reset the theme.
+// const defaultTheme = createTheme();
+
+// const Login = () => {
+//   const navigate = useNavigate();
+//   const [email, setEmail] = useState('');
+//   const [password, setPassword] = useState('');
+
+//   const onLogin = (e: React.FormEvent) => {
+//     e.preventDefault();
+//     signInWithEmailAndPassword(authService.auth, email, password)
+//       .then((userCredential) => {
+//         // Signed in
+//         const user = userCredential.user;
+//         console.log(user);
+//         localStorage.setItem("userToken", JSON.stringify(user));
+//         navigate('/home');
+//       })
+//       .catch((error) => {
+//         const errorCode = error.code;
+//         const errorMessage = error.message;
+//         console.log(errorCode, errorMessage);
+//       });
+//   };
+
 import React, { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { signInWithEmailAndPassword } from 'firebase/auth';
-import authService from '../../../Services/AuthService';
+
+import userServise from '../../../Services/UserService';
 import Button from '@mui/material/Button';
 import Avatar from '@mui/material/Avatar';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -15,7 +59,8 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { Copyright } from '@mui/icons-material';
+
+
 
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
@@ -25,22 +70,21 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const onLogin = (e: React.FormEvent) => {
+  const onLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    signInWithEmailAndPassword(authService.auth, email, password)
-      .then((userCredential) => {
-        // Signed in
-        const user = userCredential.user;
-        console.log(user);
-        localStorage.setItem("userToken", JSON.stringify(user));
-        navigate('/home');
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.log(errorCode, errorMessage);
-      });
+    try {
+      const token = await userServise.login(email, password);
+      localStorage.setItem('token', token); // Save the token to local storage
+      console.log(token);
+        
+      alert('!התחברות בוצעה בהצלחה');
+    } catch (error) {
+      console.error(error);
+    }
   };
+  
+  
+
 
   return (
     <ThemeProvider theme={defaultTheme}>

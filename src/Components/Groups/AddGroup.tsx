@@ -73,7 +73,7 @@ const AddGroup = () => {
                 <TextField label="שם קבוצה" required fullWidth {...register('name')} />
                 <TextField label="מורה" required fullWidth {...register('teacher')} />
                 <Button variant="contained" type="submit" fullWidth sx={{ mt: 3, mb: 2 }}>
-                  Save
+                  שמור
                 </Button>
               </Box>
             </Box>

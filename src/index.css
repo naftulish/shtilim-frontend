@@ -7,3 +7,62 @@ html, body{
 #root{
   height: 100%;
 }
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Hebrew:wght@100;200;300;400;500;600;700;800;900&display=swap');
+*{
+  font-family: 'Noto Sans Hebrew', sans-serif !important;
+  color: rgb(0, 57, 107); 
+
+}
+bady{
+  background-image: url("/src/Assets/logo.png");
+
+  background-repeat: no-repeat;
+  background-size: cover; 
+}
+
+.MuiSnackbarContent-message 
+{
+  color: white;
+}
+.MuiButton-containedPrimary{
+
+  background:rgb(0, 57, 107) !important;
+  min-width: 200px !important;
+}
+.MuiButton-containedPrimary path{
+
+ fill: white ;
+}
+.delete-button path  {
+  fill: red  !important ;
+}
+
+.css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input
+{
+  direction: rtl !important;
+
+}
+
+
+/* class="MuiInputBase-input MuiOutlinedInput-input css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input" */
+
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1; 
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888; 
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555; 
+}
+

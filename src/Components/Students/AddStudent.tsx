@@ -268,6 +268,7 @@ const AddStudent = () => {
             marginTop: '100px',
             marginLeft: '100px',
             whiteSpace: 'nowrap',
+            direction: 'rtl'
           }}
         >
           <ArrowBack />
@@ -364,7 +365,7 @@ const AddStudent = () => {
               />
 
               <Button variant="contained" type="submit" fullWidth sx={{ mt: 3, mb: 2 }}>
-                Save
+                שמור
               </Button>
             </Box>
           </Box>

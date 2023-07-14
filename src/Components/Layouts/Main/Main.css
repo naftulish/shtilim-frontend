@@ -1,0 +1,16 @@
+.main{
+  overflow-y: scroll;
+  height: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+
+.box-main-naf{
+  padding: unset !important;
+  height: 100vh;
+}
+
+.MuiDataGrid-root{
+  height: unset !important;
+}

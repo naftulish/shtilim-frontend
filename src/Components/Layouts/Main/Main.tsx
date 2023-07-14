@@ -15,12 +15,14 @@ import AddGroup from "../../Groups/AddGroup";
 import UpdateGroup from "../../Groups/UpdateGroup";
 import Plans from "../../Plans/Plans/Plans";
 import AddPlan from "../../Plans/AddPlan/AddPlan";
+import './Main.css'; 
+
 
 
 function Main():JSX.Element {
 
     return (
-        <main>
+        <main className="main">
             <Routes>
                 <Route path="/login" element={<Login /> } />
            
@@ -40,6 +42,7 @@ function Main():JSX.Element {
                 <Route path="/groups" element={<Groups /> } />
                 <Route path="/addgroup" element={<AddGroup /> } />
                 <Route path="/update-group/:id" element={<UpdateGroup /> } />
+                {/* https://trello.com/1/cards/64a132fc58f839254c9b4cd7/attachments/64aa6700a2ea39169bb0cc99/download/%D7%9C%D7%95%D7%92%D7%95_%D7%A9%D7%AA%D7%99%D7%9C%D7%99%D7%9D_%D7%A8%D7%A7%D7%A2_%D7%A9%D7%A7%D7%95%D7%A3.png */}
                 
             </Routes>
         </main>
@@ -75,3 +78,6 @@ export default Main;
           </>
         )}
       </Routes> */}
+
+
+  

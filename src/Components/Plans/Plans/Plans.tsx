@@ -221,12 +221,12 @@ const Plans = () => {
   const columns: GridColDef[] = [
     {
       field: 'name',
-      headerName: 'Plan Name',
+      headerName: 'שם תוכנית',
       width: 200,
     },
     {
       field: 'numberOfQuestions',
-      headerName: 'Number of Questions',
+      headerName: 'מספר שאלות',
       width: 200,
       valueGetter: (params: GridCellParams) => {
         const plan = params.row as IPlanModel;
@@ -235,7 +235,7 @@ const Plans = () => {
     },
     {
       field: 'actions',
-      headerName: 'Actions',
+      headerName: 'פעולות',
       width: 120,
       sortable: false,
       filterable: false,
@@ -269,14 +269,14 @@ const Plans = () => {
       <div>
         <DataGrid rows={plans} columns={columns} autoHeight />
         <Dialog open={deleteConfirmationOpen} onClose={handleCancelDelete}>
-          <DialogTitle>Delete Plan</DialogTitle>
+          <DialogTitle>מחק תוכנית</DialogTitle>
           <DialogContent>
-            Are you sure you want to delete this plan?
+          אתה בטוח שברצונך למחוק את התוכנית הזו?
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleCancelDelete}>Cancel</Button>
+            <Button onClick={handleCancelDelete}>ביטול</Button>
             <Button onClick={handleConfirmDelete} autoFocus>
-              Delete
+              מחיקה
             </Button>
           </DialogActions>
         </Dialog>

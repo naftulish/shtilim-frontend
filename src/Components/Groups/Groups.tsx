@@ -114,12 +114,12 @@ const Groups = () => {
       <DataGrid rows={groups} columns={columns} />
       <Snackbar open={snackbarOpen} message={snackbarMessage} onClose={handleSnackbarClose} />
       <Dialog open={deleteConfirmationOpen} onClose={handleCancelDelete}>
-        <DialogTitle>Delete Group</DialogTitle>
-        <DialogContent>Are you sure you want to delete this group?</DialogContent>
+        <DialogTitle>מחק קבוצה</DialogTitle>
+        <DialogContent>אתה בטוח שברצונך למחוק את הקבוצה הזו?</DialogContent>
         <DialogActions>
-          <Button onClick={handleCancelDelete}>Cancel</Button>
+          <Button onClick={handleCancelDelete}>ביטול</Button>
           <Button onClick={handleConfirmDelete} color="error" autoFocus>
-            Delete
+            מחיקה
           </Button>
         </DialogActions>
       </Dialog>

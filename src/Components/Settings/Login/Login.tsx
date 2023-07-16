@@ -3,32 +3,26 @@
 
 import React, { useState } from 'react';
 import {  useNavigate } from 'react-router-dom';
-
 import userServise from '../../../Services/UserService';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import logokivun from "../../../Assets/logo_kivun.png";
-
-
-
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
-
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { ThemeProvider } from '@mui/material/styles';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert, { AlertColor } from '@mui/material/Alert';
 import logo from "../../../Assets/logo.png";
 
-// TODO remove, this demo shouldn't need to reset the theme.
-const defaultTheme = createTheme();
 
 const Login = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [snackbarSeverity, setSnackbarSeverity] = useState<AlertColor | undefined>('success');
@@ -40,14 +34,15 @@ const Login = () => {
   const onLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
+      
       const token = await userServise.login(email, password);
       localStorage.setItem('token', token);
       setSnackbarMessage('התחברות בוצעה בהצלחה.');
       setSnackbarSeverity('success');
       setSnackbarOpen(true);
-      // console.log(token);
+      
       setTimeout(() => {
-        navigate('/'); // Navigate to "/" route  
+        navigate('/'); 
       }, 2000); 
       
     } catch (error) {
@@ -59,7 +54,7 @@ const Login = () => {
   };
 
   return (
-    <ThemeProvider theme={defaultTheme}>
+    <>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
@@ -128,7 +123,7 @@ const Login = () => {
           {snackbarMessage}
         </MuiAlert>
       </Snackbar>
-    </ThemeProvider>
+    </>
   );
 };
 

@@ -94,7 +94,7 @@ const UpdateGroup = () => {
             <EditIcon />
           </Avatar> */}
           <Typography component="h1" variant="h5">
-            Update Group
+            עדכון כיתה
           </Typography>
           {group && (
             <form onSubmit={handleSubmit(handleFormSubmit)}>
@@ -102,7 +102,7 @@ const UpdateGroup = () => {
                 margin="normal"
                 fullWidth
                 id="name"
-                label="Group Name"
+                label="שם כיתה"
                 defaultValue={group.name}
                 autoFocus
                 {...register('name')}
@@ -111,15 +111,15 @@ const UpdateGroup = () => {
                 margin="normal"
                 fullWidth
                 id="teacher"
-                label="Teacher"
+                label="מורה / גננת"
                 defaultValue={group.teacher}
                 {...register('teacher')}
               />
               <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
-                Update
+                עדכון
               </Button>
               <Button fullWidth variant="contained" onClick={handleGoBack}>
-                Cancel
+                ביטול
               </Button>
             </form>
           )}

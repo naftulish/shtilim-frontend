@@ -25,8 +25,6 @@ const Users = () => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(true);
-  const [rows, setRows] = useState([]);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -35,8 +33,8 @@ const Users = () => {
         const usersWithIds = fetchedUsers.map((user, index) => ({ ...user, id: index + 1 }));
         setUsers(usersWithIds);
       } catch (error: any) {
-        // Handle the error appropriately (e.g., show an error message)
-        console.error('Failed to fetch users:', error);
+        setSnackbarMessage('שגיאה בנתוני משתמש');
+        setSnackbarOpen(true);
       }
     };
 
@@ -56,10 +54,10 @@ const Users = () => {
         setDeleteConfirmationOpen(false);
         setSelectedUser(null);
         setUsers(users.filter((user) => user._id !== selectedUser._id));
-        setSnackbarMessage('User deleted successfully.');
+        setSnackbarMessage('המשתמש נמחק בהצלחה');
         setSnackbarOpen(true);
       } catch (error) {
-        setSnackbarMessage('Failed to delete user.');
+        setSnackbarMessage('ארעה שגיאה במחיקת המשתמש');
         setSnackbarOpen(true);
       }
     }
@@ -77,35 +75,35 @@ const Users = () => {
   const columns: GridColDef[] = [
     {
       field: 'firstName',
-      headerName: 'First Name',
+      headerName: 'שם פרטי',
       width: 150,
     },
     {
       field: 'lastName',
-      headerName: 'Last Name',
+      headerName: 'שם משפחה',
       width: 150,
     },
     {
       field: 'email',
-      headerName: 'Email',
+      headerName: 'אימייל',
       width: 250,
     },
     {
       field: 'role',
-      headerName: 'Role',
+      headerName: 'תפקיד',
       width: 120,
       valueGetter: (params: GridCellParams) => (params.row.role === Role.admin ? 'ADMIN' : 'USER'),
       editable: false,
     },
     {
       field: 'active',
-      headerName: 'Status',
+      headerName: 'סטטוס',
       width: 150,
       valueGetter: (params: GridCellParams) => (params.row.active ? 'Active' : 'Inactive'),
     },
     {
       field: 'actions',
-      headerName: 'Actions',
+      headerName: 'פעולות',
       width: 120,
       sortable: false,
       filterable: false,
@@ -116,7 +114,7 @@ const Users = () => {
             <EditIcon />
           </IconButton>
           <IconButton onClick={() => handleDeleteUser(params.row as IUserModel)}>
-            <DeleteIcon style={{ color: 'red' }} />
+            <DeleteIcon className="delete-button" />
           </IconButton>
         </div>
       ),
@@ -132,21 +130,20 @@ const Users = () => {
           <Button
             type="submit"
             variant="contained"
-            onClick={() => navigate('/adduser')}
-            sx={{ mt: 3, mb: 2, flexShrink: 0, width: '11%' }}
-          >
+            onClick={() => navigate('/add-user')}
+            className='btn-top'          >
             הוספת משתמש &nbsp;<PersonAddIcon />
           </Button>
         </div>  
       <DataGrid rows={users} columns={columns} />
       <Snackbar open={snackbarOpen} message={snackbarMessage} onClose={handleSnackbarClose} />
       <Dialog open={deleteConfirmationOpen} onClose={handleCancelDelete}>
-        <DialogTitle>Delete User</DialogTitle>
-        <DialogContent>Are you sure you want to delete this user?</DialogContent>
+        <DialogTitle>מחיקת משתמש</DialogTitle>
+        <DialogContent>האם למחוק את המשתמש?</DialogContent>
         <DialogActions>
-          <Button onClick={handleCancelDelete}>Cancel</Button>
+          <Button onClick={handleCancelDelete}>ביטול</Button>
           <Button onClick={handleConfirmDelete} color="error" autoFocus>
-            Delete
+            מחיקה
           </Button>
         </DialogActions>
       </Dialog>

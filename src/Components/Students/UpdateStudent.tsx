@@ -9,25 +9,17 @@ import {
   Box,
   Container,
   Typography,
-  Avatar,
-  CssBaseline,
   FormControl,
   InputLabel,
   Select,
   MenuItem,
 } from '@mui/material';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { Edit as EditIcon } from '@mui/icons-material';
-import { green } from '@mui/material/colors';
 import { useForm } from 'react-hook-form';
 import IStudentModel from '../../Models/IStudentModel';
 import StudentService from '../../Services/StudentService';
 import IGroupModel from '../../Models/IGroupModel';
-import { IPlanModel } from '../../Models/IPlanModel';
 import GroupService from '../../Services/GroupService';
-import PlanService from '../../Services/PlanService';
 
-const defaultTheme = createTheme();
 
 const UpdateStudent = () => {
   const { id } = useParams();
@@ -44,8 +36,6 @@ const UpdateStudent = () => {
 
   const navigate = useNavigate();
   const { register, handleSubmit, setValue } = useForm<IStudentModel>();
-  const [plans, setPlans] = useState<IPlanModel[]>([]);
-  const [selectedPlans, setSelectedPlans] = useState<string[]>(student.plans);
   const [groups, setGroups] = useState<IGroupModel[]>([]);
 
   useEffect(() => {
@@ -53,7 +43,6 @@ const UpdateStudent = () => {
       try {
         if (id) {
           const fetchedStudent = await StudentService.getStudent(id);
-          // console.log('Fetched Student:', fetchedStudent);
           setStudent(fetchedStudent);
           setValue('firstName', fetchedStudent.firstName);
           setValue('lastName', fetchedStudent.lastName);
@@ -65,7 +54,6 @@ const UpdateStudent = () => {
           
         }
       } catch (error) {
-        console.log(error);
         alert('Failed to fetch the student!');
       }
     };
@@ -73,19 +61,7 @@ const UpdateStudent = () => {
     fetchStudent();
   }, [id, setValue]);
 
-  useEffect(() => {
-    const fetchPlans = async () => {
-      try {
-        const fetchedPlans = await PlanService.getAllPlans();
-        setPlans(fetchedPlans);
-      } catch (error) {
-        console.log(error);
-        alert('Failed to fetch the plans!');
-      }
-    };
-
-    fetchPlans();
-  }, []);
+  
 
   useEffect(() => {
     const fetchGroups = async () => {
@@ -132,8 +108,6 @@ const UpdateStudent = () => {
   };
 
   return (
-    <ThemeProvider theme={defaultTheme}>
-      <CssBaseline />
       <Container maxWidth="xs">
         <Box
           sx={{
@@ -143,11 +117,8 @@ const UpdateStudent = () => {
             alignItems: 'center',
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: green[500] }}>
-            <EditIcon />
-          </Avatar>
           <Typography component="h1" variant="h5">
-            Update Student
+            עדכון תלמיד
           </Typography>
           {student && (
             <form onSubmit={handleSubmit(handleFormSubmit)}>
@@ -201,31 +172,6 @@ const UpdateStudent = () => {
               </FormControl>
 
               <FormControl margin="normal" fullWidth>
-                <InputLabel id="plans-label">תוכנית</InputLabel>
-                <Select
-                  id="plans"
-                  labelId="plans-label"
-                  {...register('plans')}
-                  multiple
-                  fullWidth
-                  defaultValue={student.plans}
-                  onChange={(e) => {
-                    const selectedPlans = Array.from(
-                      (e.target as unknown as HTMLSelectElement).selectedOptions,
-                      (option: HTMLOptionElement) => option.value
-                    );
-                    setValue('plans', selectedPlans);
-                  }}
-                >
-                  {plans.map((plan) => (
-                    <MenuItem key={plan._id} value={plan._id}>
-                      {plan.name}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-
-              <FormControl margin="normal" fullWidth>
                 <InputLabel id="group-label">כיתה</InputLabel>
                 <Select
                   labelId="group-label"
@@ -251,17 +197,18 @@ const UpdateStudent = () => {
                 defaultValue={student.address}
                 {...register('address')}
               />
-              <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
-                Update
-              </Button>
-              <Button fullWidth variant="contained" onClick={handleGoBack}>
-                Cancel
-              </Button>
+              <FormControl className='flex space row gap-10' fullWidth sx={{ mt: 3, mb: 2 }}>
+                <Button fullWidth variant="outlined" onClick={ () => navigate('/students')}>
+                  ביטול
+                </Button>
+                <Button fullWidth type="submit" variant="contained" >
+                    שמירה 
+                </Button>
+              </FormControl>
             </form>
           )}
         </Box>
       </Container>
-    </ThemeProvider>
   );
 };
 

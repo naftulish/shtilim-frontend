@@ -70,17 +70,17 @@ const Groups = () => {
   const columns: GridColDef[] = [
     {
       field: 'name',
-      headerName: 'Name',
+      headerName: 'שם',
       width: 200,
     },
     {
       field: 'teacher',
-      headerName: 'Teacher',
+      headerName: 'מורה',
       width: 200,
     },
     {
       field: 'actions',
-      headerName: 'Actions',
+      headerName: 'פעולות',
       width: 120,
       sortable: false,
       filterable: false,
@@ -91,7 +91,7 @@ const Groups = () => {
             <EditIcon />
           </IconButton>
           <IconButton onClick={() => handleDeleteGroup(params.row as IGroupModel)}>
-            <DeleteIcon style={{ color: 'red' }} />
+            <DeleteIcon className="delete-button" />
           </IconButton>
         </div>
       ),
@@ -101,20 +101,20 @@ const Groups = () => {
   return (
     <div style={{ height: 400, width: '100%' }}>
       <div style={{ display: 'flex', alignItems: 'center', marginBottom: '1rem' }}>
-        <h1 style={{ flex: 1 }}>רשימת קבוצות</h1>
+        <h1 style={{ flex: 1 }}>רשימת כיתות</h1>
         <Button
           type="submit"
           variant="contained"
-          onClick={() => navigate('/addgroup')}
-          sx={{ mt: 3, mb: 2, flexShrink: 0, width: '11%' }}
+          onClick={() => navigate('/add-group')}
+          className='btn-top'
         >
-          הוספת קבוצה &nbsp;<GroupAdd />
+          הוספת כיתה &nbsp;<GroupAdd />
         </Button>
       </div>
       <DataGrid rows={groups} columns={columns} />
       <Snackbar open={snackbarOpen} message={snackbarMessage} onClose={handleSnackbarClose} />
       <Dialog open={deleteConfirmationOpen} onClose={handleCancelDelete}>
-        <DialogTitle>מחק קבוצה</DialogTitle>
+        <DialogTitle>מחק כיתה</DialogTitle>
         <DialogContent>אתה בטוח שברצונך למחוק את הקבוצה הזו?</DialogContent>
         <DialogActions>
           <Button onClick={handleCancelDelete}>ביטול</Button>

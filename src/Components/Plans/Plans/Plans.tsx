@@ -124,7 +124,7 @@ const Plans = () => {
         <Dialog open={deleteConfirmationOpen} onClose={handleCancelDelete}>
           <DialogTitle>מחק תוכנית</DialogTitle>
           <DialogContent>
-          אתה בטוח שברצונך למחוק את התוכנית הזו?
+          ?אתה בטוח שברצונך למחוק את התוכנית הזו
           </DialogContent>
           <DialogActions>
             <Button onClick={handleCancelDelete}>ביטול</Button>

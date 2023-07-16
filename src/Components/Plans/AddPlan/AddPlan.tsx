@@ -18,6 +18,7 @@ import {
   defaultReportingTime,
 } from '../../../Models/IPlanModel';
 import { useNavigate } from 'react-router-dom';
+import useTitle from '../../../hooks/useTitle';
 
 
 
@@ -29,10 +30,11 @@ interface IPlanModelExtended extends IPlanModel {
 
 const AddPlan = () => {
   
-  // const { register, handleSubmit, setValue } = useForm<IPlanModel>();
   const { register, handleSubmit, setValue, watch } = useForm<IPlanModel>();
   const [selectedOption, setSelectedOption] = useState('');
   const selectedReportingType = watch('reportingType');
+
+  useTitle("תוכניות");
 
   const navigate = useNavigate();
   const [questionDescription, setQuestionDescription] = useState("");
@@ -106,16 +108,9 @@ const AddPlan = () => {
 
   return (
 
-    <form onSubmit={handleSubmit(save)}>
-          <Box
-            sx={{
-              flex: 1,
-              marginTop: 8,
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-            }}
-          >
+    <div style={{ width: '100%', maxWidth: "850px", margin: "auto", marginTop: "50px" }}>
+      <form onSubmit={handleSubmit(save)}>
+        
             <Typography component="h1" variant="h5">
               הוספת תוכנית
             </Typography>
@@ -254,10 +249,6 @@ const AddPlan = () => {
 
 
                   </Box>
-
-
-                  
-                  
                 </Box>
               ))}
 
@@ -277,9 +268,8 @@ const AddPlan = () => {
                   </Button>
               </FormControl>
             </Box>
-          </Box>
     </form>
-
+    </div>
   );
 };
 

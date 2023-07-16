@@ -12,11 +12,13 @@ import { ArrowBack } from '@mui/icons-material';
 import IGroupModel from '../../Models/IGroupModel';
 import GroupService from '../../Services/GroupService';
 import { useNavigate } from 'react-router-dom';
+import useTitle from '../../hooks/useTitle';
 
 
 const AddGroup = () => {
   const { register, handleSubmit } = useForm<IGroupModel>();
   const navigate = useNavigate();
+  useTitle("כיתות");
 
   const save = async (group: IGroupModel) => {
     try {

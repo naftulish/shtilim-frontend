@@ -14,6 +14,7 @@ import StudentService from '../../Services/StudentService';
 import IStudentModel from '../../Models/IStudentModel';
 import GroupService from '../../Services/GroupService';
 import './Students.css'; 
+import useTitle from '../../hooks/useTitle';
 
 
 const Students = () => {
@@ -24,6 +25,8 @@ const Students = () => {
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [groups, setGroups] = useState<{ [key: string]: string }>({});
   const navigate = useNavigate();
+
+  useTitle("תלמידים")
 
 
   useEffect(() => {
@@ -159,7 +162,7 @@ const Students = () => {
   ];
 
   return (
-    <div style={{ height: 400, width: '100%' }}>
+    <div style={{ width: '100%' }}>
       <div style={{ display: 'flex', alignItems: 'center', marginBottom: '1rem' }}>
         <h1 style={{ flex: 1 }}>רשימת תלמידים</h1>
         <Button
@@ -173,7 +176,7 @@ const Students = () => {
 
       <DataGrid rows={students} columns={columns} />
       <Snackbar open={snackbarOpen} message={snackbarMessage} onClose={handleSnackbarClose} />
-      
+
       <Dialog open={deleteConfirmationOpen} onClose={handleCancelDelete}>
         <DialogTitle>מחיקת תלמיד</DialogTitle>
         <DialogContent>האם אתה בטוח שברצונך למחוק תלמיד זה?</DialogContent>

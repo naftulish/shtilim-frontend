@@ -19,6 +19,7 @@ import IStudentModel from '../../Models/IStudentModel';
 import StudentService from '../../Services/StudentService';
 import IGroupModel from '../../Models/IGroupModel';
 import GroupService from '../../Services/GroupService';
+import useTitle from '../../hooks/useTitle';
 
 
 const UpdateStudent = () => {
@@ -33,6 +34,8 @@ const UpdateStudent = () => {
     plans: [],
     group: '',
   });
+
+  useTitle("תלמידים");
 
   const navigate = useNavigate();
   const { register, handleSubmit, setValue } = useForm<IStudentModel>();

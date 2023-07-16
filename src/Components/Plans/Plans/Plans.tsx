@@ -11,6 +11,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import PlanService from '../../../Services/PlanService';
 import { IPlanModel } from '../../../Models/IPlanModel';
+import useTitle from '../../../hooks/useTitle';
 
 
 const Plans = () => {
@@ -20,6 +21,7 @@ const Plans = () => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const navigate = useNavigate();
+  useTitle("תוכניות");
 
   useEffect(() => {
     const fetchPlans = async () => {

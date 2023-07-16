@@ -15,6 +15,7 @@ import DialogActions from '@mui/material/DialogActions';
 import IUserModel, { Role } from '../../../Models/IUserModel';
 import UserService from '../../../Services/UserService';
 import { useNavigate } from 'react-router-dom';
+import useTitle from '../../../hooks/useTitle';
 
 
 const Users = () => {
@@ -25,6 +26,7 @@ const Users = () => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const navigate = useNavigate();
+  useTitle("משתמשים");
 
   useEffect(() => {
     const fetchUsers = async () => {

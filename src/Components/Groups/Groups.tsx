@@ -11,6 +11,7 @@ import DialogActions from '@mui/material/DialogActions';
 import GroupService from '../../Services/GroupService';
 import IGroupModel from '../../Models/IGroupModel';
 import { GroupAdd } from '@mui/icons-material';
+import useTitle from '../../hooks/useTitle';
 
 const Groups = () => {
   const [groups, setGroups] = useState<IGroupModel[]>([]);
@@ -19,6 +20,7 @@ const Groups = () => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const navigate = useNavigate();
+  useTitle("כיתות");
 
   useEffect(() => {
     const fetchGroups = async () => {

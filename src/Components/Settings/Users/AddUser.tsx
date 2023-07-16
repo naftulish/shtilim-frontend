@@ -6,6 +6,7 @@ import IUserModel, { Role } from '../../../Models/IUserModel';
 import userServise from '../../../Services/UserService';
 import { ArrowBack } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
+import useTitle from '../../../hooks/useTitle';
 
 
 const AddUser = () => {
@@ -13,6 +14,9 @@ const AddUser = () => {
   const navigate = useNavigate();
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
+
+  useTitle("משתמשים");
+
 
   const save = async (user: IUserModel) => {
     try {

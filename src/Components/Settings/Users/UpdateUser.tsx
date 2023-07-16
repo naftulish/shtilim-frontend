@@ -16,6 +16,7 @@ import {
 import { useForm } from 'react-hook-form';
 import IUserModel, { Role } from '../../../Models/IUserModel';
 import UserService from '../../../Services/UserService';
+import useTitle from '../../../hooks/useTitle';
 
 
 const UpdateUser = () => {
@@ -31,6 +32,7 @@ const UpdateUser = () => {
     });
   const navigate = useNavigate();
   const { register, handleSubmit, setValue } = useForm<IUserModel>();
+  useTitle("משתמשים");
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -97,7 +99,6 @@ const UpdateUser = () => {
                 fullWidth
                 id="firstName"
                 label="שם פרטי"
-                defaultValue={user.firstName}
                 autoFocus
                 {...register('firstName')}
               />
@@ -106,7 +107,6 @@ const UpdateUser = () => {
                 fullWidth
                 id="lastName"
                 label="שם משפחה"
-                defaultValue={user.lastName}
                 {...register('lastName')}
               />
               <TextField
@@ -114,7 +114,6 @@ const UpdateUser = () => {
                 fullWidth
                 id="email"
                 label="כתובת דואר אלקטרוני"
-                defaultValue={user.email}
                 {...register('email')}
               />
               <FormControl fullWidth margin="normal">
@@ -134,7 +133,6 @@ const UpdateUser = () => {
                 <Select
                   id="role"
                   labelId="role-label"
-                  defaultValue={user.role}
                   {...register('role')}
                 >
                   <MenuItem value={Role.admin}>מנהל</MenuItem>

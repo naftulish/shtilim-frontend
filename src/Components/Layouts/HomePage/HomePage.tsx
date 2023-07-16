@@ -1,12 +1,13 @@
 import React from 'react';
-import { Box, Button } from "@mui/material";
-import { AddBox, SchoolRounded } from "@mui/icons-material";
-import { Link, Navigate } from "react-router-dom";
+import {  SchoolRounded } from "@mui/icons-material";
+import { Link } from "react-router-dom";
 import "./HomePage.css";
 import AssignmentIcon from "@mui/icons-material/Assignment";
+import useTitle from '../../../hooks/useTitle';
 
 
 const HomePage = () => {
+  useTitle("ראשי");
 
   return (
     <div className='Home'>

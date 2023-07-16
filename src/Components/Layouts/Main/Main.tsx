@@ -16,12 +16,13 @@ import UpdateGroup from "../../Groups/UpdateGroup";
 import Plans from "../../Plans/Plans/Plans";
 import AddPlan from "../../Plans/AddPlan/AddPlan";
 import './Main.css'; 
-import { Home } from "@mui/icons-material";
 import HomePage from "../HomePage/HomePage";
+import useTitle from "../../../hooks/useTitle";
 
 
 
 function Main():JSX.Element {
+    useTitle("ראשי");
 
     return (
         <main className="main">

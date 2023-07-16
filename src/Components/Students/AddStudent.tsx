@@ -20,12 +20,15 @@ import IGroupModel from '../../Models/IGroupModel';
 
 
 import { useNavigate } from 'react-router-dom';
+import useTitle from '../../hooks/useTitle';
 
 const AddStudent = () => {
   const { register, handleSubmit } = useForm<IStudentModel>();
   const [groups, setGroups] = useState<IGroupModel[]>([]);
   const navigate = useNavigate();
   
+  useTitle("תלמידים");
+
   useEffect(() => {
     fetchGroups();
   }, []);

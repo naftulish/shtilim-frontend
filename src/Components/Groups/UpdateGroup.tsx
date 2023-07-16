@@ -8,19 +8,12 @@ import {
   Box,
   Container,
   Typography,
-  Avatar,
-  CssBaseline,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
 } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { Edit as EditIcon } from '@mui/icons-material';
-import { green } from '@mui/material/colors';
 import { useForm } from 'react-hook-form';
 import GroupService from '../../Services/GroupService';
 import Group from '../../Models/IGroupModel';
+import useTitle from '../../hooks/useTitle';
 
 const defaultTheme = createTheme();
 
@@ -31,6 +24,9 @@ const UpdateGroup = () => {
     name: '',
     teacher: '',
   });
+  
+  useTitle("כיתות");
+
 
   const navigate = useNavigate();
   const { register, handleSubmit, setValue } = useForm<Group>();
@@ -80,7 +76,6 @@ const UpdateGroup = () => {
 
   return (
     <ThemeProvider theme={defaultTheme}>
-      <CssBaseline />
       <Container maxWidth="xs">
         <Box
           sx={{

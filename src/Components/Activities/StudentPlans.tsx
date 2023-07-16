@@ -407,6 +407,7 @@ const StudentPlans = () => {
       planId: selectedPlan?._id || '',
       studentId: student?._id || '',
       grade: grade,
+      
     };
 
     try {

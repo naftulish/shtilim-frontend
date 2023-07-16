@@ -90,9 +90,9 @@ const UpdateGroup = () => {
             alignItems: 'center',
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: green[500] }}>
+          {/* <Avatar sx={{ m: 1, bgcolor: green[500] }}>
             <EditIcon />
-          </Avatar>
+          </Avatar> */}
           <Typography component="h1" variant="h5">
             Update Group
           </Typography>

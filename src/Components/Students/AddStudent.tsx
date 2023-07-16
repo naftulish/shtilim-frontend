@@ -264,9 +264,9 @@ const AddStudent = () => {
             overflow: 'hidden',
             position: 'absolute',
             top: 0,
-            left: 0,
-            marginTop: '100px',
-            marginLeft: '100px',
+            left: 30,
+            // marginTop: '100px',
+            // marginLeft: '100px',
             whiteSpace: 'nowrap',
             direction: 'rtl'
           }}
@@ -280,9 +280,9 @@ const AddStudent = () => {
         <Container component="main" maxWidth="xs">
           <CssBaseline />
           <Box sx={{ marginTop: 8, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+            {/* <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
               <PersonAddAlt />
-            </Avatar>
+            </Avatar> */}
             <Typography component="h1" variant="h5">
               הוסף תלמיד
             </Typography>
@@ -361,7 +361,7 @@ const AddStudent = () => {
                 required
                 fullWidth
                 multiline
-                rows={4}
+                // rows={2}
               />
 
               <Button variant="contained" type="submit" fullWidth sx={{ mt: 3, mb: 2 }}>

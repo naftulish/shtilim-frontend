@@ -1,105 +1,7 @@
 
-
-
-
-// import React from 'react';
-// import { useForm } from 'react-hook-form';
-// import { TextField, Button, Box, Container, Typography, Avatar} from '@mui/material';
-// import { createTheme, ThemeProvider } from '@mui/material/styles';
-// import IUserModel, { Role } from '../../../Models/IUserModel';
-// import userServise from '../../../Services/UserService';
-// import { PersonAddAlt } from '@mui/icons-material';
-// import { green } from '@mui/material/colors';
-
-
-
-// const defaultTheme = createTheme();
-
-// // const AddUser = () => {
-// //   const { register, handleSubmit } = useForm<IUserModel>();
-
-// //   const save = (p: IUserModel) => {
-// //     userServise.addUser(p).then((d) => console.log(d));
-
-// //     alert("You have successfully added the new user!");
-
-// //   };
-
-// const AddUser = () => {
-//   const { register, handleSubmit } = useForm<IUserModel>();
-
-//   const save = async (p: IUserModel) => {
-//     p.role = Role.user ; p.active = true
-//     try {
-//       await userServise.addUser(p);
-//       alert("You have successfully added the new user!");
-//     } catch (e) {
-//       console.error(e);
-//     }
-//   };
-  
-
-//   return (
-//     <ThemeProvider theme={defaultTheme}>
-//       <Container component="main" maxWidth="xs">
-//         <Box
-//           sx={{
-//             marginTop: 8,
-//             display: 'flex',
-//             flexDirection: 'column',
-//             alignItems: 'center',
-//           }}
-//         >
-//           <Avatar sx={{ m: 3, bgcolor: green[500], width: 88, height: 88 }}>
-//           <PersonAddAlt color="action" fontSize={'large'} />
-//           </Avatar>
-//           <Typography component="h1" variant="h5">
-//             Add User
-//           </Typography>
-//           <Box component="form" onSubmit={handleSubmit(save)} noValidate sx={{ mt: 1 }}>
-//             <TextField
-//               margin="normal"
-//               required
-//               fullWidth
-//               id="firstName"
-//               label="First name"
-//               {...register('firstName')}
-//             />
-//             <TextField
-//               margin="normal"
-//               required
-//               fullWidth
-//               id="lastName"
-//               label="Last name"
-//               {...register('lastName')}
-//             />
-//             <TextField
-//               margin="normal"
-//               required
-//               fullWidth
-//               id="email"
-//               label="Email"
-//               {...register('email')}
-//             />
-//             <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
-//               Save
-//             </Button>
-//           </Box>
-//         </Box>
-//       </Container>
-//     </ThemeProvider>
-//   );
-// };
-
-// export default AddUser;
-
-
-
-
-
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import { TextField, Button, Box, Container, Typography, Avatar, CssBaseline } from '@mui/material';
+import { TextField, Button, Box, Container, Typography, Avatar, CssBaseline, InputLabel, Select, FormControl, MenuItem } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import IUserModel, { Role } from '../../../Models/IUserModel';
 import userServise from '../../../Services/UserService';
@@ -114,11 +16,11 @@ const AddUser = () => {
   const { register, handleSubmit } = useForm<IUserModel>();
   const navigate = useNavigate();
 
-  const save = async (p: IUserModel) => {
-    p.role = Role.user;
-    p.active = true;
+  const save = async (user: IUserModel) => {
+    // console.log(user);
+    // return;
     try {
-      await userServise.addUser(p);
+      await userServise.addUser(user);
       alert('You have successfully added the new user!');
     } catch (error) {
       console.error(error);
@@ -164,6 +66,31 @@ const AddUser = () => {
               <TextField margin="normal" required fullWidth id="firstName" label="First name" {...register('firstName')} />
               <TextField margin="normal" required fullWidth id="lastName" label="Last name" {...register('lastName')} />
               <TextField margin="normal" required fullWidth id="email" label="Email" {...register('email')} />
+              <TextField margin="normal" required fullWidth id="password" label="Password" {...register('password')} />
+              <FormControl fullWidth margin="normal">
+                <InputLabel id="active-label">סטטוס</InputLabel>
+                <Select
+                  id="active"
+                  labelId="active-label"
+                  defaultValue=""
+                  {...register('active')}
+                >
+                  <MenuItem value="true">פעיל</MenuItem>
+                  <MenuItem value="false">לא פעיל</MenuItem>
+                </Select>
+              </FormControl>
+              <FormControl fullWidth margin="normal">
+                <InputLabel id="role-label">תפקיד</InputLabel>
+                <Select
+                  id="role"
+                  labelId="role-label"
+                  defaultValue=""
+                  {...register('role')}
+                >
+                  <MenuItem value={Role.admin}>מנהל</MenuItem>
+                  <MenuItem value={Role.user}>משתמש</MenuItem>
+                </Select>
+              </FormControl>
               <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
                 Save
               </Button>

@@ -202,6 +202,7 @@ import PlaylistAddCheckIcon from '@mui/icons-material/PlaylistAddCheck';
 import StudentService from '../../Services/StudentService';
 import IStudentModel from '../../Models/IStudentModel';
 import GroupService from '../../Services/GroupService';
+import { Role } from '../../Models/IUserModel';
 import './Students.css'; 
 
 
@@ -213,6 +214,9 @@ const Students = () => {
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [groups, setGroups] = useState<{ [key: string]: string }>({});
   const navigate = useNavigate();
+  // const isAdmin = 
+  const [isAdmin, setIsAdmin] = useState(false); // Add isAdmin state
+
 
   useEffect(() => {
     const fetchStudents = async () => {
@@ -243,6 +247,17 @@ const Students = () => {
 
     fetchStudents();
     fetchGroups();
+  }, []);
+
+  useEffect(() => {
+    // const tokenString = localStorage.getItem('userToken');
+    // const token = tokenString ? JSON.parse(tokenString) : null;
+    // const isAdmin = token?.role === Role.admin;
+    const isAdmin = true;
+    // if (isAdmin) {
+    //   // User is an admin
+    //   // Perform admin-specific logic here if needed
+    // }
   }, []);
 
   const handleDeleteStudent = (student: IStudentModel) => {
@@ -330,18 +345,23 @@ const Students = () => {
       sortable: false,
       filterable: false,
       disableColumnMenu: true,
-      renderCell: (params: GridCellParams) => (
-        <div>
-          <IconButton component={Link} to={`/update-student/${params.row._id}`}>
-            <EditIcon />
-          </IconButton>
-          <IconButton onClick={() => handleDeleteStudent(params.row as IStudentModel)}>
-          <DeleteIcon className="delete-button"/>
+      renderCell: (params: GridCellParams) => {
+        // if (isAdmin) {
+          return (
+            <div>
+              <IconButton component={Link} to={`/update-student/${params.row._id}`}>
+                <EditIcon />
+              </IconButton>
+              <IconButton onClick={() => handleDeleteStudent(params.row as IStudentModel)}>
+              <DeleteIcon className="delete-button"/>
 
             {/* <DeleteIcon style={{ color: 'red' }} /> */}
-          </IconButton>
-        </div>
-      ),
+              </IconButton>
+            </div>
+          );
+        }
+        // return null;
+      // },
     },
   ];
 

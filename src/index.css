@@ -6,41 +6,40 @@ html, body{
 
 #root{
   height: 100%;
+  overflow: hidden;
 }
+
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Hebrew:wght@100;200;300;400;500;600;700;800;900&display=swap');
 *{
   font-family: 'Noto Sans Hebrew', sans-serif !important;
   color: rgb(0, 57, 107); 
-
 }
+
 bady{
   background-image: url("/src/Assets/logo.png");
-
   background-repeat: no-repeat;
   background-size: cover; 
 }
 
-.MuiSnackbarContent-message 
-{
+.MuiSnackbarContent-message {
   color: white;
 }
-.MuiButton-containedPrimary{
 
+.MuiButton-containedPrimary{
   background:rgb(0, 57, 107) !important;
   min-width: 200px !important;
 }
-.MuiButton-containedPrimary path{
 
+.MuiButton-containedPrimary path{
  fill: white ;
 }
+
 .delete-button path  {
   fill: red  !important ;
 }
 
-.css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input
-{
+.css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input{
   direction: rtl !important;
-
 }
 
 
@@ -66,3 +65,33 @@ bady{
   background: #555; 
 }
 
+.credit{
+  
+  font-size: 10px;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+  padding: 20px;
+}
+
+.credit.login{
+  position: relative;
+}
+
+.credit div{
+  margin-top: 10px;
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  justify-content: center;
+}
+
+.credit img{
+  width: 60px;
+}
+
+.user{
+  font-size: 16px;
+  margin-bottom: 10px;
+}

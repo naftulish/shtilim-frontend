@@ -1,21 +1,26 @@
+
+
+
 import React, { useState } from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
-import { signInWithEmailAndPassword } from 'firebase/auth';
-import authService from '../../../Services/AuthService';
+import {  useNavigate } from 'react-router-dom';
+
+import userServise from '../../../Services/UserService';
 import Button from '@mui/material/Button';
-import Avatar from '@mui/material/Avatar';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
+import logokivun from "../../../Assets/logo_kivun.png";
+
+
+
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { Copyright } from '@mui/icons-material';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert, { AlertColor } from '@mui/material/Alert';
+import logo from "../../../Assets/logo.png";
 
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
@@ -24,22 +29,33 @@ const Login = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [snackbarSeverity, setSnackbarSeverity] = useState<AlertColor | undefined>('success');
 
-  const onLogin = (e: React.FormEvent) => {
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
+  };
+
+  const onLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    signInWithEmailAndPassword(authService.auth, email, password)
-      .then((userCredential) => {
-        // Signed in
-        const user = userCredential.user;
-        console.log(user);
-        localStorage.setItem("userToken", JSON.stringify(user));
-        navigate('/home');
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.log(errorCode, errorMessage);
-      });
+    try {
+      const token = await userServise.login(email, password);
+      localStorage.setItem('token', token);
+      setSnackbarMessage('התחברות בוצעה בהצלחה.');
+      setSnackbarSeverity('success');
+      setSnackbarOpen(true);
+      // console.log(token);
+      setTimeout(() => {
+        navigate('/'); // Navigate to "/" route  
+      }, 2000); 
+      
+    } catch (error) {
+      console.error(error);
+      setSnackbarMessage('אחד או יותר נתונים שהקשת שגויים.');
+      setSnackbarSeverity('error');
+      setSnackbarOpen(true);
+    }
   };
 
   return (
@@ -54,21 +70,18 @@ const Login = () => {
             alignItems: 'center',
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-            <LockOutlinedIcon />
-          </Avatar>
+          <img src={logo} style={{width:250}} />
+          
           <Typography component="h1" variant="h5">
-            Login
+            התחברות למערכת
           </Typography>
-          <Box component="form" 
-          // onSubmit={handleSubmit} 
-          noValidate sx={{ mt: 1 }}>
+          <Box component="form" noValidate sx={{ mt: 1 }}>
             <TextField
               margin="normal"
               required
               fullWidth
               id="email"
-              label="Email Address"
+              label="אימייל"
               name="email"
               autoComplete="email"
               autoFocus
@@ -80,17 +93,14 @@ const Login = () => {
               required
               fullWidth
               name="password"
-              label="Password"
+              label="סיסמא"
               type="password"
               id="password"
               autoComplete="current-password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-            />
+
             <Button
               type="submit"
               fullWidth
@@ -98,24 +108,26 @@ const Login = () => {
               onClick={onLogin}
               sx={{ mt: 3, mb: 2 }}
             >
-              Login
+              התחברות
             </Button>
             <Grid container>
-              <Grid item xs>
-                <Link href="#" variant="body2">
-                  Forgot password?
-                </Link>
-              </Grid>
-              <Grid item>
-                <NavLink to="/signup">
-                  {"Don't have an account? Sign Up"}
-                </NavLink>
-              </Grid>
+            <div className="login credit">
+          <div>
+            <span>פותח בשיתוף</span>
+            <img src={logokivun} alt=""  />
+          </div>
+            <span>Version 1.0.0</span>
+          </div>
             </Grid>
           </Box>
         </Box>
-        {/* <Copyright sx={{ mt: 8, mb: 4 }} /> */}
       </Container>
+
+      <Snackbar open={snackbarOpen} autoHideDuration={2500} onClose={handleSnackbarClose}>
+        <MuiAlert onClose={handleSnackbarClose} severity={snackbarSeverity} sx={{ width: '100%' }}>
+          {snackbarMessage}
+        </MuiAlert>
+      </Snackbar>
     </ThemeProvider>
   );
 };

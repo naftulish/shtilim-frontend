@@ -3,6 +3,7 @@ interface IUserModel{
     firstName: string,
     lastName: string,
     email: string,
+    password?: string,
     active: boolean,
     role: Role
 }

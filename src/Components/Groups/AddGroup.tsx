@@ -63,9 +63,9 @@ const AddGroup = () => {
           <Container component="main" maxWidth="xs">
             <CssBaseline />
             <Box sx={{ marginTop: 8, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-              <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+              {/* <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
                 <GroupAdd />
-              </Avatar>
+              </Avatar> */}
               <Typography component="h1" variant="h5">
                 הוסף קבוצה
               </Typography>

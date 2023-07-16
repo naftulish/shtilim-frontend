@@ -48,9 +48,15 @@ class UserService {
   }
 
   async addUser(user: IUserModel): Promise<IUserModel> {
-    const response = await axios.post<IUserModel>(appConfig.users, user);
+    const response = await axios.post<IUserModel>(appConfig.register, user);
     return response.data;
   }
+
+  async login(email: string, password: string): Promise<string> {
+    const response = await axios.post<string>(appConfig.login, {email, password});
+    return response.data;
+  }
+
 }
 
 const userService = new UserService();

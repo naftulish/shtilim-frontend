@@ -66,3 +66,33 @@ bady{
   background: #555; 
 }
 
+.credit{
+  
+  font-size: 10px;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+  padding: 20px;
+}
+
+.credit.login{
+  position: relative;
+}
+
+.credit div{
+  margin-top: 10px;
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  justify-content: center;
+}
+
+.credit img{
+  width: 60px;
+}
+
+.user{
+  font-size: 16px;
+  margin-bottom: 10px;
+}

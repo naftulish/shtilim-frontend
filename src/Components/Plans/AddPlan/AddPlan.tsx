@@ -1,19 +1,12 @@
-import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import Button from '@mui/material/Button';
-import Avatar from '@mui/material/Avatar';
-import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useForm } from "react-hook-form";
 import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
-import SettingsIcon from '@mui/icons-material/Settings';
-import AssignmentIcon from '@mui/icons-material/Assignment';
-import { FormControlLabel, Grid, Radio, RadioGroup, ToggleButton, ToggleButtonGroup } from '@mui/material';
-import { title } from 'process';
+import { FormControlLabel, Grid, Radio, RadioGroup} from '@mui/material';
 
 import planServise from '../../../Services/PlanService';
 import {
@@ -24,12 +17,10 @@ import {
   ReportingTime,
   defaultReportingTime,
 } from '../../../Models/IPlanModel';
-import { Directions } from '@mui/icons-material';
+import { useNavigate } from 'react-router-dom';
+import useTitle from '../../../hooks/useTitle';
 
 
-
-const defaultTheme = createTheme(  {direction: 'rtl',}
-);
 
 interface IPlanModelExtended extends IPlanModel {
   maxReportingTime: {
@@ -39,15 +30,14 @@ interface IPlanModelExtended extends IPlanModel {
 
 const AddPlan = () => {
   
-  // const { register, handleSubmit, setValue } = useForm<IPlanModel>();
   const { register, handleSubmit, setValue, watch } = useForm<IPlanModel>();
   const [selectedOption, setSelectedOption] = useState('');
   const selectedReportingType = watch('reportingType');
-  const planModel = watch();
 
+  useTitle("תוכניות");
+
+  const navigate = useNavigate();
   const [questionDescription, setQuestionDescription] = useState("");
-
-  // const [answersDescription, setanswersDescription] = useState("");
 
   useEffect(() => {
     setQuestionDescription('');
@@ -110,8 +100,6 @@ const AddPlan = () => {
       .catch((error: { message: string; }) => {
         alert('שגיאה בשמירת התוכנית: ' + error.message);
       });
-
-    console.log(plan);
   };
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -119,27 +107,12 @@ const AddPlan = () => {
   };
 
   return (
-    // <div> 
-    //   <ImageComponent />
 
-
-    <form onSubmit={handleSubmit(save)}>
-      <ThemeProvider theme={defaultTheme}>
-        <Container component="main" maxWidth="xs">
-          <CssBaseline />
-          <Box
-            sx={{
-              marginTop: 8,
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-            }}
-          >
-            <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-              <AssignmentIcon />
-            </Avatar>
+    <div style={{ width: '100%', maxWidth: "850px", margin: "auto", marginTop: "50px" }}>
+      <form onSubmit={handleSubmit(save)}>
+        
             <Typography component="h1" variant="h5">
-              הוסף תוכנית
+              הוספת תוכנית
             </Typography>
             <Box component="div" sx={{ mt: 1 }}>
               <TextField
@@ -156,28 +129,7 @@ const AddPlan = () => {
                 {...register("description")}
               />
 
-
-              {/* <FormControl required fullWidth margin="normal">
-              <InputLabel id="reporting-type-label">זמן דיווח</InputLabel>
-              <Select
-                labelId="reporting-type-label"
-                defaultValue=""
-                {...register('reportingType', { required: true })}
-              >
-                <MenuItem value={ReportingType.days}>יומי</MenuItem>
-                <MenuItem value={ReportingType.hours}>שעתי</MenuItem>
-                <MenuItem value={ReportingType.minutes}>דקתי</MenuItem>
-              </Select>
-              </FormControl>
-              <TextField
-                label="תדירות"
-                {...register('reportingTime')}
-                margin="normal"
-                required
-                fullWidth
-              /> */}
-
-              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                 <FormControl required margin="normal" sx={{ flex: 0.5 }}>
                   <InputLabel id="reporting-type-label">זמן דיווח</InputLabel>
                   <Select
@@ -219,14 +171,13 @@ const AddPlan = () => {
                   </Box>
 
                   <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                    <RadioGroup value={quiz.type} onChange={(e) => updateQuiz(index, "type", e.target.value as Type)} sx={{ display: 'flex' }}>
+                    <RadioGroup value={quiz.type} onChange={(e) => updateQuiz(index, "type", e.target.value as Type)} 
+                      sx={{ display: 'flex', flexDirection: "row" }}>
                       <FormControlLabel value={Type.booleany} control={<Radio />} label="כן/לא" />
                       <FormControlLabel value={Type.scalar} control={<Radio />} label="מדורג" />
                     </RadioGroup>
-                  </Box>
 
-
-                  {quiz.type === Type.booleany && (
+                    {quiz.type === Type.booleany && (
                     <Box sx={{ marginTop: '16px' }}>
                       <Grid container spacing={2}>
                         <Grid item xs={6}>
@@ -251,44 +202,44 @@ const AddPlan = () => {
                   )}
 
                   {quiz.type === Type.scalar && (
-                    <Grid container spacing={2} sx={{ marginTop: '16px' }}>
-                      <Grid item xs={6}>
+                    <Grid container spacing={2} sx={{ marginTop: '16px',  }}>
+                      <Grid item>
                         <TextField
                           label="*"
-                          fullWidth
+                    
                           defaultValue={"טעון שיפור"}
                           onChange={(e) => updateQuiz(index, "answer1", e.target.value)}
                         />
                       </Grid>
-                      <Grid item xs={6}>
+                      <Grid item>
                         <TextField
                           label="**"
-                          fullWidth
+                          
                           defaultValue={"מספיק"}
 
                           onChange={(e) => updateQuiz(index, "answer2", e.target.value)}
                         />
                       </Grid>
-                      <Grid item xs={4}>
+                      <Grid item>
                         <TextField
                           label="***"
-                          fullWidth
+                          
                           defaultValue={"טוב"}
                           onChange={(e) => updateQuiz(index, "answer3", e.target.value)}
                         />
                       </Grid>
-                      <Grid item xs={4}>
+                      <Grid item >
                         <TextField
                           label="****"
-                          fullWidth
+                          
                           defaultValue={"טוב מאוד"}
                           onChange={(e) => updateQuiz(index, "answer4", e.target.value)}
                         />
                       </Grid>
-                      <Grid item xs={4}>
+                      <Grid item>
                         <TextField
                           label="*****"
-                          fullWidth
+                          
                           defaultValue={"מצוין"}
                           onChange={(e) => updateQuiz(index, "answer5", e.target.value)}
                         />
@@ -296,36 +247,29 @@ const AddPlan = () => {
                     </Grid>
                   )}
 
+
+                  </Box>
                 </Box>
               ))}
 
-              <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                <Button
-                  variant="contained"
-                  onClick={addQuiz}
-                  fullWidth
-                  sx={{ mt: 3, mb: 2, width: '50%' }}
-                >
+              <Box sx={{ mt: 1, display: 'flex', justifyContent: 'start' }}>
+                <Button variant="contained" onClick={addQuiz}>
                   להוספת שאלה
                 </Button>
               </Box>
 
 
-              <Button
-                variant="contained"
-                type="submit"
-                fullWidth
-                sx={{ mt: 3, mb: 2 }}
-              >
-                שמור
-              </Button>
+              <FormControl className='flex space row gap-10' fullWidth sx={{ mt: 3, mb: 2 }}>
+                  <Button fullWidth variant="outlined" onClick={ () => navigate('/plans')}>
+                    ביטול
+                  </Button>
+                  <Button fullWidth type="submit" variant="contained" >
+                      שמירה 
+                  </Button>
+              </FormControl>
             </Box>
-          </Box>
-        </Container>
-      </ThemeProvider>
     </form>
-    // </div>
-
+    </div>
   );
 };
 

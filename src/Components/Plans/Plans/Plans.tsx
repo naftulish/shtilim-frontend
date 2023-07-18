@@ -1,6 +1,3 @@
-
-
-
 import React, { useEffect, useState } from 'react';
 import { DataGrid, GridColDef, GridCellParams } from '@mui/x-data-grid';
 import { Button, IconButton, Snackbar } from '@mui/material';
@@ -14,6 +11,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import PlanService from '../../../Services/PlanService';
 import { IPlanModel } from '../../../Models/IPlanModel';
+import useTitle from '../../../hooks/useTitle';
 
 
 const Plans = () => {
@@ -23,6 +21,7 @@ const Plans = () => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const navigate = useNavigate();
+  useTitle("תוכניות");
 
   useEffect(() => {
     const fetchPlans = async () => {
@@ -95,11 +94,8 @@ const Plans = () => {
       disableColumnMenu: true,
       renderCell: (params: GridCellParams) => (
         <div>
-          <IconButton component={Link} to={`/update-plan/${params.row._id}`}>
-            <EditIcon />
-          </IconButton>
           <IconButton onClick={() => handleDeletePlan(params.row as IPlanModel)}>
-            <DeleteIcon style={{ color: 'red' }} />
+            <DeleteIcon className="delete-button" />
           </IconButton>
         </div>
       ),
@@ -113,8 +109,8 @@ const Plans = () => {
         <Button
           type="submit"
           variant="contained"
-          onClick={() => navigate('/addplan')}
-          sx={{ mt: 3, mb: 2, flexShrink: 0, width: '11%' }}
+          onClick={() => navigate('/add-plan')}
+          className='btn-top'
         >
           הוספת תוכנית<AssignmentIcon />
         </Button>

@@ -1,0 +1,78 @@
+.Aside{
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    border-left: 1px solid rgb(0, 57, 107);
+    text-align: center;
+}
+
+.AsideLogo{
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+
+}
+
+.Aside .AsideList{
+    text-align: right;
+    padding: 10px;
+    display: flex;
+    gap: 10px;
+    flex-direction: column;
+}
+
+.Aside .AsideList a{
+    text-decoration: none;
+    border-radius: 5px;
+    display: flex;
+    gap: 20px;
+    padding: 10px;
+    transition: 0.1s;
+}
+
+.Aside .AsideList a.active,
+.Aside .AsideList a:hover{
+    color: white;
+    background: rgb(0, 57, 107);
+}
+
+.Aside .AsideList a.active{
+    font-weight: bolder;
+}
+
+
+.Aside .AsideList a path{
+    fill: #cd362a;;
+}
+
+.Aside .AsideList a.active path,
+.Aside .AsideList a:hover path{
+    fill: white;
+}
+
+.credit{
+    font-size: 10px;
+    text-align: center;
+    padding: 20px;
+}
+
+.credit.login{
+    position: relative;
+}
+  
+.credit div{
+    margin-top: 10px;
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    justify-content: center;
+}
+  
+.credit img{
+    width: 60px;
+}
+  
+.user{
+    font-size: 16px;
+    margin-bottom: 10px;
+}

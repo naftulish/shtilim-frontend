@@ -8,19 +8,12 @@ import {
   Box,
   Container,
   Typography,
-  Avatar,
-  CssBaseline,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
 } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { Edit as EditIcon } from '@mui/icons-material';
-import { green } from '@mui/material/colors';
 import { useForm } from 'react-hook-form';
 import GroupService from '../../Services/GroupService';
 import Group from '../../Models/IGroupModel';
+import useTitle from '../../hooks/useTitle';
 
 const defaultTheme = createTheme();
 
@@ -31,6 +24,9 @@ const UpdateGroup = () => {
     name: '',
     teacher: '',
   });
+  
+  useTitle("כיתות");
+
 
   const navigate = useNavigate();
   const { register, handleSubmit, setValue } = useForm<Group>();
@@ -80,7 +76,6 @@ const UpdateGroup = () => {
 
   return (
     <ThemeProvider theme={defaultTheme}>
-      <CssBaseline />
       <Container maxWidth="xs">
         <Box
           sx={{
@@ -94,7 +89,7 @@ const UpdateGroup = () => {
             <EditIcon />
           </Avatar> */}
           <Typography component="h1" variant="h5">
-            Update Group
+            עדכון כיתה
           </Typography>
           {group && (
             <form onSubmit={handleSubmit(handleFormSubmit)}>
@@ -102,7 +97,7 @@ const UpdateGroup = () => {
                 margin="normal"
                 fullWidth
                 id="name"
-                label="Group Name"
+                label="שם כיתה"
                 defaultValue={group.name}
                 autoFocus
                 {...register('name')}
@@ -111,15 +106,15 @@ const UpdateGroup = () => {
                 margin="normal"
                 fullWidth
                 id="teacher"
-                label="Teacher"
+                label="מורה / גננת"
                 defaultValue={group.teacher}
                 {...register('teacher')}
               />
               <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
-                Update
+                עדכון
               </Button>
               <Button fullWidth variant="contained" onClick={handleGoBack}>
-                Cancel
+                ביטול
               </Button>
             </form>
           )}

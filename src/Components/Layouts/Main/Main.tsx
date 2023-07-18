@@ -16,32 +16,31 @@ import UpdateGroup from "../../Groups/UpdateGroup";
 import Plans from "../../Plans/Plans/Plans";
 import AddPlan from "../../Plans/AddPlan/AddPlan";
 import './Main.css'; 
-import { Home } from "@mui/icons-material";
+import HomePage from "../HomePage/HomePage";
+import useTitle from "../../../hooks/useTitle";
 
 
 
 function Main():JSX.Element {
+    useTitle("ראשי");
 
     return (
         <main className="main">
             <Routes>
                 
                 <Route path="/home" element={<Navigate to = "/" /> } />
+                <Route path="/" element={<HomePage /> } />
                 <Route path="/users" element={<Users /> } />
-                <Route path="/adduser" element={<AddUser /> } />
+                <Route path="/add-user" element={<AddUser /> } />
                 <Route path="/update-user/:id" element={<UpdateUser /> } />
-
                 <Route path="/students" element={<Students /> } />
                 <Route path="/update-student/:id" element={<UpdateStudent /> } />
-                <Route path="/addstudent" element={<AddStudent /> } />
+                <Route path="/add-student" element={<AddStudent /> } />
                 <Route path="/student-plans/:id" element={<StudentPlans />} />
-
                 <Route path="/plans" element={<Plans /> } />
-                <Route path="/addplan" element={<AddPlan /> } />
-
-
+                <Route path="/add-plan" element={<AddPlan /> } />
                 <Route path="/groups" element={<Groups /> } />
-                <Route path="/addgroup" element={<AddGroup /> } />
+                <Route path="/add-group" element={<AddGroup /> } />
                 <Route path="/update-group/:id" element={<UpdateGroup /> } />
                 
             </Routes>

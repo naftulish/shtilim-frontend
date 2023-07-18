@@ -6,21 +6,19 @@ import {
   Box,
   Container,
   Typography,
-  Avatar,
-  CssBaseline,
-  createTheme,
-  ThemeProvider,
+  FormControl
 } from '@mui/material';
-import { ArrowBack, GroupAdd } from '@mui/icons-material';
+import { ArrowBack } from '@mui/icons-material';
 import IGroupModel from '../../Models/IGroupModel';
 import GroupService from '../../Services/GroupService';
 import { useNavigate } from 'react-router-dom';
+import useTitle from '../../hooks/useTitle';
 
-const defaultTheme = createTheme();
 
 const AddGroup = () => {
   const { register, handleSubmit } = useForm<IGroupModel>();
   const navigate = useNavigate();
+  useTitle("כיתות");
 
   const save = async (group: IGroupModel) => {
     try {
@@ -34,51 +32,44 @@ const AddGroup = () => {
 
   return (
     <>
+      <Button
+      variant="contained"
+      onClick={() => navigate('/groups')}
+      className='btn-top-left'
+      >
+      <ArrowBack />
+        חזרה לכיתות
+      </Button>
       <Container component="main" maxWidth="xs">
-        <CssBaseline />
-        <div className="button">
-          <Button
-            variant="contained"
-            onClick={() => navigate('/groups')}
-            sx={{
-              mt: 3,
-              mb: 2,
-              flexShrink: 0,
-              textAlign: 'left',
-              overflow: 'hidden',
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              marginTop: '100px',
-              marginLeft: '100px',
-              whiteSpace: 'nowrap', // Add this line
-            }}
-          >
-            <ArrowBack />
-            חזרה לרשימת קבוצות
-          </Button>
-        </div>
-
-        <ThemeProvider theme={defaultTheme}>
-          <Container component="main" maxWidth="xs">
-            <CssBaseline />
+        <Container component="main" maxWidth="xs">
             <Box sx={{ marginTop: 8, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-              {/* <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-                <GroupAdd />
-              </Avatar> */}
               <Typography component="h1" variant="h5">
-                הוסף קבוצה
+                הוספת כיתה
               </Typography>
+              
               <Box component="form" onSubmit={handleSubmit(save)} sx={{ mt: 3 }}>
-                <TextField label="שם קבוצה" required fullWidth {...register('name')} />
-                <TextField label="מורה" required fullWidth {...register('teacher')} />
-                <Button variant="contained" type="submit" fullWidth sx={{ mt: 3, mb: 2 }}>
-                  שמור
-                </Button>
+              
+                <FormControl margin="normal" required fullWidth>
+                  <TextField label="שם כיתה" required fullWidth {...register('name')} />
+                </FormControl>                
+                
+                <FormControl margin="normal" required fullWidth>
+                  <TextField label="מורה" required fullWidth {...register('teacher')} />
+                </FormControl>                
+                  
+
+                <FormControl className='flex space row gap-10' fullWidth sx={{ mt: 3, mb: 2 }}>
+                  <Button fullWidth variant="outlined" onClick={ () => navigate('/groups')}>
+                    ביטול
+                  </Button>
+                  <Button fullWidth type="submit" variant="contained" >
+                      שמירה 
+                  </Button>
+                </FormControl>
+
               </Box>
             </Box>
           </Container>
-        </ThemeProvider>
       </Container>
     </>
   );

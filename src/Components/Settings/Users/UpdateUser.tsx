@@ -8,21 +8,16 @@ import {
   Box,
   Container,
   Typography,
-  Avatar,
-  CssBaseline,
   FormControl,
   InputLabel,
   Select,
   MenuItem,
 } from '@mui/material';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { Edit as EditIcon } from '@mui/icons-material';
-import { green } from '@mui/material/colors';
 import { useForm } from 'react-hook-form';
 import IUserModel, { Role } from '../../../Models/IUserModel';
 import UserService from '../../../Services/UserService';
+import useTitle from '../../../hooks/useTitle';
 
-const defaultTheme = createTheme();
 
 const UpdateUser = () => {
   const { id } = useParams();
@@ -37,6 +32,7 @@ const UpdateUser = () => {
     });
   const navigate = useNavigate();
   const { register, handleSubmit, setValue } = useForm<IUserModel>();
+  useTitle("משתמשים");
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -83,13 +79,7 @@ const UpdateUser = () => {
     }
   };
 
-  const handleGoBack = () => {
-    navigate('/users');
-  };
-
   return (
-    <ThemeProvider theme={defaultTheme}>
-      <CssBaseline />
       <Container maxWidth="xs">
         <Box
           sx={{
@@ -99,11 +89,8 @@ const UpdateUser = () => {
             alignItems: 'center',
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: green[500] }}>
-            <EditIcon />
-          </Avatar>
           <Typography component="h1" variant="h5">
-            עדכון משתמש
+            עריכת משתמש
           </Typography>
           {user && (
             <form onSubmit={handleSubmit(handleFormSubmit)}>
@@ -112,7 +99,6 @@ const UpdateUser = () => {
                 fullWidth
                 id="firstName"
                 label="שם פרטי"
-                defaultValue={user.firstName}
                 autoFocus
                 {...register('firstName')}
               />
@@ -121,7 +107,6 @@ const UpdateUser = () => {
                 fullWidth
                 id="lastName"
                 label="שם משפחה"
-                defaultValue={user.lastName}
                 {...register('lastName')}
               />
               <TextField
@@ -129,7 +114,6 @@ const UpdateUser = () => {
                 fullWidth
                 id="email"
                 label="כתובת דואר אלקטרוני"
-                defaultValue={user.email}
                 {...register('email')}
               />
               <FormControl fullWidth margin="normal">
@@ -149,24 +133,25 @@ const UpdateUser = () => {
                 <Select
                   id="role"
                   labelId="role-label"
-                  defaultValue={user.role}
                   {...register('role')}
                 >
                   <MenuItem value={Role.admin}>מנהל</MenuItem>
                   <MenuItem value={Role.user}>משתמש</MenuItem>
                 </Select>
               </FormControl>
-              <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
-                עדכון
-              </Button>
-              <Button fullWidth variant="contained" onClick={handleGoBack}>
-                ביטול
-              </Button>
+
+              <FormControl className='flex space row gap-10' fullWidth sx={{ mt: 3, mb: 2 }}>
+                <Button fullWidth variant="outlined" onClick={() => navigate('/users')}>
+                  ביטול
+                </Button>
+                <Button fullWidth type="submit" variant="contained" >
+                  עדכון
+                </Button>
+              </FormControl>
             </form>
           )}
         </Box>
       </Container>
-    </ThemeProvider>
   );
 };
 

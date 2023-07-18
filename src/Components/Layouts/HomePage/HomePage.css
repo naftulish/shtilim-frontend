@@ -1,0 +1,39 @@
+.Home{
+    max-width: 750px;
+    margin: auto;
+}
+
+.Home .homeBox{
+    width: 100%;
+}
+
+.homeFlex {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    padding: 50px;
+    max-width: 750px;
+    margin: auto;
+}
+
+.homeBox a{
+    text-decoration: none;
+}
+
+
+.homeBox span{
+    color: #cd362a;
+    font-size: 34px;
+    font-weight: bolder;
+    text-decoration: none;
+}
+
+.homeBox > a{
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    box-shadow: 0px 0px 30px -10px gainsboro;
+    border-radius: 14px;
+}

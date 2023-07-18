@@ -13,8 +13,8 @@ import PlaylistAddCheckIcon from '@mui/icons-material/PlaylistAddCheck';
 import StudentService from '../../Services/StudentService';
 import IStudentModel from '../../Models/IStudentModel';
 import GroupService from '../../Services/GroupService';
-import { Role } from '../../Models/IUserModel';
 import './Students.css'; 
+import useTitle from '../../hooks/useTitle';
 
 
 const Students = () => {
@@ -25,8 +25,8 @@ const Students = () => {
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [groups, setGroups] = useState<{ [key: string]: string }>({});
   const navigate = useNavigate();
-  // const isAdmin = 
-  const [isAdmin, setIsAdmin] = useState(false); // Add isAdmin state
+
+  useTitle("תלמידים")
 
 
   useEffect(() => {
@@ -52,7 +52,7 @@ const Students = () => {
         });
         setGroups(groupMap);
       } catch (error: any) {
-        console.error('נכשל לקבל את רשימת הקבוצות:', error);
+        console.error('נכשל לקבל את רשימת ה:', error);
       }
     };
 
@@ -60,16 +60,6 @@ const Students = () => {
     fetchGroups();
   }, []);
 
-  useEffect(() => {
-    // const tokenString = localStorage.getItem('userToken');
-    // const token = tokenString ? JSON.parse(tokenString) : null;
-    // const isAdmin = token?.role === Role.admin;
-    const isAdmin = true;
-    // if (isAdmin) {
-    //   // User is an admin
-    //   // Perform admin-specific logic here if needed
-    // }
-  }, []);
 
   const handleDeleteStudent = (student: IStudentModel) => {
     setSelectedStudent(student);
@@ -157,7 +147,6 @@ const Students = () => {
       filterable: false,
       disableColumnMenu: true,
       renderCell: (params: GridCellParams) => {
-        // if (isAdmin) {
           return (
             <div>
               <IconButton component={Link} to={`/update-student/${params.row._id}`}>
@@ -165,33 +154,29 @@ const Students = () => {
               </IconButton>
               <IconButton onClick={() => handleDeleteStudent(params.row as IStudentModel)}>
               <DeleteIcon className="delete-button"/>
-
-            {/* <DeleteIcon style={{ color: 'red' }} /> */}
               </IconButton>
             </div>
           );
         }
-        // return null;
-      // },
     },
   ];
 
   return (
-    <div style={{ height: 400, width: '100%' }}>
+    <div style={{ width: '100%' }}>
       <div style={{ display: 'flex', alignItems: 'center', marginBottom: '1rem' }}>
         <h1 style={{ flex: 1 }}>רשימת תלמידים</h1>
         <Button
           type="submit"
           variant="contained"
-          onClick={() => navigate('/addstudent')}
-          sx={{ mt: 3, mb: 2, flexShrink: 0, width: '11%' }}
-        >
+          onClick={() => navigate('/add-student')}
+          className='btn-top'        >
           הוספת תלמיד &nbsp;<PersonAddAltIcon />
         </Button>
       </div>
 
       <DataGrid rows={students} columns={columns} />
       <Snackbar open={snackbarOpen} message={snackbarMessage} onClose={handleSnackbarClose} />
+
       <Dialog open={deleteConfirmationOpen} onClose={handleCancelDelete}>
         <DialogTitle>מחיקת תלמיד</DialogTitle>
         <DialogContent>האם אתה בטוח שברצונך למחוק תלמיד זה?</DialogContent>

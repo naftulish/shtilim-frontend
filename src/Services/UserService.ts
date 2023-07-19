@@ -1,5 +1,6 @@
 import axios from "axios";
 import appConfig from "../Utils/Config";
+import jwtDecode from "jwt-decode";
 import IUserModel, { Role } from "../Models/IUserModel";
 
 class UserService {
@@ -55,6 +56,16 @@ class UserService {
   async login(email: string, password: string): Promise<string> {
     const response = await axios.post<string>(appConfig.login, {email, password});
     return response.data;
+  }
+
+  getUserFromToken(): IUserModel {
+    const token = localStorage.getItem("token");
+    let user = null;
+    if (token) {
+      const payloadJwt: any = jwtDecode(token);
+      user = payloadJwt.user;
+    }
+    return user;
   }
 
 }

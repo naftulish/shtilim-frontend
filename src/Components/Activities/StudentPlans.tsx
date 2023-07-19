@@ -1,45 +1,11 @@
 
-// if (isViewReportsStarted) {
-//   return (
-//     <div>
-//       <Typography variant="h5" align="center">
-//         Student: {student.firstName} {student.lastName}
-//       </Typography>
-//       <Box maxWidth="600px" mx="auto" mt={2}>
-//         <Paper>
-//           <Box p={2}>
-//             <Typography variant="h6">Reports for {selectedPlan?.name}</Typography>
-//             <Table>
-//               <TableHead>
-//                 <TableRow>
-//                   <TableCell>Activity ID</TableCell>
-//                   <TableCell>Grade</TableCell>
-//                 </TableRow>
-//               </TableHead>
-//               <TableBody>
-//                 {activities.map((activity) => (
-//                   <TableRow key={activity._id}>
-//                     <TableCell>{activity._id}</TableCell>
-//                     <TableCell>{activity.grade}</TableCell>
-//                   </TableRow>
-//                 ))}
-//               </TableBody>
-//             </Table>
-//             <Box mt={2}>
-//               <Button variant="contained" onClick={handleCancelViewReport}>
-//                 Cancel
-//               </Button>
-//             </Box>
-//           </Box>
-//         </Paper>
-//       </Box>
-//     </div>
-//   );
-// }
-
 
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import * as XLSX from 'xlsx';
+
+// @ts-ignore
+import * as FileSaver from 'file-saver';
 
 import PlanService from '../../Services/PlanService';
 import StudentService from '../../Services/StudentService';
@@ -64,12 +30,16 @@ import {
   Select,
   InputLabel,
   MenuItem,
-  SelectChangeEvent
+  SelectChangeEvent,
+  ButtonGroup
 } from '@mui/material';
 import ActivityService from '../../Services/ActivityService';
-
+import userService from '../../Services/UserService';
 import { ArrowBack, Delete } from '@mui/icons-material';
 import { IPlanModel } from '../../Models/IPlanModel';
+import IUserModel from '../../Models/IUserModel';
+import UserService from '../../Services/UserService';
+import { log } from 'console';
 
 // The interface represents an activity object
 
@@ -91,6 +61,23 @@ const StudentPlans = () => {
   const [isViewReportsStarted, setIsViewReportsStarted] = useState(false);
   const [activities, setActivities] = useState<IActivityModel[]>([]);
   const [newPlan, setNewPlan] = useState<string>(''); // New state variable to hold the selected plan
+  const [users, setUsers] = useState<IUserModel[]>([]);
+
+  useEffect(() => {
+  const fetchUsers = async () => {
+    try {
+      const fetchedUsers = await UserService.getAllUsers();
+      setUsers(fetchedUsers);
+    } catch (error) {
+      // Handle the error if fetching users fails
+    }
+  };
+
+    fetchUsers();
+  }, []);
+  
+  
+  
 
   // console.log(selectedPlan);
   // console.log(activities);
@@ -167,12 +154,18 @@ const StudentPlans = () => {
   
     // Create the grade array
     const grade: number[] = selectedAnswers;
-  
+    
+
+    const user = userService.getUserFromToken();
+    console.log(user);
+    
+    
     // Create the activity object
     const activity: IActivityModel = {
       planId: selectedPlan?._id || '',
       studentId: student?._id || '',
       grade: grade,
+      userId: user?._id || "", // Assuming the user object has a `userId` property
     };
   
     try {
@@ -201,6 +194,8 @@ const StudentPlans = () => {
         plan._id,
         student?._id ?? ''
       );
+      console.log(fetchedActivities);
+      
       setActivities(fetchedActivities);
       setSelectedPlan(plan);
       setIsViewReportsStarted(true);
@@ -332,9 +327,13 @@ if (isViewReportsStarted) {
     });
   });
 
-  console.log(arr);
+ 
   
+  const average = arr.reduce((accumulator, currentValue) => accumulator + (currentValue / (selectedPlan?.quiz?.length || 1)), 0) / arr.length;
 
+  
+  // console.log(arr);
+  
   
   return (
     <div>
@@ -342,16 +341,19 @@ if (isViewReportsStarted) {
         Student: {student.firstName} {student.lastName}
       </Typography>
       <Box maxWidth="600px" mx="auto" mt={2}>
-        <Paper>
+        
           <Box p={2}>
-            <Typography variant="h6">Reports for {selectedPlan?.name}</Typography>
+          <Typography variant="h6">
+            תוכנית: {selectedPlan?.name} | אחוזי הצלחה: {average.toFixed(2)}
+          </Typography>
             <Table>
               <TableHead>
                 <TableRow>
                   <TableCell>Activity ID</TableCell>
                   {selectedPlan?.quiz.map(q => <TableCell>{q.title}</TableCell>)}
                   <TableCell>Sum</TableCell>
-                  <TableCell>Date</TableCell>
+                  <TableCell>תאריך</TableCell>
+                  <TableCell>המדווח</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -366,31 +368,40 @@ if (isViewReportsStarted) {
                     })}
                     <TableCell>{arr[j] / ( selectedPlan?.quiz.length || 1 ) }</TableCell>
                     <TableCell>{activity.createdIn}</TableCell>
+                    <TableCell key={activity._id}>
+                      {
+                        (() => {
+                          const user = users.find((user) => user._id === activity.userId);
+                          
+                          
+                          return user ? `${user.firstName} ${user.lastName}` : '';
+                        })()
+                      }
+                    </TableCell>
+                    
+
                   </TableRow>
                 ))}
               </TableBody>
             </Table>
             <Box mt={2}>
-              <Button variant="contained" onClick={handleCancelViewReport}>
-                Cancel
-              </Button>
-            </Box>
+              
+                <Button variant="contained" onClick={handleCancelViewReport}>
+                  Cancel
+                </Button>
+                {/* <Button variant="contained" onClick={handleExportToExcel}>
+                  to Excel
+                </Button> */}
+                
+              </Box>
           </Box>
-        </Paper>
+        
       </Box>
     </div>
   );
 }
 
-  // // If viewing reports, display the reports table
-  // if (isViewReportsStarted) {
-  //   return <Report
-  //   student={student}
-  //   selectedPlan={selectedPlan}
-  //   activities={activities as IActivityModel[]}
-  //   handleCancelViewReport={handleCancelViewReport}
-  // />
-  // }
+ 
 
 
 

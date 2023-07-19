@@ -3,6 +3,6 @@ interface IActivityModel{
     planId: string,
     studentId: string,
     grade: number[],
-    
+    createdIn?: string
 }
 export default IActivityModel;

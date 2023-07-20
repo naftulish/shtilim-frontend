@@ -75,7 +75,8 @@ const AddUser = () => {
                   {...register('role')}
                 >
                   <MenuItem value={Role.admin}>מנהל</MenuItem>
-                  <MenuItem value={Role.user}>משתמש</MenuItem>
+                  <MenuItem value={Role.programManager}>מנהל תוכניות</MenuItem>
+                  <MenuItem value={Role.reporter}>מדווח</MenuItem>
                 </Select>
               </FormControl>
 

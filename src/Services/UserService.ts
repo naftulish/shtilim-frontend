@@ -68,6 +68,21 @@ class UserService {
     return user;
   }
 
+  isAdmin(): boolean {
+    const user = this.getUserFromToken();
+    return user?.role === Role.admin;
+  }
+
+  isProgramManager(): boolean {
+    const user = this.getUserFromToken();
+    return user?.role === Role.programManager;
+  }
+
+  isReporter(): boolean {
+    const user = this.getUserFromToken();
+    return user?.role === Role.reporter;
+  }
+
 }
 
 const userService = new UserService();

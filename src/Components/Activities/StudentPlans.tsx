@@ -2,10 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import * as XLSX from 'xlsx';
 
-// @ts-ignore
-import * as FileSaver from 'file-saver';
 
 import PlanService from '../../Services/PlanService';
 import StudentService from '../../Services/StudentService';
@@ -50,6 +47,8 @@ const StudentPlans = () => {
 
   // The 'useNavigate' hook provides navigation capabilities
   const navigate = useNavigate();
+
+  const isReporter = userService.isReporter();
 
   // State variables
   const [student, setStudent] = useState<IStudentModel | null>(null);
@@ -423,6 +422,7 @@ if (isViewReportsStarted) {
       </Typography>
 
       {/* Add new plan */}
+      {!isReporter && (
       <Box>
         <Typography>שיוך תוכנית חדשה</Typography>
         <FormControl margin="normal" fullWidth>
@@ -448,7 +448,7 @@ if (isViewReportsStarted) {
         <Button variant="outlined" onClick={handleAddPlan}>
           שמירה
         </Button>
-      </Box>
+      </Box>)}
 
       {/* Display existing plans */}
       <Grid container spacing={2}>
@@ -456,6 +456,7 @@ if (isViewReportsStarted) {
           <Grid item xs={12} sm={6} md={4} key={plan?._id}>
             <Paper>
               <Box p={2}>
+              {!isReporter && (
                 <Box display="flex" justifyContent="flex-end">
                   <Button
                     variant="outlined"
@@ -464,7 +465,7 @@ if (isViewReportsStarted) {
                   >
                     מחיקה
                   </Button>
-                </Box>
+                </Box>)}
                 <Typography variant="h6">{plan?.name}</Typography>
                 <Typography variant="body1">{plan?.description}</Typography>
                 <Box mt={2} display="flex" justifyContent="space-between">

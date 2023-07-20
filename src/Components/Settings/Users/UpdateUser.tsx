@@ -28,7 +28,7 @@ const UpdateUser = () => {
       lastName: '',
       email: "",
       active: false,
-      role: Role.user,
+      role: Role.reporter,
     });
   const navigate = useNavigate();
   const { register, handleSubmit, setValue } = useForm<IUserModel>();
@@ -57,18 +57,38 @@ const UpdateUser = () => {
 
   const handleFormSubmit = async (data: IUserModel) => {
     try {
-      const updatedUser = {
-        _id: user._id,
-        firstName: data.firstName,
-        lastName: data.lastName,
-        email: data.email,
-        active: data.active,
-        role: data.role,
-      };
-
-      await UserService.updateOneUser(user?._id || '', updatedUser);
-      alert('המשתמש עודכן בהצלחה!');
-      navigate('/users');
+      // Check if the password field is not empty and not undefined
+      if (data.password && data.password.trim()) {
+        const updatedUser = {
+          _id: user._id,
+          firstName: data.firstName,
+          lastName: data.lastName,
+          email: data.email,
+          active: data.active,
+          role: data.role,
+          password: data.password, // Add the password field back if it's not empty
+        };
+  
+        await UserService.updateOneUser(user?._id || '', updatedUser);
+        alert('המשתמש עודכן בהצלחה!');
+        navigate('/users');
+      } else {
+        // If the password field is empty or undefined, remove it from the data object
+        delete data.password;
+  
+        const updatedUser = {
+          _id: user._id,
+          firstName: data.firstName,
+          lastName: data.lastName,
+          email: data.email,
+          active: data.active,
+          role: data.role,
+        };
+  
+        await UserService.updateOneUser(user?._id || '', updatedUser);
+        alert('המשתמש עודכן בהצלחה!');
+        navigate('/users');
+      }
     } catch (error: any) {
       if (error.response) {
         console.log('תגובת שגיאה:', error.response.data);
@@ -78,6 +98,7 @@ const UpdateUser = () => {
       }
     }
   };
+  
 
   return (
       <Container maxWidth="xs">
@@ -116,6 +137,14 @@ const UpdateUser = () => {
                 label="כתובת דואר אלקטרוני"
                 {...register('email')}
               />
+
+              <TextField 
+              margin="normal" 
+              fullWidth 
+              id="password" 
+              label="סיסמה" 
+              {...register('password')} />
+
               <FormControl fullWidth margin="normal">
                 <InputLabel id="active-label">סטטוס</InputLabel>
                 <Select
@@ -136,7 +165,9 @@ const UpdateUser = () => {
                   {...register('role')}
                 >
                   <MenuItem value={Role.admin}>מנהל</MenuItem>
-                  <MenuItem value={Role.user}>משתמש</MenuItem>
+                  <MenuItem value={Role.programManager}>מנהל תוכניות</MenuItem>
+                  <MenuItem value={Role.reporter}>מדווח</MenuItem>
+    
                 </Select>
               </FormControl>
 

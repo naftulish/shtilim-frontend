@@ -94,7 +94,18 @@ const Users = () => {
       field: 'role',
       headerName: 'תפקיד',
       width: 120,
-      valueGetter: (params: GridCellParams) => (params.row.role === Role.admin ? 'ADMIN' : 'USER'),
+      valueGetter: (params: GridCellParams) => {
+        switch (params.row.role) {
+          case Role.admin:
+            return 'ADMIN';
+          case Role.programManager:
+            return 'Program Manager';
+          case Role.reporter:
+            return 'Reporter';
+          default:
+            return 'Unknown Role';
+        }
+      },
       editable: false,
     },
     {

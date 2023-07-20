@@ -12,7 +12,9 @@ interface IUserModel{
 
 export enum Role {
   admin = "ADMIN",
-  user = "USER"
+  programManager = "Program Manager",
+  reporter = "Reporter"
+
 }
 
 export default IUserModel;

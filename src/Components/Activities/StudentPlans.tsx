@@ -37,7 +37,7 @@ import { IPlanModel } from '../../Models/IPlanModel';
 import IUserModel from '../../Models/IUserModel';
 import UserService from '../../Services/UserService';
 import { log } from 'console';
-
+import "./StudentPlans.css";
 // The interface represents an activity object
 
 
@@ -63,25 +63,25 @@ const StudentPlans = () => {
   const [users, setUsers] = useState<IUserModel[]>([]);
 
   useEffect(() => {
-  const fetchUsers = async () => {
-    try {
-      const fetchedUsers = await UserService.getAllUsers();
-      setUsers(fetchedUsers);
-    } catch (error) {
-      // Handle the error if fetching users fails
-    }
-  };
+    const fetchUsers = async () => {
+      try {
+        const fetchedUsers = await UserService.getAllUsers();
+        setUsers(fetchedUsers);
+      } catch (error) {
+        // Handle the error if fetching users fails
+      }
+    };
 
     fetchUsers();
   }, []);
-  
-  
-  
+
+
+
 
   // console.log(selectedPlan);
   // console.log(activities);
 
-  
+
   useEffect(() => {
     // Fetch student data when the 'id' parameter changes
     const fetchStudent = async () => {
@@ -150,15 +150,15 @@ const StudentPlans = () => {
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     setIsReportStarted(false);
-  
+
     // Create the grade array
     const grade: number[] = selectedAnswers;
-    
+
 
     const user = userService.getUserFromToken();
     console.log(user);
-    
-    
+
+
     // Create the activity object
     const activity: IActivityModel = {
       planId: selectedPlan?._id || '',
@@ -166,12 +166,12 @@ const StudentPlans = () => {
       grade: grade,
       userId: user?._id || "", // Assuming the user object has a `userId` property
     };
-  
+
     try {
       // Add the activity using the ActivityService
       const addedActivity = await ActivityService.addActivity(activity);
       console.log('Added activity:', addedActivity);
-  
+
       // Reset the selected plan and answers
       setSelectedPlan(null);
       setSelectedAnswers([]);
@@ -194,7 +194,7 @@ const StudentPlans = () => {
         student?._id ?? ''
       );
       console.log(fetchedActivities);
-      
+
       setActivities(fetchedActivities);
       setSelectedPlan(plan);
       setIsViewReportsStarted(true);
@@ -259,36 +259,54 @@ const StudentPlans = () => {
 
   // If student data is still loading, display a loading message
   if (!student) {
-    return <div>Loading...</div>;
+    return <div>טוען...</div>;
   }
 
   // If a report is started, display the report form
   if (isReportStarted) {
-  return (
-    <div>
-      <Typography variant="h5" align="center">
-        תלמיד: {student.firstName} {student.lastName}
-      </Typography>
-      <Box maxWidth="600px" mx="auto" mt={2} onSubmit={handleSubmit}>
-        {/* <Paper component="form" onSubmit={handleSubmit}> */}
-          <Typography variant="h6">תוכנית: {selectedPlan?.name}</Typography>
-          <Box mt={2}>
+    return (
+      <div>
+        <Typography variant="h5" align="center">
+          תלמיד: {student.firstName} {student.lastName}
+        </Typography>
+        <Box maxWidth="600px" mx="auto" mt={2} onSubmit={handleSubmit}>
+          {/* <Paper component="form" onSubmit={handleSubmit}> */}
+          <Typography variant="h5" style={{ textAlign: 'center' }}>
+            תוכנית: {selectedPlan?.name}
+          </Typography>
+          <Box mt={7}>
             {selectedPlan?.quiz.map((question, index) => (
-              <Box key={index} mb={2}>
-                <Typography variant="body2">{question.title}</Typography>
-                <div className='flex center'>
+              <Box key={index} mb={7}>
+
+                <Typography variant="body2" style={{ fontSize: '22px' }}>
+                  {question.title}
+                </Typography>
+
+                <div className='flex center' style={{ marginTop: '12px' }}>
                   <RadioGroup
+                    className='quisGroup'
                     value={selectedAnswers[index] ?? ''}
                     onChange={(e) => handleAnswerChange(index, parseInt(e.target.value))}
                     row
                   >
                     {question.answer.map((option, optionIndex) => (
-                      <FormControlLabel
-                        key={optionIndex}
-                        value={optionIndex.toString()}
-                        control={<Radio />}
-                        label={option}
-                      />
+                      // <FormControlLabel
+                      // 
+                      //   key={optionIndex}
+                      //   value={optionIndex.toString()}
+                      //   control={<Radio />}
+                      //   label={option}
+                      // />
+
+                      <label className='quisLabel'>
+                        <input className='quisText'
+                          onChange={(e) => handleAnswerChange(index, optionIndex)}
+                          type="radio" name={question.title}
+                        />
+                        <span className='quisItem'>{option}</span>
+                      </label>
+
+
                     ))}
                   </RadioGroup>
                 </div>
@@ -296,61 +314,64 @@ const StudentPlans = () => {
               </Box>
             ))}
           </Box>
-            <div className='flex center'>
-              <Button variant="contained" onClick={handleSubmit}>
-                דווח
-              </Button>
-              <Button variant="contained" onClick={handleCancelReport}>
-                ביטול
-              </Button>
-            </div>
-          
-        {/* </Paper> */}
-      </Box>
-    </div>
-  );
-}
+          <div className='flex center'>
+
+            <Button fullWidth variant="outlined" onClick={handleCancelReport} style={{ marginRight: '10px' }}>
+              ביטול
+            </Button>
+            <Button fullWidth variant="contained" onClick={handleSubmit} style={{ background: 'transparent', border: '1px solid black' }}>
+              דיווח
+            </Button>
 
 
-if (isViewReportsStarted) {
+          </div>
 
-  const arr:number[] = [];
+          {/* </Paper> */}
+        </Box>
+      </div>
+    );
+  }
 
-  activities.forEach(( activity, j ) => {
-    activity.grade.forEach( ( answer:number, i:number ) => {
-      const arrLength = selectedPlan?.quiz[i].answer.length;
-      const mul = arrLength == 2 ? 100 : 25;
-      const score = mul * answer;
-      if( !arr[j] ) arr[j] = 0;
-      arr[j]+= score;
+
+  if (isViewReportsStarted) {
+
+    const arr: number[] = [];
+
+    activities.forEach((activity, j) => {
+      activity.grade.forEach((answer: number, i: number) => {
+        const arrLength = selectedPlan?.quiz[i].answer.length;
+        const mul = arrLength == 2 ? 100 : 25;
+        const score = mul * answer;
+        if (!arr[j]) arr[j] = 0;
+        arr[j] += score;
+      });
     });
-  });
 
- 
-  
-  const average = arr.reduce((accumulator, currentValue) => accumulator + (currentValue / (selectedPlan?.quiz?.length || 1)), 0) / arr.length;
 
-  
-  // console.log(arr);
-  
-  
-  return (
-    <div>
-      <Typography variant="h5" align="center">
-        Student: {student.firstName} {student.lastName}
-      </Typography>
-      <Box maxWidth="600px" mx="auto" mt={2}>
-        
+
+    const average = arr.reduce((accumulator, currentValue) => accumulator + (currentValue / (selectedPlan?.quiz?.length || 1)), 0) / arr.length;
+
+
+    // console.log(arr);
+
+
+    return (
+      <div>
+        <Typography variant="h5" align="center">
+          תלמיד: {student.firstName} {student.lastName}
+        </Typography>
+        <Box maxWidth="600px" mx="auto" mt={2}>
+
           <Box p={2}>
-          <Typography variant="h6">
-            תוכנית: {selectedPlan?.name} | אחוזי הצלחה: {average.toFixed(2)}
-          </Typography>
+            <Typography variant="h6">
+              תוכנית: {selectedPlan?.name} | אחוזי הצלחה: {average.toFixed(2)}
+            </Typography>
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell>Activity ID</TableCell>
+                  <TableCell>מזהה פעילות</TableCell>
                   {selectedPlan?.quiz.map(q => <TableCell>{q.title}</TableCell>)}
-                  <TableCell>Sum</TableCell>
+                  <TableCell>אחוז הצלחה</TableCell>
                   <TableCell>תאריך</TableCell>
                   <TableCell>המדווח</TableCell>
                 </TableRow>
@@ -359,50 +380,46 @@ if (isViewReportsStarted) {
                 {activities.map((activity, j) => (
                   <TableRow key={activity._id}>
                     <TableCell>{activity._id}</TableCell>
-                    {activity.grade.map(( answer:number, i:number) => {
+                    {activity.grade.map((answer: number, i: number) => {
                       const arrLength = selectedPlan?.quiz[i].answer.length;
                       const mul = arrLength == 2 ? 100 : 25;
                       const score = mul * answer;
                       return <TableCell>{selectedPlan?.quiz[i].answer[answer]} ({score})</TableCell>
                     })}
-                    <TableCell>{arr[j] / ( selectedPlan?.quiz.length || 1 ) }</TableCell>
+                    <TableCell>{arr[j] / (selectedPlan?.quiz.length || 1)}</TableCell>
                     <TableCell>{activity.createdIn}</TableCell>
                     <TableCell key={activity._id}>
                       {
                         (() => {
                           const user = users.find((user) => user._id === activity.userId);
-                          
-                          
+
+
                           return user ? `${user.firstName} ${user.lastName}` : '';
                         })()
                       }
                     </TableCell>
-                    
+
 
                   </TableRow>
                 ))}
               </TableBody>
             </Table>
             <Box mt={2}>
-              
-                <Button variant="contained" onClick={handleCancelViewReport}>
-                  Cancel
-                </Button>
-                {/* <Button variant="contained" onClick={handleExportToExcel}>
+
+              <Button variant="contained" onClick={handleCancelViewReport}>
+                ביטול
+              </Button>
+              {/* <Button variant="contained" onClick={handleExportToExcel}>
                   to Excel
                 </Button> */}
-                
-              </Box>
+
+            </Box>
           </Box>
-        
-      </Box>
-    </div>
-  );
-}
 
- 
-
-
+        </Box>
+      </div>
+    );
+  }
 
 
 
@@ -413,7 +430,7 @@ if (isViewReportsStarted) {
       {/* Button to navigate back to the students list */}
       <Button variant="contained" onClick={() => navigate('/students')} className='btn-top-left'>
         <ArrowBack />
-        חזרה לרשימת סטודנטים
+        חזרה לרשימת תלמידים
       </Button>
 
       {/* Student name */}
@@ -423,32 +440,32 @@ if (isViewReportsStarted) {
 
       {/* Add new plan */}
       {!isReporter && (
-      <Box>
-        <Typography>שיוך תוכנית חדשה</Typography>
-        <FormControl margin="normal" fullWidth>
-          <InputLabel id="group-label">תוכנית</InputLabel>
-          <Select
-            labelId="group-label"
-            id="allPlan"
-            defaultValue=""
-            label="תוכנית"
-            onChange={handleNewPlanChange}
-            value={newPlan} // Bind the selected plan value to the state
-          >
-            {/* Filter out plans that are already in the student's plans */}
-            {allPlans
-              .filter((plan) => !student.plans.includes(plan?._id))
-              .map((plan) => (
-                <MenuItem key={plan?._id} value={plan?._id}>
-                  {plan?.name}
-                </MenuItem>
-              ))}
-          </Select>
-        </FormControl>
-        <Button variant="outlined" onClick={handleAddPlan}>
-          שמירה
-        </Button>
-      </Box>)}
+        <Box>
+          <Typography>שיוך תוכנית חדשה</Typography>
+          <FormControl margin="normal" fullWidth>
+            <InputLabel id="group-label">תוכנית</InputLabel>
+            <Select
+              labelId="group-label"
+              id="allPlan"
+              defaultValue=""
+              label="תוכנית"
+              onChange={handleNewPlanChange}
+              value={newPlan} // Bind the selected plan value to the state
+            >
+              {/* Filter out plans that are already in the student's plans */}
+              {allPlans
+                .filter((plan) => !student.plans.includes(plan?._id))
+                .map((plan) => (
+                  <MenuItem key={plan?._id} value={plan?._id}>
+                    {plan?.name}
+                  </MenuItem>
+                ))}
+            </Select>
+          </FormControl>
+          <Button variant="outlined" onClick={handleAddPlan}>
+            שמירה
+          </Button>
+        </Box>)}
 
       {/* Display existing plans */}
       <Grid container spacing={2}>
@@ -456,16 +473,16 @@ if (isViewReportsStarted) {
           <Grid item xs={12} sm={6} md={4} key={plan?._id}>
             <Paper>
               <Box p={2}>
-              {!isReporter && (
-                <Box display="flex" justifyContent="flex-end">
-                  <Button
-                    variant="outlined"
-                    startIcon={<Delete />}
-                    onClick={() => handleDeletePlan(plan?._id || '')}
-                  >
-                    מחיקה
-                  </Button>
-                </Box>)}
+                {!isReporter && (
+                  <Box display="flex" justifyContent="flex-end">
+                    <Button
+                      variant="outlined"
+                      startIcon={<Delete />}
+                      onClick={() => handleDeletePlan(plan?._id || '')}
+                    >
+                      מחיקה
+                    </Button>
+                  </Box>)}
                 <Typography variant="h6">{plan?.name}</Typography>
                 <Typography variant="body1">{plan?.description}</Typography>
                 <Box mt={2} display="flex" justifyContent="space-between">

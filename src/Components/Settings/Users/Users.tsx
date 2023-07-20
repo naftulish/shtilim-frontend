@@ -99,11 +99,10 @@ const Users = () => {
           case Role.admin:
             return 'ADMIN';
           case Role.programManager:
-            return 'Program Manager';
+            return 'PManager';
           case Role.reporter:
             return 'Reporter';
-          default:
-            return 'Unknown Role';
+          
         }
       },
       editable: false,

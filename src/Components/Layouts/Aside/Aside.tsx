@@ -36,8 +36,8 @@ function Aside(props: AsideProps) {
     ];
 
     const filteredMenu = menu.filter(item => {
-        if (item.path === '/users' && isAdmin) return true;
-        if ((item.path === '/plans' || item.path === '/groups') && (isAdmin || isProgramManager)) return true;
+        if ((item.path === '/users' || item.path === '/groups') && isAdmin) return true;
+        if ((item.path === '/plans' ) && (isAdmin || isProgramManager)) return true;
         if ((item.path === '/students') && (isAdmin || isProgramManager || isReporter)) return true;
         return false;
     });

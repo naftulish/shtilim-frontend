@@ -12,7 +12,7 @@ interface IUserModel{
 
 export enum Role {
   admin = "ADMIN",
-  programManager = "Program Manager",
+  programManager = "PManager",
   reporter = "Reporter"
 
 }

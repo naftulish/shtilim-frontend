@@ -10,12 +10,15 @@ class UserService {
   }
 
   async getUserById(_id: string): Promise<IUserModel> {
-//     const response = await axios.get<IUserModel>(`${appConfig.users}/${_id}`);
-//     return response.data;
-//   }
-        let response = await axios.get<IUserModel>(appConfig.users + "user-by-id/" + _id);
-        return response.data;
+
+    try {
+      let response = await axios.get<IUserModel>(appConfig.users + "user-by-id/" + _id);
+      return response.data;
+    } catch (error) {
+      throw new Error('Failed to fetch user by ID');
     }
+        
+  }
 
   // async getUserByEmail(email: string): Promise<IUserModel> {
   //   const response = await axios.get<IUserModel>(appConfig.users, {

@@ -1,6 +1,7 @@
 import axios from "axios";
 import appConfig from "../Utils/Config";
 import IGroupModel from "../Models/IGroupModel";
+import userService from "./UserService";
 
 class GroupServise {
 
@@ -25,6 +26,16 @@ class GroupServise {
 
     async addGroup(group: IGroupModel): Promise<void> {
        await axios.post<IGroupModel[]>(appConfig.groups, group);
+    }
+
+    // New function to fetch groups by reporter's user ID
+    async getAllGroupsByReporter(): Promise<IGroupModel[]> {
+        const reporterId = userService.getUserFromToken()?._id;
+        if (!reporterId) {
+            throw new Error("Reporter ID not available");
+        }
+        let response = await axios.get<IGroupModel[]>(`${appConfig.groups}/by-teacher/${reporterId}`);
+        return response.data;
     }
 
 }

@@ -8,17 +8,38 @@ import {
   Box,
   Container,
   Typography,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
 } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useForm } from 'react-hook-form';
 import GroupService from '../../Services/GroupService';
 import Group from '../../Models/IGroupModel';
 import useTitle from '../../hooks/useTitle';
+import IUserModel from '../../Models/IUserModel';
+import UserService from '../../Services/UserService';
 
 const defaultTheme = createTheme();
 
 const UpdateGroup = () => {
   const { id } = useParams();
+  const [users, setUsers] = useState<IUserModel[]>([]);
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const fetchedUsers = await UserService.getAllUsers();
+        setUsers(fetchedUsers);
+      } catch (error) {
+        console.error('Failed to fetch users:', error);
+        // You can add additional error handling here if needed
+      }
+    };
+  
+    fetchUsers();
+  }, []);
   const [group, setGroup] = useState<Group>({
     _id: '',
     name: '',
@@ -102,14 +123,25 @@ const UpdateGroup = () => {
                 autoFocus
                 {...register('name')}
               />
-              <TextField
-                margin="normal"
-                fullWidth
-                id="teacher"
-                label="מורה / גננת"
-                defaultValue={group.teacher}
-                {...register('teacher')}
-              />
+              
+
+              <FormControl margin="normal" required fullWidth>
+                <InputLabel id="teacher-label">מורה</InputLabel>
+                <Select
+                  labelId="teacher-label"
+                  id="teacher"
+                  {...register('teacher')}
+                  defaultValue={group.teacher}
+                  label="מורה / גננת"
+                >
+                  {users.map((user) => (
+                    <MenuItem key={user._id} value={user._id}>
+                      {`${user.firstName} ${user.lastName}`}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+
               <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
                 עדכון
               </Button>

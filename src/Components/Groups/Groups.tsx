@@ -12,6 +12,8 @@ import GroupService from '../../Services/GroupService';
 import IGroupModel from '../../Models/IGroupModel';
 import { GroupAdd } from '@mui/icons-material';
 import useTitle from '../../hooks/useTitle';
+import IUserModel from '../../Models/IUserModel';
+import UserService from '../../Services/UserService';
 
 const Groups = () => {
   const [groups, setGroups] = useState<IGroupModel[]>([]);
@@ -38,6 +40,27 @@ const Groups = () => {
 
     fetchGroups();
   }, []);
+
+  const [users, setUsers] = useState<IUserModel[]>([]);
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const fetchedUsers = await UserService.getAllUsers();
+        setUsers(fetchedUsers);
+        const userMap: { [key: string]: string } = {};
+        fetchedUsers.forEach((user) => {
+          userMap[user._id] = `${user.firstName} ${user.lastName}`;
+        });
+      } catch (error) {
+        console.error('Failed to fetch users:', error);
+        // You can add additional error handling here if needed
+      }
+    };
+  
+    fetchUsers();
+  }, []);
+  
 
   const handleDeleteGroup = (group: IGroupModel) => {
     setSelectedGroup(group);
@@ -79,6 +102,11 @@ const Groups = () => {
       field: 'teacher',
       headerName: 'מורה',
       width: 200,
+      valueGetter: (params: GridCellParams) => {
+        const teacherId = params.row.teacher;
+        const teacher = users.find((user) => user._id === teacherId);
+        return teacher ? `${teacher.firstName} ${teacher.lastName}` : '';
+      },
     },
     {
       field: 'actions',

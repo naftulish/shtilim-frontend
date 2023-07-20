@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import {
   TextField,
@@ -6,17 +6,39 @@ import {
   Box,
   Container,
   Typography,
-  FormControl
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem
 } from '@mui/material';
 import { ArrowBack } from '@mui/icons-material';
 import IGroupModel from '../../Models/IGroupModel';
 import GroupService from '../../Services/GroupService';
 import { useNavigate } from 'react-router-dom';
 import useTitle from '../../hooks/useTitle';
+import IUserModel from '../../Models/IUserModel';
+import UserService from '../../Services/UserService';
 
 
 const AddGroup = () => {
   const { register, handleSubmit } = useForm<IGroupModel>();
+  const [users, setUsers] = useState<IUserModel[]>([]);
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const fetchedUsers = await UserService.getAllUsers();
+        setUsers(fetchedUsers);
+      } catch (error) {
+        console.error('Failed to fetch users:', error);
+        // You can add additional error handling here if needed
+      }
+    };
+  
+    fetchUsers();
+  }, []);
+  
+
   const navigate = useNavigate();
   useTitle("כיתות");
 
@@ -53,10 +75,23 @@ const AddGroup = () => {
                   <TextField label="שם כיתה" required fullWidth {...register('name')} />
                 </FormControl>                
                 
-                <FormControl margin="normal" required fullWidth>
-                  <TextField label="מורה" required fullWidth {...register('teacher')} />
-                </FormControl>  
                 
+                <FormControl margin="normal" required fullWidth>
+                <InputLabel id="group-label">מורה</InputLabel>
+                  <Select
+                    labelId="group-label"
+                    id="group"
+                    {...register('teacher')}
+                    defaultValue=""
+                    label="כיתה"
+                  >
+                    {users.map((user) => (
+                      <MenuItem key={user._id} value={user._id}>
+                        {`${user.firstName} ${user.lastName}`}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
                               
                   
 

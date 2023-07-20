@@ -28,6 +28,7 @@ const Students = () => {
   const [groups, setGroups] = useState<{ [key: string]: string }>({});
   const navigate = useNavigate();
   const isAdmin = userService.isAdmin();
+  const isReporter = userService.isReporter();
   const actionsColumn = isAdmin
   ? {
       field: 'actions',
@@ -54,21 +55,38 @@ const Students = () => {
   useTitle("תלמידים")
 
 
-  useEffect(() => {
-    const fetchStudents = async () => {
-      try {
-        const fetchedStudents = await StudentService.getAllStudents();
-        const studentsWithIds = fetchedStudents.map((student) => ({
-          ...student,
-          id: student._id,
-        }));
-        setStudents(studentsWithIds);
-      } catch (error: any) {
-        console.error('נכשל לקבל את רשימת התלמידים:', error);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchStudents = async () => {
+  //     try {
+  //       const fetchedStudents = await StudentService.getAllStudents();
+  //       const studentsWithIds = fetchedStudents.map((student) => ({
+  //         ...student,
+  //         id: student._id,
+  //       }));
+  //       setStudents(studentsWithIds);
+  //     } catch (error: any) {
+  //       console.error('נכשל לקבל את רשימת התלמידים:', error);
+  //     }
+  //   };
 
-    const fetchGroups = async () => {
+  //   const fetchGroups = async () => {
+  //     try {
+  //       const fetchedGroups = await GroupService.getAllGroups();
+  //       const groupMap: { [key: string]: string } = {};
+  //       fetchedGroups.forEach((group) => {
+  //         groupMap[group._id] = group.name;
+  //       });
+  //       setGroups(groupMap);
+  //     } catch (error: any) {
+  //       console.error('נכשל לקבל את רשימת ה:', error);
+  //     }
+  //   };
+
+  //   fetchStudents();
+  //   fetchGroups();
+  // }, []);
+  useEffect(() => {
+    const fetchData = async () => {
       try {
         const fetchedGroups = await GroupService.getAllGroups();
         const groupMap: { [key: string]: string } = {};
@@ -76,14 +94,34 @@ const Students = () => {
           groupMap[group._id] = group.name;
         });
         setGroups(groupMap);
+  
+        const fetchedStudents = await StudentService.getAllStudents();
+        let studentsWithIds = fetchedStudents.map((student) => ({
+          ...student,
+          id: student._id,
+        }));
+  
+        if (isReporter) {
+          const reporterId = userService.getUserFromToken()?._id;
+          if (reporterId) {
+            const reporterGroup = fetchedGroups.find((group) => group.teacher === reporterId);
+            if (reporterGroup) {
+              const reporterGroupStudents = studentsWithIds.filter((student) => student.group === reporterGroup._id);
+              setStudents(reporterGroupStudents);
+            }
+          }
+        } else {
+          // Users other than "Reporter" will see all students
+          setStudents(studentsWithIds);
+        }
       } catch (error: any) {
-        console.error('נכשל לקבל את רשימת ה:', error);
+        console.error('Failed to fetch data:', error);
       }
     };
-
-    fetchStudents();
-    fetchGroups();
-  }, []);
+  
+    fetchData();
+  }, [isReporter]);
+  
 
 
   const handleDeleteStudent = (student: IStudentModel) => {

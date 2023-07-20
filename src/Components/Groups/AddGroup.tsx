@@ -55,7 +55,9 @@ const AddGroup = () => {
                 
                 <FormControl margin="normal" required fullWidth>
                   <TextField label="מורה" required fullWidth {...register('teacher')} />
-                </FormControl>                
+                </FormControl>  
+                
+                              
                   
 
                 <FormControl className='flex space row gap-10' fullWidth sx={{ mt: 3, mb: 2 }}>

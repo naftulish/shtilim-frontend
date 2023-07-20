@@ -741,20 +741,20 @@ const AddPlan = () => {
               <Button
               variant="contained"
               color="error"
-              size="small"
+              size="large"
               style={{
                 position: 'absolute',
-                top: '-10px',
-                left: '-10px',
+                top: '-20px',
+                left: '-20px',
                 borderRadius: '50%',
                 padding: '4px',
                 minWidth: 0,
-                width: '24px',
-                height: '24px',
+                width: '40px',
+                height: '40px',
               }}
                 onClick={() => deleteQuiz(index)}
               >
-                <CancelIcon style={{ fontSize: '18px' }} />
+                <CancelIcon style={{ fontSize: '28px' }} />
               </Button>
               <TextField
                 label="תיאור השאלה"

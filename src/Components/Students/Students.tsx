@@ -11,10 +11,12 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import PlaylistAddCheckIcon from '@mui/icons-material/PlaylistAddCheck';
 import StudentService from '../../Services/StudentService';
+import userService from '../../Services/UserService';
 import IStudentModel from '../../Models/IStudentModel';
 import GroupService from '../../Services/GroupService';
 import './Students.css'; 
 import useTitle from '../../hooks/useTitle';
+
 
 
 const Students = () => {
@@ -25,6 +27,29 @@ const Students = () => {
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [groups, setGroups] = useState<{ [key: string]: string }>({});
   const navigate = useNavigate();
+  const isAdmin = userService.isAdmin();
+  const actionsColumn = isAdmin
+  ? {
+      field: 'actions',
+      headerName: 'פעולות',
+      width: 120,
+      sortable: false,
+      filterable: false,
+      disableColumnMenu: true,
+      renderCell: (params: GridCellParams) => (
+        <div>
+          <IconButton component={Link} to={`/update-student/${params.row._id}`}>
+            <EditIcon />
+          </IconButton>
+          <IconButton onClick={() => handleDeleteStudent(params.row as IStudentModel)}>
+            <DeleteIcon className="delete-button" />
+          </IconButton>
+        </div>
+      ),
+    }
+  : null;
+
+  
 
   useTitle("תלמידים")
 
@@ -62,6 +87,7 @@ const Students = () => {
 
 
   const handleDeleteStudent = (student: IStudentModel) => {
+    if (!isAdmin) return; // Only allow deletion for admin users
     setSelectedStudent(student);
     setDeleteConfirmationOpen(true);
   };
@@ -128,9 +154,9 @@ const Students = () => {
       field: 'plans',
       headerName: 'תוכניות',
       width: 120,
-      sortable: false,
+      sortable: true,
       filterable: false,
-      disableColumnMenu: true,
+      disableColumnMenu: false,
       renderCell: (params: GridCellParams) => (
         params.row.plans[0] !== '' && (
           <IconButton component={Link} to={`/student-plans/${params.row._id}`}>
@@ -139,39 +165,29 @@ const Students = () => {
         )
       ),
     },
-    {
-      field: 'actions',
-      headerName: 'פעולות',
-      width: 120,
-      sortable: false,
-      filterable: false,
-      disableColumnMenu: true,
-      renderCell: (params: GridCellParams) => {
-          return (
-            <div>
-              <IconButton component={Link} to={`/update-student/${params.row._id}`}>
-                <EditIcon />
-              </IconButton>
-              <IconButton onClick={() => handleDeleteStudent(params.row as IStudentModel)}>
-              <DeleteIcon className="delete-button"/>
-              </IconButton>
-            </div>
-          );
-        }
-    },
+     
+  // Conditionally add the 'actions' column for admin users
+  // Spread the 'actions' column into the columns array conditionally
+  ...(actionsColumn ? [actionsColumn] : []),
   ];
+  
+
+  
 
   return (
     <div style={{ width: '100%' }}>
       <div style={{ display: 'flex', alignItems: 'center', marginBottom: '1rem' }}>
         <h1 style={{ flex: 1 }}>רשימת תלמידים</h1>
-        <Button
-          type="submit"
-          variant="contained"
-          onClick={() => navigate('/add-student')}
-          className='btn-top'        >
-          הוספת תלמיד &nbsp;<PersonAddAltIcon />
-        </Button>
+        {isAdmin && ( // Only render the 'Add Student' button for admin users
+          <Button
+            type="submit"
+            variant="contained"
+            onClick={() => navigate('/add-student')}
+            className="btn-top"
+          >
+            הוספת תלמיד &nbsp;<PersonAddAltIcon />
+          </Button>
+        )}
       </div>
 
       <DataGrid rows={students} columns={columns} />

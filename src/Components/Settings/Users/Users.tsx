@@ -2,7 +2,7 @@
 
 
 import React, { useEffect, useState } from 'react';
-import { DataGrid, GridColDef, GridCellParams } from '@mui/x-data-grid';
+import { DataGrid, GridColDef, GridCellParams, GridToolbarContainer, GridToolbarExport } from '@mui/x-data-grid';
 import { Button, IconButton, Snackbar } from '@mui/material';
 import { Link } from 'react-router-dom';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
@@ -16,6 +16,7 @@ import IUserModel, { Role } from '../../../Models/IUserModel';
 import UserService from '../../../Services/UserService';
 import { useNavigate } from 'react-router-dom';
 import useTitle from '../../../hooks/useTitle';
+import heILGrid from '../../../Utils/HebrewIL';
 
 
 const Users = () => {
@@ -132,6 +133,19 @@ const Users = () => {
       ),
     },
   ];
+
+  const CustomToolbar = () => (
+    <GridToolbarContainer>
+      <GridToolbarExport
+        csvOptions={{
+
+          delimiter: ';',
+          utf8WithBom: true,
+        }}
+        printOptions={{ disableToolbarButton: true }}
+      />
+    </GridToolbarContainer>
+  );
   
 
   return (
@@ -147,7 +161,18 @@ const Users = () => {
             הוספת משתמש &nbsp;<PersonAddIcon />
           </Button>
         </div>  
-      <DataGrid rows={users} columns={columns} />
+        <DataGrid
+          rows={users}
+          columns={columns}
+          autoHeight
+          localeText={heILGrid}
+          
+          components={{
+            Toolbar: CustomToolbar, // Use the custom toolbar component
+          }}
+        />
+
+
       <Snackbar open={snackbarOpen} message={snackbarMessage} onClose={handleSnackbarClose} />
       <Dialog open={deleteConfirmationOpen} onClose={handleCancelDelete}>
         <DialogTitle>מחיקת משתמש</DialogTitle>

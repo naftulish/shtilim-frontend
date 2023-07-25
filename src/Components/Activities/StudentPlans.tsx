@@ -203,6 +203,8 @@ const StudentPlans = () => {
     }
   };
 
+  
+
   // Handle canceling view reports
   const handleCancelViewReport = () => {
     setSelectedPlan(null);
@@ -256,6 +258,8 @@ const StudentPlans = () => {
       console.error('Failed to remove plan from student:', error);
     }
   };
+
+  
 
   // If student data is still loading, display a loading message
   if (!student) {
@@ -332,6 +336,7 @@ const StudentPlans = () => {
     );
   }
 
+  
 
   if (isViewReportsStarted) {
 
@@ -353,6 +358,7 @@ const StudentPlans = () => {
 
 
     // console.log(arr);
+    
 
 
     return (
@@ -409,9 +415,11 @@ const StudentPlans = () => {
               <Button variant="contained" onClick={handleCancelViewReport}>
                 ביטול
               </Button>
-              {/* <Button variant="contained" onClick={handleExportToExcel}>
-                  to Excel
-                </Button> */}
+
+              {/* <Button variant="contained" onClick={handleExportToCSV}>
+              'ייצוא ל- Excel'
+              </Button>
+               */}
 
             </Box>
           </Box>

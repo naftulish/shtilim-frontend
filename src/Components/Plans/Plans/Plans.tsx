@@ -1,8 +1,9 @@
+
 import React, { useEffect, useState } from 'react';
-import { DataGrid, GridColDef, GridCellParams } from '@mui/x-data-grid';
-import { Button, IconButton, Snackbar } from '@mui/material';
+import { DataGrid, GridColDef, GridCellParams, GridToolbarContainer, GridToolbarExport } from '@mui/x-data-grid';
+import { Button, IconButton } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
-import EditIcon from '@mui/icons-material/Edit';
+
 import DeleteIcon from '@mui/icons-material/Delete';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import Dialog from '@mui/material/Dialog';
@@ -12,7 +13,8 @@ import DialogActions from '@mui/material/DialogActions';
 import PlanService from '../../../Services/PlanService';
 import { IPlanModel } from '../../../Models/IPlanModel';
 import useTitle from '../../../hooks/useTitle';
-
+import SnackbarMessage from '../../SnackbarMessage/SnackbarMessage';
+import heILGrid from '../../../Utils/HebrewIL';
 
 const Plans = () => {
   const [plans, setPlans] = useState<IPlanModel[]>([]);
@@ -102,6 +104,19 @@ const Plans = () => {
     },
   ];
 
+  const CustomToolbar = () => (
+    <GridToolbarContainer>
+      <GridToolbarExport
+        csvOptions={{
+
+          delimiter: ';',
+          utf8WithBom: true,
+        }}
+        printOptions={{ disableToolbarButton: true }}
+      />
+    </GridToolbarContainer>
+  );
+
   return (
     <div style={{ height: 400, width: '100%' }}>
       <div style={{ display: 'flex', alignItems: 'center', marginBottom: '1rem' }}>
@@ -116,7 +131,16 @@ const Plans = () => {
         </Button>
       </div>
       <div>
-        <DataGrid rows={plans} columns={columns} autoHeight />
+        <DataGrid
+          rows={plans}
+          columns={columns}
+          autoHeight
+          localeText={heILGrid}
+          
+          components={{
+            Toolbar: CustomToolbar, // Use the custom toolbar component
+          }}
+        />
         <Dialog open={deleteConfirmationOpen} onClose={handleCancelDelete}>
           <DialogTitle>מחק תוכנית</DialogTitle>
           <DialogContent>
@@ -129,10 +153,11 @@ const Plans = () => {
             </Button>
           </DialogActions>
         </Dialog>
-        <Snackbar
+        <SnackbarMessage
           open={snackbarOpen}
           message={snackbarMessage}
           onClose={handleSnackbarClose}
+          severity="success"
           autoHideDuration={3000}
         />
       </div>

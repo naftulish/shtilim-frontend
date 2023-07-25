@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { DataGrid, GridColDef, GridCellParams } from '@mui/x-data-grid';
+import { DataGrid, GridColDef, GridCellParams, GridToolbarContainer, GridToolbarExport } from '@mui/x-data-grid';
 import { Button, IconButton, Snackbar } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
 import EditIcon from '@mui/icons-material/Edit';
@@ -14,6 +14,7 @@ import { GroupAdd } from '@mui/icons-material';
 import useTitle from '../../hooks/useTitle';
 import IUserModel from '../../Models/IUserModel';
 import UserService from '../../Services/UserService';
+import heILGrid from '../../Utils/HebrewIL';
 
 const Groups = () => {
   const [groups, setGroups] = useState<IGroupModel[]>([]);
@@ -21,6 +22,7 @@ const Groups = () => {
   const [deleteConfirmationOpen, setDeleteConfirmationOpen] = useState(false);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [showReports, setShowReports] = useState(false);
   const navigate = useNavigate();
   useTitle("כיתות");
 
@@ -128,6 +130,19 @@ const Groups = () => {
     },
   ];
 
+  const CustomToolbar = () => (
+    <GridToolbarContainer>
+      <GridToolbarExport
+        csvOptions={{
+
+          delimiter: ';',
+          utf8WithBom: true,
+        }}
+        printOptions={{ disableToolbarButton: true }}
+      />
+    </GridToolbarContainer>
+  );
+
   return (
     <div style={{ height: 400, width: '100%' }}>
       <div style={{ display: 'flex', alignItems: 'center', marginBottom: '1rem' }}>
@@ -141,7 +156,18 @@ const Groups = () => {
           הוספת כיתה &nbsp;<GroupAdd />
         </Button>
       </div>
-      <DataGrid rows={groups} columns={columns} />
+
+      <DataGrid
+          rows={groups}
+          columns={columns}
+          autoHeight
+          localeText={heILGrid}
+          
+          components={{
+            Toolbar: CustomToolbar, // Use the custom toolbar component
+          }}
+        />
+
       <Snackbar open={snackbarOpen} message={snackbarMessage} onClose={handleSnackbarClose} />
       <Dialog open={deleteConfirmationOpen} onClose={handleCancelDelete}>
         <DialogTitle>מחק כיתה</DialogTitle>

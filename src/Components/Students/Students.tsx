@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { DataGrid, GridColDef, GridCellParams } from '@mui/x-data-grid';
+import { DataGrid, GridColDef, GridCellParams, GridToolbarContainer, GridToolbarExport } from '@mui/x-data-grid';
 import { Button, IconButton, Snackbar } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
 import EditIcon from '@mui/icons-material/Edit';
@@ -16,6 +16,7 @@ import IStudentModel from '../../Models/IStudentModel';
 import GroupService from '../../Services/GroupService';
 import './Students.css'; 
 import useTitle from '../../hooks/useTitle';
+import heILGrid from '../../Utils/HebrewIL';
 
 
 
@@ -208,6 +209,19 @@ const Students = () => {
   // Spread the 'actions' column into the columns array conditionally
   ...(actionsColumn ? [actionsColumn] : []),
   ];
+
+  const CustomToolbar = () => (
+    <GridToolbarContainer>
+      <GridToolbarExport
+        csvOptions={{
+
+          delimiter: ';',
+          utf8WithBom: true,
+        }}
+        printOptions={{ disableToolbarButton: true }}
+      />
+    </GridToolbarContainer>
+  );
   
 
   
@@ -228,7 +242,17 @@ const Students = () => {
         )}
       </div>
 
-      <DataGrid rows={students} columns={columns} />
+      <DataGrid
+          rows={students}
+          columns={columns}
+          autoHeight
+          localeText={heILGrid}
+          
+          components={{
+            Toolbar: CustomToolbar, // Use the custom toolbar component
+          }}
+        />
+
       <Snackbar open={snackbarOpen} message={snackbarMessage} onClose={handleSnackbarClose} />
 
       <Dialog open={deleteConfirmationOpen} onClose={handleCancelDelete}>

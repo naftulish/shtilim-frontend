@@ -102,3 +102,8 @@ button.btn-second{
   left: 40px !important;
   background: #cd362a !important;
 }
+
+.datagrid-container {
+  width: 100%; /* Take full width of the page */
+  height: 100vh; /* Take full height of the viewport */
+}

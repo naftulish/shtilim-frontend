@@ -38,6 +38,8 @@ import IUserModel from '../../Models/IUserModel';
 import UserService from '../../Services/UserService';
 import { log } from 'console';
 import "./StudentPlans.css";
+import { DataGrid, GridColDef, GridToolbarContainer, GridToolbarExport } from '@mui/x-data-grid';
+import heILGrid from '../../Utils/HebrewIL';
 // The interface represents an activity object
 
 
@@ -345,89 +347,114 @@ const StudentPlans = () => {
     activities.forEach((activity, j) => {
       activity.grade.forEach((answer: number, i: number) => {
         const arrLength = selectedPlan?.quiz[i].answer.length;
-        const mul = arrLength == 2 ? 100 : 25;
+        const mul = arrLength === 2 ? 100 : 25;
         const score = mul * answer;
         if (!arr[j]) arr[j] = 0;
         arr[j] += score;
       });
     });
 
+    const average =
+      arr.reduce((accumulator, currentValue) => accumulator + currentValue / (selectedPlan?.quiz?.length || 1), 0) / arr.length;
 
+    // Prepare the data for the DataGrid
+    const report = activities.map((activity, j) => {
+      const data: { [key: string]: any } = {
+        id: activity._id,
+        activityId: activity._id,
+        successPercentage: arr[j] / (selectedPlan?.quiz.length || 1),
+        createdIn: activity.createdIn,
+      };
+      console.log( activity.grade);
+      
+      activity.grade.forEach((answer: number, i: number) => {
+        const arrLength = selectedPlan?.quiz[i].answer.length;
+        const mul = arrLength === 2 ? 100 : 25;
+        const score = mul * answer;
+        data[`answer${i}`] = `${selectedPlan?.quiz[i].answer[answer]} (${score})`;
+      });
 
-    const average = arr.reduce((accumulator, currentValue) => accumulator + (currentValue / (selectedPlan?.quiz?.length || 1)), 0) / arr.length;
+      const user = users.find((user) => user._id === activity.userId);
+      data.reporter = user ? `${user.firstName} ${user.lastName}` : '';
 
+      return data;
+    });
 
-    // console.log(arr);
+    const columns: GridColDef[] = [
+      { field: 'activityId', headerName: 'מזהה פעילות', width: 180 },
+      // Define other columns for the quiz answers dynamically based on selectedPlan
+      ...(selectedPlan?.quiz.map((question, index) => ({
+        field: `answer${index}`,
+        headerName: question.title,
+        width: 200,
+        valueGetter: (params : any) => {
+          const activity = activities[index];
+          const arrLength = selectedPlan?.quiz[index].answer.length;
+          console.log(arrLength);
+          
+          const mul = arrLength === 2 ? 100 : 25;
+          
+          console.log(activity);
+          console.log(activity.grade);
+          console.log(activity.grade[index])
+          const score = mul * (activity.grade[index] || 0);
+          console.log(activity.grade[index])
+          return `${selectedPlan?.quiz[index].answer[activity.grade[index]]} (${score})`;
+        },
+      })) ?? []), // Provide an empty array as a fallback when selectedPlan is undefined
+      { field: 'successPercentage', headerName: 'אחוז הצלחה', width: 180 },
+      { field: 'createdIn', headerName: 'תאריך', width: 180 },
+      { field: 'reporter', headerName: 'המדווח', width: 180 },
+    ];
+
+    const CustomToolbar = () => (
+      <GridToolbarContainer>
+        <GridToolbarExport
+          csvOptions={{
+            delimiter: ';',
+            utf8WithBom: true,
+          }}
+          printOptions={{ disableToolbarButton: true }}
+        />
+      </GridToolbarContainer>
+    );
     
-
+    // console.log(report);
+    // console.log(columns);
+    
+       
+    // return <></>
 
     return (
       <div>
         <Typography variant="h5" align="center">
-          תלמיד: {student.firstName} {student.lastName}
+          תלמיד: {student?.firstName} {student?.lastName}
         </Typography>
         <Box maxWidth="600px" mx="auto" mt={2}>
-
           <Box p={2}>
             <Typography variant="h6">
               תוכנית: {selectedPlan?.name} | אחוזי הצלחה: {average.toFixed(2)}
             </Typography>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell>מזהה פעילות</TableCell>
-                  {selectedPlan?.quiz.map(q => <TableCell>{q.title}</TableCell>)}
-                  <TableCell>אחוז הצלחה</TableCell>
-                  <TableCell>תאריך</TableCell>
-                  <TableCell>המדווח</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {activities.map((activity, j) => (
-                  <TableRow key={activity._id}>
-                    <TableCell>{activity._id}</TableCell>
-                    {activity.grade.map((answer: number, i: number) => {
-                      const arrLength = selectedPlan?.quiz[i].answer.length;
-                      const mul = arrLength == 2 ? 100 : 25;
-                      const score = mul * answer;
-                      return <TableCell>{selectedPlan?.quiz[i].answer[answer]} ({score})</TableCell>
-                    })}
-                    <TableCell>{arr[j] / (selectedPlan?.quiz.length || 1)}</TableCell>
-                    <TableCell>{activity.createdIn}</TableCell>
-                    <TableCell key={activity._id}>
-                      {
-                        (() => {
-                          const user = users.find((user) => user._id === activity.userId);
-
-
-                          return user ? `${user.firstName} ${user.lastName}` : '';
-                        })()
-                      }
-                    </TableCell>
-
-
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+            <DataGrid
+              rows={report}
+              columns={columns}
+              autoHeight
+              
+              localeText={heILGrid}
+              components={{
+                Toolbar: CustomToolbar, // Use the custom toolbar component
+              }}
+            />
             <Box mt={2}>
-
               <Button variant="contained" onClick={handleCancelViewReport}>
                 ביטול
               </Button>
-
-              {/* <Button variant="contained" onClick={handleExportToCSV}>
-              'ייצוא ל- Excel'
-              </Button>
-               */}
-
             </Box>
           </Box>
-
         </Box>
       </div>
     );
-  }
+  };
 
 
 

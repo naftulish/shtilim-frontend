@@ -3,7 +3,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { DataGrid, GridColDef, GridCellParams, GridToolbarContainer, GridToolbarExport } from '@mui/x-data-grid';
-import { Button, IconButton, Snackbar } from '@mui/material';
+import { Button, IconButton } from '@mui/material';
 import { Link } from 'react-router-dom';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import EditIcon from '@mui/icons-material/Edit';
@@ -17,6 +17,7 @@ import UserService from '../../../Services/UserService';
 import { useNavigate } from 'react-router-dom';
 import useTitle from '../../../hooks/useTitle';
 import heILGrid from '../../../Utils/HebrewIL';
+import notification from '../../../Services/Notification';
 
 
 const Users = () => {
@@ -24,8 +25,6 @@ const Users = () => {
   const [users, setUsers] = useState<IUserModel[]>([]);
   const [selectedUser, setSelectedUser] = useState<IUserModel | null>(null);
   const [deleteConfirmationOpen, setDeleteConfirmationOpen] = useState(false);
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState('');
   const navigate = useNavigate();
   useTitle("משתמשים");
 
@@ -36,8 +35,7 @@ const Users = () => {
         const usersWithIds = fetchedUsers.map((user, index) => ({ ...user, id: index + 1 }));
         setUsers(usersWithIds);
       } catch (error: any) {
-        setSnackbarMessage('שגיאה בנתוני משתמש');
-        setSnackbarOpen(true);
+        notification.error('שגיאה בנתוני משתמש');
       }
     };
 
@@ -57,11 +55,9 @@ const Users = () => {
         setDeleteConfirmationOpen(false);
         setSelectedUser(null);
         setUsers(users.filter((user) => user._id !== selectedUser._id));
-        setSnackbarMessage('המשתמש נמחק בהצלחה');
-        setSnackbarOpen(true);
+        notification.success('המשתמש נמחק בהצלחה');
       } catch (error) {
-        setSnackbarMessage('ארעה שגיאה במחיקת המשתמש');
-        setSnackbarOpen(true);
+        notification.error('ארעה שגיאה במחיקת המשתמש');
       }
     }
   };
@@ -69,10 +65,6 @@ const Users = () => {
   const handleCancelDelete = () => {
     setDeleteConfirmationOpen(false);
     setSelectedUser(null);
-  };
-
-  const handleSnackbarClose = () => {
-    setSnackbarOpen(false);
   };
 
   const columns: GridColDef[] = [
@@ -98,11 +90,11 @@ const Users = () => {
       valueGetter: (params: GridCellParams) => {
         switch (params.row.role) {
           case Role.admin:
-            return 'ADMIN';
+            return 'מנהל';
           case Role.programManager:
-            return 'PManager';
+            return 'מנהל תוכניות';
           case Role.reporter:
-            return 'Reporter';
+            return 'מדווח';
           
         }
       },
@@ -112,7 +104,7 @@ const Users = () => {
       field: 'active',
       headerName: 'סטטוס',
       width: 150,
-      valueGetter: (params: GridCellParams) => (params.row.active ? 'Active' : 'Inactive'),
+      valueGetter: (params: GridCellParams) => (params.row.active ? 'פעיל' : 'לא פעיל'),
     },
     {
       field: 'actions',
@@ -138,8 +130,6 @@ const Users = () => {
     <GridToolbarContainer>
       <GridToolbarExport
         csvOptions={{
-
-          delimiter: ';',
           utf8WithBom: true,
         }}
         printOptions={{ disableToolbarButton: true }}
@@ -173,7 +163,6 @@ const Users = () => {
         />
 
 
-      <Snackbar open={snackbarOpen} message={snackbarMessage} onClose={handleSnackbarClose} />
       <Dialog open={deleteConfirmationOpen} onClose={handleCancelDelete}>
         <DialogTitle>מחיקת משתמש</DialogTitle>
         <DialogContent>האם למחוק את המשתמש?</DialogContent>

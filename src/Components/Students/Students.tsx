@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { DataGrid, GridColDef, GridCellParams, GridToolbarContainer, GridToolbarExport } from '@mui/x-data-grid';
-import { Button, IconButton, Snackbar } from '@mui/material';
+import { Box, Button, IconButton } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -12,11 +12,13 @@ import DialogActions from '@mui/material/DialogActions';
 import PlaylistAddCheckIcon from '@mui/icons-material/PlaylistAddCheck';
 import StudentService from '../../Services/StudentService';
 import userService from '../../Services/UserService';
-import IStudentModel from '../../Models/IStudentModel';
+import IStudentModel, { IList } from '../../Models/IStudentModel';
 import GroupService from '../../Services/GroupService';
-import './Students.css'; 
 import useTitle from '../../hooks/useTitle';
 import heILGrid from '../../Utils/HebrewIL';
+import notification from '../../Services/Notification';
+import { useForm } from 'react-hook-form';
+import studentService from '../../Services/StudentService';
 
 
 
@@ -24,10 +26,12 @@ const Students = () => {
   const [students, setStudents] = useState<IStudentModel[]>([]);
   const [selectedStudent, setSelectedStudent] = useState<IStudentModel | null>(null);
   const [deleteConfirmationOpen, setDeleteConfirmationOpen] = useState(false);
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState('');
   const [groups, setGroups] = useState<{ [key: string]: string }>({});
+  const { register, handleSubmit } = useForm<IList>();
+
   const navigate = useNavigate();
+  useTitle("תלמידים")
+
   const isAdmin = userService.isAdmin();
   const isReporter = userService.isReporter();
   const actionsColumn = isAdmin
@@ -52,41 +56,23 @@ const Students = () => {
   : null;
 
   
+  
+  const send = async ( data:IList ) => {
+      const formData = new FormData();
+      formData.append("list", data.list[0] );
+      if( data.test ){
+        formData.append("test", '1' );
+      }
+      try {
+        await studentService.importStudents( formData );
+        notification.success("היבוא הצליח, יש לרענן את העמוד")
+      } catch (error) {
+        notification.error("ארעה שגיאה, היבוא לא הצליח")
+      }
+  }
 
-  useTitle("תלמידים")
-
-
-  // useEffect(() => {
-  //   const fetchStudents = async () => {
-  //     try {
-  //       const fetchedStudents = await StudentService.getAllStudents();
-  //       const studentsWithIds = fetchedStudents.map((student) => ({
-  //         ...student,
-  //         id: student._id,
-  //       }));
-  //       setStudents(studentsWithIds);
-  //     } catch (error: any) {
-  //       console.error('נכשל לקבל את רשימת התלמידים:', error);
-  //     }
-  //   };
-
-  //   const fetchGroups = async () => {
-  //     try {
-  //       const fetchedGroups = await GroupService.getAllGroups();
-  //       const groupMap: { [key: string]: string } = {};
-  //       fetchedGroups.forEach((group) => {
-  //         groupMap[group._id] = group.name;
-  //       });
-  //       setGroups(groupMap);
-  //     } catch (error: any) {
-  //       console.error('נכשל לקבל את רשימת ה:', error);
-  //     }
-  //   };
-
-  //   fetchStudents();
-  //   fetchGroups();
-  // }, []);
   useEffect(() => {
+
     const fetchData = async () => {
       try {
         const fetchedGroups = await GroupService.getAllGroups();
@@ -138,11 +124,9 @@ const Students = () => {
         setDeleteConfirmationOpen(false);
         setSelectedStudent(null);
         setStudents(students.filter((student) => student._id !== selectedStudent._id));
-        setSnackbarMessage('התלמיד נמחק בהצלחה.');
-        setSnackbarOpen(true);
-      } catch (error) {
-        setSnackbarMessage('נכשל למחוק את התלמיד.');
-        setSnackbarOpen(true);
+        notification.success("תלמיד נמחק בהצלחה");
+      } catch ( error ) {
+        notification.error("ארעה שגיאה");
       }
     }
   };
@@ -150,10 +134,6 @@ const Students = () => {
   const handleCancelDelete = () => {
     setDeleteConfirmationOpen(false);
     setSelectedStudent(null);
-  };
-
-  const handleSnackbarClose = () => {
-    setSnackbarOpen(false);
   };
 
   const columns: GridColDef[] = [
@@ -213,9 +193,7 @@ const Students = () => {
   const CustomToolbar = () => (
     <GridToolbarContainer>
       <GridToolbarExport
-        csvOptions={{
-
-          delimiter: ';',
+        csvOptions={{          
           utf8WithBom: true,
         }}
         printOptions={{ disableToolbarButton: true }}
@@ -253,7 +231,20 @@ const Students = () => {
           }}
         />
 
-      <Snackbar open={snackbarOpen} message={snackbarMessage} onClose={handleSnackbarClose} />
+
+      { isAdmin && 
+      <Box mt={5}>
+            <form onSubmit={handleSubmit(send)}>
+                <input accept='.xlsx' type="file" {...register("list")}/>
+                <br />
+                <label>
+                  <input type="checkbox" {...register("test")} />
+                  <span>טסט</span>
+                </label>
+                <br />
+                <Button type='submit' variant="outlined">ייבוא</Button>
+            </form>
+      </Box> }
 
       <Dialog open={deleteConfirmationOpen} onClose={handleCancelDelete}>
         <DialogTitle>מחיקת תלמיד</DialogTitle>

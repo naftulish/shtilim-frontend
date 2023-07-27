@@ -37,6 +37,15 @@ button.btn-second{
  fill: white ;
 }
 
+.delete-button{
+  cursor: pointer;
+  transform: 0.3s;
+}
+
+.delete-button:hover{
+  scale: 1.1;
+}
+
 .delete-button path  {
   fill: red  !important ;
 }
@@ -106,4 +115,18 @@ button.btn-second{
 .datagrid-container {
   width: 100%; /* Take full width of the page */
   height: 100vh; /* Take full height of the viewport */
+}
+
+.CancelIcon{
+  transition: 0.1s !important;
+  cursor: pointer  !important;
+}
+
+.CancelIcon:hover{
+  scale: 1.2;
+}
+
+label {
+  background: white;
+  padding: 0 6px !important;
 }

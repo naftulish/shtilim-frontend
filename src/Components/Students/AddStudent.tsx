@@ -15,12 +15,10 @@ import { ArrowBack } from '@mui/icons-material';
 import IStudentModel from '../../Models/IStudentModel';
 import StudentService from '../../Services/StudentService';
 import GroupService from '../../Services/GroupService';
-
 import IGroupModel from '../../Models/IGroupModel';
-
-
 import { useNavigate } from 'react-router-dom';
 import useTitle from '../../hooks/useTitle';
+import notification from '../../Services/Notification';
 
 const AddStudent = () => {
   const { register, handleSubmit } = useForm<IStudentModel>();
@@ -38,18 +36,18 @@ const AddStudent = () => {
       const fetchedGroups = await GroupService.getAllGroups();
       setGroups(fetchedGroups);
     } catch (error:any) {
-      console.error(error);
-      alert('Error fetching groups: ' + error.message);
+      notification.error();
+
     }
   };
 
   const save = async (student: IStudentModel) => {
     try {
       await StudentService.addStudent(student);
-      alert('Student saved successfully');
-    } catch (error: any) {
-      console.error(error);
-      alert('Error saving student: ' + error.message);
+      notification.success("תלמיד נשמר בהצלחה")
+      setTimeout(() => navigate("/students"), 500 );
+      } catch ( err ) {
+        notification.error();
     }
   };
 
@@ -136,6 +134,7 @@ const AddStudent = () => {
               </FormControl>
             </Box>
           </Box>
+          
         </Container>
     </>
   );

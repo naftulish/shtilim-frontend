@@ -1,15 +1,16 @@
 interface IStudentModel{
     _id: string,
-  
     firstName: string,
     lastName: string,
-    dateOfBirth: Date,
+    dateOfBirth: string,
     gender: string,
     address: string,
-    // readonly createdIn?: Date;
-    // createdIn: Date // not in frontend
     plans: string[],
     group: string
 }
 export default IStudentModel;
 
+export interface IList{
+    list: FileList;
+    test: boolean
+  }

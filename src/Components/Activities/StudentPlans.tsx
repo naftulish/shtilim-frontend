@@ -1,11 +1,8 @@
-
-
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-
-
 import PlanService from '../../Services/PlanService';
 import StudentService from '../../Services/StudentService';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 import IStudentModel from '../../Models/IStudentModel';
 import IActivityModel from '../../Models/IActivityModel';
@@ -15,20 +12,12 @@ import {
   Typography,
   Box,
   Button,
-  Table,
-  TableHead,
-  TableBody,
-  TableRow,
-  TableCell,
-  Radio,
   RadioGroup,
   FormControl,
-  FormControlLabel,
   Select,
   InputLabel,
   MenuItem,
   SelectChangeEvent,
-  ButtonGroup
 } from '@mui/material';
 import ActivityService from '../../Services/ActivityService';
 import userService from '../../Services/UserService';
@@ -36,11 +25,10 @@ import { ArrowBack, Delete } from '@mui/icons-material';
 import { IPlanModel } from '../../Models/IPlanModel';
 import IUserModel from '../../Models/IUserModel';
 import UserService from '../../Services/UserService';
-import { log } from 'console';
 import "./StudentPlans.css";
 import { DataGrid, GridColDef, GridToolbarContainer, GridToolbarExport } from '@mui/x-data-grid';
 import heILGrid from '../../Utils/HebrewIL';
-// The interface represents an activity object
+import notification from '../../Services/Notification';
 
 
 const StudentPlans = () => {
@@ -78,12 +66,6 @@ const StudentPlans = () => {
   }, []);
 
 
-
-
-  // console.log(selectedPlan);
-  // console.log(activities);
-
-
   useEffect(() => {
     // Fetch student data when the 'id' parameter changes
     const fetchStudent = async () => {
@@ -92,7 +74,7 @@ const StudentPlans = () => {
         setStudent(fetchedStudent);
         setPlans([]);
       } catch (error) {
-        console.error('Failed to fetch student:', error);
+        notification.error();
       }
     };
 
@@ -107,7 +89,7 @@ const StudentPlans = () => {
         setAllPlans(fetchedPlans);
       } catch (error) {
         console.log(error);
-        alert('Failed to fetch the plans!');
+        notification.error();
       }
     };
 
@@ -124,7 +106,7 @@ const StudentPlans = () => {
             const fetchedPlan = await PlanService.getPlan(planId);
             fetchedPlans.push(fetchedPlan);
           } catch (error) {
-            console.error('Failed to fetch plan:', error);
+            notification.error();
           }
         }
         setPlans(fetchedPlans);
@@ -150,16 +132,11 @@ const StudentPlans = () => {
   };
 
   const handleSubmit = async (event: React.FormEvent) => {
+    
     event.preventDefault();
-    setIsReportStarted(false);
-
     // Create the grade array
     const grade: number[] = selectedAnswers;
-
-
     const user = userService.getUserFromToken();
-    console.log(user);
-
 
     // Create the activity object
     const activity: IActivityModel = {
@@ -170,15 +147,16 @@ const StudentPlans = () => {
     };
 
     try {
-      // Add the activity using the ActivityService
-      const addedActivity = await ActivityService.addActivity(activity);
-      console.log('Added activity:', addedActivity);
 
-      // Reset the selected plan and answers
-      setSelectedPlan(null);
+      // Add the activity using the ActivityService
+      await ActivityService.addActivity(activity);
       setSelectedAnswers([]);
+      notification.success("הדווח נרשם בהצלחה");
+      setTimeout(() => {
+        setIsReportStarted(false);
+      }, 500)
     } catch (error) {
-      console.error('Failed to add activity:', error);
+      notification.error();
     }
   };
 
@@ -195,13 +173,11 @@ const StudentPlans = () => {
         plan._id,
         student?._id ?? ''
       );
-      console.log(fetchedActivities);
-
       setActivities(fetchedActivities);
       setSelectedPlan(plan);
       setIsViewReportsStarted(true);
     } catch (error) {
-      console.error('Failed to fetch activities:', error);
+      notification.error();
     }
   };
 
@@ -236,7 +212,7 @@ const StudentPlans = () => {
         setNewPlan(''); // Clear the selected plan
       }
     } catch (error) {
-      console.error('Failed to add plan to student:', error);
+      notification.error();
     }
   };
 
@@ -272,23 +248,21 @@ const StudentPlans = () => {
   if (isReportStarted) {
     return (
       <div>
-        <Typography variant="h5" align="center">
-          תלמיד: {student.firstName} {student.lastName}
-        </Typography>
-        <Box maxWidth="600px" mx="auto" mt={2} onSubmit={handleSubmit}>
-          {/* <Paper component="form" onSubmit={handleSubmit}> */}
-          <Typography variant="h5" style={{ textAlign: 'center' }}>
-            תוכנית: {selectedPlan?.name}
+        <Box mx="auto" mt={2} onSubmit={handleSubmit}>
+          <Typography variant="h5">
+            <strong>תלמיד:</strong> {student.firstName} {student.lastName}
           </Typography>
-          <Box mt={7}>
+          <Typography variant="h5">
+            <strong>תוכנית:</strong> {selectedPlan?.name}
+          </Typography>
+          
+          <Box mt={5}>
             {selectedPlan?.quiz.map((question, index) => (
-              <Box key={index} mb={7}>
-
-                <Typography variant="body2" style={{ fontSize: '22px' }}>
-                  {question.title}
+              <Box key={index} mb={3} >
+                <Typography style={{ fontSize: '18px' }}>
+                  שאלה: <strong> {question.title} </strong>
                 </Typography>
-
-                <div className='flex center' style={{ marginTop: '12px' }}>
+                <div className='flex' style={{ padding: "20px 0" }}>
                   <RadioGroup
                     className='quisGroup'
                     value={selectedAnswers[index] ?? ''}
@@ -296,14 +270,6 @@ const StudentPlans = () => {
                     row
                   >
                     {question.answer.map((option, optionIndex) => (
-                      // <FormControlLabel
-                      // 
-                      //   key={optionIndex}
-                      //   value={optionIndex.toString()}
-                      //   control={<Radio />}
-                      //   label={option}
-                      // />
-
                       <label className='quisLabel'>
                         <input className='quisText'
                           onChange={(e) => handleAnswerChange(index, optionIndex)}
@@ -316,23 +282,18 @@ const StudentPlans = () => {
                     ))}
                   </RadioGroup>
                 </div>
-
+                <hr />
               </Box>
             ))}
           </Box>
-          <div className='flex center'>
-
+            <FormControl className='flex row gap-10' sx={{ mt: 3, mb: 2, maxWidth: 200}}>
             <Button fullWidth variant="outlined" onClick={handleCancelReport} style={{ marginRight: '10px' }}>
-              ביטול
+              חזרה
             </Button>
             <Button fullWidth variant="contained" onClick={handleSubmit} style={{ background: 'transparent', border: '1px solid black' }}>
               דיווח
             </Button>
-
-
-          </div>
-
-          {/* </Paper> */}
+          </FormControl>
         </Box>
       </div>
     );
@@ -361,17 +322,15 @@ const StudentPlans = () => {
     const report = activities.map((activity, j) => {
       const data: { [key: string]: any } = {
         id: activity._id,
-        activityId: activity._id,
         successPercentage: arr[j] / (selectedPlan?.quiz.length || 1),
         createdIn: activity.createdIn,
       };
-      console.log( activity.grade);
       
       activity.grade.forEach((answer: number, i: number) => {
         const arrLength = selectedPlan?.quiz[i].answer.length;
         const mul = arrLength === 2 ? 100 : 25;
         const score = mul * answer;
-        data[`answer${i}`] = `${selectedPlan?.quiz[i].answer[answer]} (${score})`;
+        data[`answer_${i}`] = `${selectedPlan?.quiz[i].answer[answer]} (${score})`;
       });
 
       const user = users.find((user) => user._id === activity.userId);
@@ -380,84 +339,74 @@ const StudentPlans = () => {
       return data;
     });
 
+    
+    
+
     const columns: GridColDef[] = [
-      { field: 'activityId', headerName: 'מזהה פעילות', width: 180 },
+      { field: 'createdIn', headerName: 'תאריך', width: 180,
+      valueGetter: (params : any) => {               
+        var now = new Date( params.value );
+        return now.toLocaleString(); ;
+      }
+     },
       // Define other columns for the quiz answers dynamically based on selectedPlan
       ...(selectedPlan?.quiz.map((question, index) => ({
-        field: `answer${index}`,
+        field: `answer_${index}`,
         headerName: question.title,
         width: 200,
-        valueGetter: (params : any) => {
-          const activity = activities[index];
-          const arrLength = selectedPlan?.quiz[index].answer.length;
-          console.log(arrLength);
-          
-          const mul = arrLength === 2 ? 100 : 25;
-          
-          console.log(activity);
-          console.log(activity.grade);
-          console.log(activity.grade[index])
-          const score = mul * (activity.grade[index] || 0);
-          console.log(activity.grade[index])
-          return `${selectedPlan?.quiz[index].answer[activity.grade[index]]} (${score})`;
-        },
       })) ?? []), // Provide an empty array as a fallback when selectedPlan is undefined
       { field: 'successPercentage', headerName: 'אחוז הצלחה', width: 180 },
-      { field: 'createdIn', headerName: 'תאריך', width: 180 },
       { field: 'reporter', headerName: 'המדווח', width: 180 },
     ];
+
+    console.log( report );
+    console.log( columns );
 
     const CustomToolbar = () => (
       <GridToolbarContainer>
         <GridToolbarExport
           csvOptions={{
-            delimiter: ';',
             utf8WithBom: true,
           }}
           printOptions={{ disableToolbarButton: true }}
         />
       </GridToolbarContainer>
     );
-    
-    // console.log(report);
-    // console.log(columns);
-    
-       
-    // return <></>
 
     return (
       <div>
-        <Typography variant="h5" align="center">
-          תלמיד: {student?.firstName} {student?.lastName}
-        </Typography>
-        <Box maxWidth="600px" mx="auto" mt={2}>
+        
+        <Box mx="auto" mt={2}>
           <Box p={2}>
-            <Typography variant="h6">
-              תוכנית: {selectedPlan?.name} | אחוזי הצלחה: {average.toFixed(2)}
+          <Typography variant="h5">
+           <strong>תלמיד:</strong> {student?.firstName} {student?.lastName}
+          </Typography>
+            <Typography variant="h5">
+              <strong>תוכנית:</strong> {selectedPlan?.name}
             </Typography>
+            <Typography variant="h5">
+              <strong>אחוזי הצלחה:</strong> { average ? average.toFixed(2) : "" }
+            </Typography>
+            <br />
+            <Button sx={{mb:2}} variant="contained" onClick={handleCancelViewReport}>
+                חזרה
+            </Button>
             <DataGrid
               rows={report}
               columns={columns}
               autoHeight
-              
               localeText={heILGrid}
               components={{
                 Toolbar: CustomToolbar, // Use the custom toolbar component
               }}
             />
-            <Box mt={2}>
-              <Button variant="contained" onClick={handleCancelViewReport}>
-                ביטול
-              </Button>
-            </Box>
           </Box>
         </Box>
       </div>
     );
   };
 
-
-
+  const userAddedPlans = allPlans.filter((plan) => !student.plans.includes(plan?._id))
 
   // Main student plans page
   return (
@@ -468,18 +417,21 @@ const StudentPlans = () => {
         חזרה לרשימת תלמידים
       </Button>
 
-      {/* Student name */}
-      <Typography variant="h5" align="center">
-        תלמיד: {student.firstName} {student.lastName}
-      </Typography>
-
       {/* Add new plan */}
       {!isReporter && (
         <Box>
+          <br />
+          <Typography variant="h5">
+           <strong>תלמיד:</strong> {student.firstName} {student.lastName}
+          </Typography>
+          <br />
+          <br />
+          {userAddedPlans.length ? <>
           <Typography>שיוך תוכנית חדשה</Typography>
-          <FormControl margin="normal" fullWidth>
+          <FormControl className='flex space row gap-10' fullWidth sx={{ mt: 3, mb: 2, maxWidth: 200}}>
             <InputLabel id="group-label">תוכנית</InputLabel>
             <Select
+              sx={{minWidth: 200}}
               labelId="group-label"
               id="allPlan"
               defaultValue=""
@@ -488,19 +440,21 @@ const StudentPlans = () => {
               value={newPlan} // Bind the selected plan value to the state
             >
               {/* Filter out plans that are already in the student's plans */}
-              {allPlans
-                .filter((plan) => !student.plans.includes(plan?._id))
+              {userAddedPlans
                 .map((plan) => (
                   <MenuItem key={plan?._id} value={plan?._id}>
                     {plan?.name}
                   </MenuItem>
                 ))}
             </Select>
-          </FormControl>
           <Button variant="outlined" onClick={handleAddPlan}>
             שמירה
           </Button>
-        </Box>)}
+        </FormControl>
+        </>: <span>כל התוכניות הקיימות משוייכות לתלמיד</span>}
+        </Box>
+        
+      )}
 
       {/* Display existing plans */}
       <Grid container spacing={2}>
@@ -510,18 +464,12 @@ const StudentPlans = () => {
               <Box p={2}>
                 {!isReporter && (
                   <Box display="flex" justifyContent="flex-end">
-                    <Button
-                      variant="outlined"
-                      startIcon={<Delete />}
-                      onClick={() => handleDeletePlan(plan?._id || '')}
-                    >
-                      מחיקה
-                    </Button>
+                    <DeleteIcon onClick={() => handleDeletePlan(plan?._id || '')} className="delete-button" />
                   </Box>)}
                 <Typography variant="h6">{plan?.name}</Typography>
                 <Typography variant="body1">{plan?.description}</Typography>
                 <Box mt={2} display="flex" justifyContent="space-between">
-                  <Button variant="outlined" onClick={() => handlePlanClick(plan)}>
+                  <Button variant="contained" onClick={() => handlePlanClick(plan)}>
                     דווח
                   </Button>
                   <Button variant="outlined" onClick={() => handleViewReports(plan)}>

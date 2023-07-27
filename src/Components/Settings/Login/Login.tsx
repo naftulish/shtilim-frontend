@@ -1,6 +1,3 @@
-
-
-
 import React, { useState } from 'react';
 import {  useNavigate } from 'react-router-dom';
 import userServise from '../../../Services/UserService';
@@ -12,10 +9,8 @@ import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { ThemeProvider } from '@mui/material/styles';
-import Snackbar from '@mui/material/Snackbar';
-import MuiAlert, { AlertColor } from '@mui/material/Alert';
 import logo from "../../../Assets/logo.png";
+import notification from '../../../Services/Notification';
 
 
 const Login = () => {
@@ -23,13 +18,7 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState('');
-  const [snackbarSeverity, setSnackbarSeverity] = useState<AlertColor | undefined>('success');
 
-  const handleSnackbarClose = () => {
-    setSnackbarOpen(false);
-  };
 
   const onLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -37,19 +26,10 @@ const Login = () => {
       
       const token = await userServise.login(email, password);
       localStorage.setItem('token', token);
-      setSnackbarMessage('התחברות בוצעה בהצלחה.');
-      setSnackbarSeverity('success');
-      setSnackbarOpen(true);
-      
-      setTimeout(() => {
-        navigate('/'); 
-      }, 2000); 
-      
+      notification.success("התחברתם בהצלחה");
+      setTimeout( () => navigate('/') , 1000);
     } catch (error) {
-      console.error(error);
-      setSnackbarMessage('אחד או יותר נתונים שהקשת שגויים.');
-      setSnackbarSeverity('error');
-      setSnackbarOpen(true);
+      notification.error('אחד או יותר מהנתונים שגויים.');      
     }
   };
 
@@ -117,12 +97,6 @@ const Login = () => {
           </Box>
         </Box>
       </Container>
-
-      <Snackbar open={snackbarOpen} autoHideDuration={2500} onClose={handleSnackbarClose}>
-        <MuiAlert onClose={handleSnackbarClose} severity={snackbarSeverity} sx={{ width: '100%' }}>
-          {snackbarMessage}
-        </MuiAlert>
-      </Snackbar>
     </>
   );
 };

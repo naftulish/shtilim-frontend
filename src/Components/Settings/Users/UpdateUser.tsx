@@ -1,6 +1,6 @@
 
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, SyntheticEvent } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
   TextField,
@@ -13,25 +13,26 @@ import {
   Select,
   MenuItem,
 } from '@mui/material';
-import { useForm } from 'react-hook-form';
+
 import IUserModel, { Role } from '../../../Models/IUserModel';
 import UserService from '../../../Services/UserService';
 import useTitle from '../../../hooks/useTitle';
+import notification from '../../../Services/Notification';
 
 
 const UpdateUser = () => {
   const { id } = useParams();
-  const [user, setUser] = useState<IUserModel>(
-    {
-      _id: '',
-      firstName: '',
-      lastName: '',
-      email: "",
-      active: false,
-      role: Role.reporter,
-    });
+  const [user, setUser] = useState<IUserModel>({
+    _id: "",
+    firstName: "",
+    lastName: "",
+    email: "",
+    active: true,
+    role: Role.reporter,
+    password: "",
+  });
+
   const navigate = useNavigate();
-  const { register, handleSubmit, setValue } = useForm<IUserModel>();
   useTitle("משתמשים");
 
   useEffect(() => {
@@ -39,65 +40,70 @@ const UpdateUser = () => {
       try {
         if (id) {
           const fetchedUser = await UserService.getUserById(id);
+          fetchedUser.password = "";
           setUser(fetchedUser);
-          setValue('firstName', fetchedUser.firstName);
-          setValue('lastName', fetchedUser.lastName);
-          setValue('email', fetchedUser.email);
-          setValue('active', fetchedUser.active);
-          setValue('role', fetchedUser.role);
         }
       } catch (error) {
         console.log(error);
-        alert('נכשל לקבל את המשתמש!');
+        notification.error('שדיאה בפרטי המשתמש');
       }
     };
 
     fetchUser();
   }, []);
 
-  const handleFormSubmit = async (data: IUserModel) => {
+  const save = async (event: SyntheticEvent ) => {
+    event.preventDefault();
     try {
       // Check if the password field is not empty and not undefined
-      if (data.password && data.password.trim()) {
+      if (user.password && user.password.trim()) {
         const updatedUser = {
           _id: user._id,
-          firstName: data.firstName,
-          lastName: data.lastName,
-          email: data.email,
-          active: data.active,
-          role: data.role,
-          password: data.password, // Add the password field back if it's not empty
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email: user.email,
+          active: user.active,
+          role: user.role,
+          password: user.password, // Add the password field back if it's not empty
         };
   
         await UserService.updateOneUser(user?._id || '', updatedUser);
-        alert('המשתמש עודכן בהצלחה!');
-        navigate('/users');
+        notification.success('המשתמש עודכן בהצלחה!');
+        setTimeout(() => navigate("/users"), 500 );
       } else {
         // If the password field is empty or undefined, remove it from the data object
-        delete data.password;
+        delete user.password;
   
         const updatedUser = {
           _id: user._id,
-          firstName: data.firstName,
-          lastName: data.lastName,
-          email: data.email,
-          active: data.active,
-          role: data.role,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email: user.email,
+          active: user.active,
+          role: user.role,
         };
   
         await UserService.updateOneUser(user?._id || '', updatedUser);
-        alert('המשתמש עודכן בהצלחה!');
-        navigate('/users');
+        notification.success('המשתמש עודכן בהצלחה!');
+        setTimeout(() => navigate("/users"), 500 );
       }
     } catch (error: any) {
-      if (error.response) {
-        console.log('תגובת שגיאה:', error.response.data);
-        console.log('קוד סטטוס שגיאה:', error.response.status);
-      } else {
-        console.log('שגיאה:', error.message);
-      }
+      notification.error();
     }
   };
+
+
+  const getVal = ( str:string ):Role => {
+    switch (str) {
+      case "ADMIN":
+        return Role.admin;
+      case "PManager":
+        return Role.programManager;
+      case "Reporter":
+        return Role.reporter;
+    }
+    return Role.admin;
+  }
   
 
   return (
@@ -114,28 +120,31 @@ const UpdateUser = () => {
             עריכת משתמש
           </Typography>
           {user && (
-            <form onSubmit={handleSubmit(handleFormSubmit)}>
+            <form onSubmit={save}>
               <TextField
                 margin="normal"
                 fullWidth
                 id="firstName"
                 label="שם פרטי"
                 autoFocus
-                {...register('firstName')}
+                value={user.firstName}
+                onChange={e => setUser( {...user, firstName: e.target.value })}
               />
               <TextField
                 margin="normal"
                 fullWidth
                 id="lastName"
                 label="שם משפחה"
-                {...register('lastName')}
+                value={user.lastName}
+                onChange={e => setUser( {...user, lastName: e.target.value })}
               />
               <TextField
                 margin="normal"
                 fullWidth
                 id="email"
                 label="כתובת דואר אלקטרוני"
-                {...register('email')}
+                value={user.email}
+                onChange={e => setUser( {...user, email: e.target.value })}
               />
 
               <TextField 
@@ -143,15 +152,17 @@ const UpdateUser = () => {
               fullWidth 
               id="password" 
               label="סיסמה" 
-              {...register('password')} />
+              value={user.password}
+              onChange={e => setUser( {...user, password: e.target.value })}
+               />
 
               <FormControl fullWidth margin="normal">
                 <InputLabel id="active-label">סטטוס</InputLabel>
                 <Select
                   id="active"
                   labelId="active-label"
-                  defaultValue={user.active ? 'true' : 'false'}
-                  {...register('active')}
+                  value={user.active ? 'true' : 'false'}
+                  onChange={e => setUser( {...user, active: e.target.value === "true" ? true : false  })}
                 >
                   <MenuItem value="true">פעיל</MenuItem>
                   <MenuItem value="false">לא פעיל</MenuItem>
@@ -162,7 +173,8 @@ const UpdateUser = () => {
                 <Select
                   id="role"
                   labelId="role-label"
-                  {...register('role')}
+                  value={user.role}
+                  onChange={e => setUser( {...user, role: getVal(e.target.value) })}
                 >
                   <MenuItem value={Role.admin}>מנהל</MenuItem>
                   <MenuItem value={Role.programManager}>מנהל תוכניות</MenuItem>

@@ -1,7 +1,6 @@
 interface Group{
-    _id:string,
+    _id: string,
     name: string,
-    teacher: string,//user._id
-    
+    teacher: string,
 }
 export default Group;

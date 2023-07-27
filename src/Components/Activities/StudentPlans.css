@@ -1,14 +1,13 @@
-
-
-
 .quisGroup {
-    display: flex; /* הוספת Flexbox לכל הריבועים */
-    gap: 10px; /* רווח יפה בין הריבועים */
+    display: flex;
+    gap: 10px;
 }
 
 .quisLabel input {
-    display: none;
-
+    opacity: 0;
+    position: absolute;
+    top: 100%;
+    right: 100%;
 }
 
 .quisLabel {

@@ -19,8 +19,8 @@ import AddPlan from "../../Plans/AddPlan/AddPlan";
 import './Main.css'; 
 import HomePage from "../HomePage/HomePage";
 import useTitle from "../../../hooks/useTitle";
-import { Role} from '../../../Models/IUserModel'; // Import the Role enum and IUserModel interface
 import userService from "../../../Services/UserService";
+import Import from "../../Settings/Import/Import";
 
 function Main(): JSX.Element {
     const isAdmin = userService.isAdmin();
@@ -36,6 +36,7 @@ function Main(): JSX.Element {
         <Route path="/" element={<HomePage />} />
 
         {isAdmin && <Route path="/users" element={<Users />} />}
+        {isAdmin && <Route path="/import" element={<Import />} />}
         {isAdmin && <Route path="/add-user" element={<AddUser />} />}
         {isAdmin && <Route path="/update-user/:id" element={<UpdateUser />} />}
         {isAdmin && <Route path="/plans" element={<Plans />} />}

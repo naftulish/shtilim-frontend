@@ -140,16 +140,28 @@ const Users = () => {
 
   return (
     
-    <div style={{ height: 400, width: '100%' }}>
+    <div style={{ width: '100%' }}>
         <div style={{ display: 'flex', alignItems: 'center', marginBottom: '1rem' }}>
           <h1 style={{ flex: 1 }}>רשימת משתמשים</h1>
+          
+
           <Button
-            type="submit"
+            variant="contained"
+            onClick={() => navigate('/import')}
+            className='btn-top'>
+              ייבוא תלמידים
+          </Button>
+          
+          <Button
+          sx={{marginLeft: "10px" }}
             variant="contained"
             onClick={() => navigate('/add-user')}
             className='btn-top'          >
             הוספת משתמש &nbsp;<PersonAddIcon />
           </Button>
+
+          
+
         </div>  
         <DataGrid
           rows={users}

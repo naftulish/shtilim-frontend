@@ -248,6 +248,8 @@ const StudentPlans = () => {
   if (isReportStarted) {
     return (
       <div>
+        <form onSubmit={handleSubmit}>
+
         <Box mx="auto" mt={2} onSubmit={handleSubmit}>
           <Typography variant="h5">
             <strong>תלמיד:</strong> {student.firstName} {student.lastName}
@@ -272,6 +274,7 @@ const StudentPlans = () => {
                     {question.answer.map((option, optionIndex) => (
                       <label className='quisLabel'>
                         <input className='quisText'
+                          required
                           onChange={(e) => handleAnswerChange(index, optionIndex)}
                           type="radio" name={question.title}
                         />
@@ -290,11 +293,12 @@ const StudentPlans = () => {
             <Button fullWidth variant="outlined" onClick={handleCancelReport} style={{ marginRight: '10px' }}>
               חזרה
             </Button>
-            <Button fullWidth variant="contained" onClick={handleSubmit} style={{ background: 'transparent', border: '1px solid black' }}>
+            <Button type='submit' fullWidth variant="contained" style={{ background: 'transparent', border: '1px solid black' }}>
               דיווח
             </Button>
           </FormControl>
         </Box>
+        </form>
       </div>
     );
   }

@@ -12,13 +12,11 @@ import DialogActions from '@mui/material/DialogActions';
 import PlaylistAddCheckIcon from '@mui/icons-material/PlaylistAddCheck';
 import StudentService from '../../Services/StudentService';
 import userService from '../../Services/UserService';
-import IStudentModel, { IList } from '../../Models/IStudentModel';
+import IStudentModel from '../../Models/IStudentModel';
 import GroupService from '../../Services/GroupService';
 import useTitle from '../../hooks/useTitle';
 import heILGrid from '../../Utils/HebrewIL';
 import notification from '../../Services/Notification';
-import { useForm } from 'react-hook-form';
-import studentService from '../../Services/StudentService';
 
 
 
@@ -27,7 +25,8 @@ const Students = () => {
   const [selectedStudent, setSelectedStudent] = useState<IStudentModel | null>(null);
   const [deleteConfirmationOpen, setDeleteConfirmationOpen] = useState(false);
   const [groups, setGroups] = useState<{ [key: string]: string }>({});
-  const { register, handleSubmit } = useForm<IList>();
+  const [ load, setLoad ] = useState<boolean>(false);
+
 
   const navigate = useNavigate();
   useTitle("תלמידים")
@@ -57,24 +56,14 @@ const Students = () => {
 
   
   
-  const send = async ( data:IList ) => {
-      const formData = new FormData();
-      formData.append("list", data.list[0] );
-      if( data.test ){
-        formData.append("test", '1' );
-      }
-      try {
-        await studentService.importStudents( formData );
-        notification.success("היבוא הצליח, יש לרענן את העמוד")
-      } catch (error) {
-        notification.error("ארעה שגיאה, היבוא לא הצליח")
-      }
-  }
+  
 
   useEffect(() => {
 
     const fetchData = async () => {
       try {
+
+        setLoad(true);
         const fetchedGroups = await GroupService.getAllGroups();
         const groupMap: { [key: string]: string } = {};
         fetchedGroups.forEach((group) => {
@@ -103,6 +92,8 @@ const Students = () => {
         }
       } catch (error: any) {
         console.error('Failed to fetch data:', error);
+      }finally{
+        setLoad(false);
       }
     };
   
@@ -205,7 +196,7 @@ const Students = () => {
   
 
   return (
-    <div style={{ width: '100%' }}>
+    <div style={{ width: '100%' }} className={ load ? "load" : ""}>
       <div style={{ display: 'flex', alignItems: 'center', marginBottom: '1rem' }}>
         <h1 style={{ flex: 1 }}>רשימת תלמידים</h1>
         {isAdmin && ( // Only render the 'Add Student' button for admin users
@@ -232,19 +223,7 @@ const Students = () => {
         />
 
 
-      { isAdmin && 
-      <Box mt={5}>
-            <form onSubmit={handleSubmit(send)}>
-                <input accept='.xlsx' type="file" {...register("list")}/>
-                <br />
-                <label>
-                  <input type="checkbox" {...register("test")} />
-                  <span>טסט</span>
-                </label>
-                <br />
-                <Button type='submit' variant="outlined">ייבוא</Button>
-            </form>
-      </Box> }
+      
 
       <Dialog open={deleteConfirmationOpen} onClose={handleCancelDelete}>
         <DialogTitle>מחיקת תלמיד</DialogTitle>

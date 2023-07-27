@@ -18,6 +18,7 @@ import {
 } from '../../../Models/IPlanModel';
 import { useNavigate } from 'react-router-dom';
 import useTitle from '../../../hooks/useTitle';
+import notification from '../../../Services/Notification';
 
 
 
@@ -79,7 +80,7 @@ const AddPlan = () => {
       updatedQuizes[index].answer[3] = value;
 
     if (field === 'answer5')
-      updatedQuizes[index].answer[3] = value;
+      updatedQuizes[index].answer[4] = value;
 
     setQuizes(updatedQuizes);
     setValue('quiz', updatedQuizes);
@@ -96,10 +97,11 @@ const AddPlan = () => {
   const save = (plan: IPlanModel) => {
     planServise.addPlan(plan)
       .then(() => {
-        alert('תוכנית נשמרה בהצלחה');
+        notification.success('תוכנית נשמרה בהצלחה');
+        setTimeout( () => navigate("/plans"), 500)
       })
       .catch((error: { message: string; }) => {
-        alert('שגיאה בשמירת התוכנית: ' + error.message);
+        notification.error('שגיאה בשמירת התוכנית: ' + error.message);
       });
   };
 
@@ -204,7 +206,7 @@ const AddPlan = () => {
                           label="הצלחה"
                           fullWidth
                           defaultValue={"הצליח"}
-                          onChange={(e) => updateQuiz(index, "answer1", e.target.value)}
+                          onChange={(e) => updateQuiz(index, "answer2", e.target.value)}
                           dir="rtl"
                         />
                       </Grid>
@@ -213,7 +215,7 @@ const AddPlan = () => {
                           label="כישלון"
                           fullWidth
                           defaultValue={"נכשל"}
-                          onChange={(e) => updateQuiz(index, "answer2", e.target.value)}
+                          onChange={(e) => updateQuiz(index, "answer1", e.target.value)}
                           dir="rtl"
                         />
                       </Grid>

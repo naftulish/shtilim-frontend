@@ -10,25 +10,25 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import logo from "../../../Assets/logo.png";
+import 'react-notifications-component/dist/theme.css'
 import notification from '../../../Services/Notification';
-
 
 const Login = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  
-
+  const [err, setErr] = useState('');
 
   const onLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      
+      setErr("");
       const token = await userServise.login(email, password);
       localStorage.setItem('token', token);
-      notification.success("התחברתם בהצלחה");
-      setTimeout( () => navigate('/') , 1000);
+      setErr("התחברתם בהצלחה");
+      setTimeout( () => navigate('/') , 500);
     } catch (error) {
+      setErr('אחד או יותר מהנתונים שגויים.')
       notification.error('אחד או יותר מהנתונים שגויים.');      
     }
   };
@@ -85,7 +85,12 @@ const Login = () => {
             >
               התחברות
             </Button>
-            <Grid container>
+
+            <Typography>
+              {err}
+            </Typography>
+
+            <Grid container justifyContent={'center'}>
             <div className="login credit">
           <div>
             <span>פותח בשיתוף</span>
@@ -96,6 +101,7 @@ const Login = () => {
             </Grid>
           </Box>
         </Box>
+        
       </Container>
     </>
   );

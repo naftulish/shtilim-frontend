@@ -130,3 +130,8 @@ label {
   background: white;
   padding: 0 6px !important;
 }
+
+.load{
+  opacity: 0.8;
+  pointer-events: none;
+}

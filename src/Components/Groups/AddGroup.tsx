@@ -18,20 +18,24 @@ import { useNavigate } from 'react-router-dom';
 import useTitle from '../../hooks/useTitle';
 import IUserModel from '../../Models/IUserModel';
 import UserService from '../../Services/UserService';
+import notification from '../../Services/Notification';
 
 
 const AddGroup = () => {
+  
   const { register, handleSubmit } = useForm<IGroupModel>();
   const [users, setUsers] = useState<IUserModel[]>([]);
+  const navigate = useNavigate();
+  useTitle("כיתות");
 
+  
   useEffect(() => {
     const fetchUsers = async () => {
       try {
         const fetchedUsers = await UserService.getAllUsers();
         setUsers(fetchedUsers);
       } catch (error) {
-        console.error('Failed to fetch users:', error);
-        // You can add additional error handling here if needed
+        notification.error();
       }
     };
   
@@ -39,16 +43,15 @@ const AddGroup = () => {
   }, []);
   
 
-  const navigate = useNavigate();
-  useTitle("כיתות");
+
 
   const save = async (group: IGroupModel) => {
     try {
       await GroupService.addGroup(group);
-      alert('Group saved successfully');
+      notification.success("הכיתה נשמרה בהצלחה");
+      navigate("/groups");
     } catch (error: any) {
-      console.error(error);
-      alert('Error saving group: ' + error.message);
+      notification.error();
     }
   };
 

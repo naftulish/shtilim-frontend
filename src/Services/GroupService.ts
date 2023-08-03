@@ -19,8 +19,8 @@ class GroupServise {
         await axios.delete<void>(appConfig.groups + _id);
     }
 
-    async updateGroup(_id: string ,group: IGroupModel): Promise<IGroupModel> {
-        let response = await axios.put<IGroupModel>(appConfig.groups + _id, group);
+    async updateGroup( group: IGroupModel): Promise<IGroupModel> {
+        let response = await axios.put<IGroupModel>(appConfig.groups + group._id, group);
         return response.data;
         }
 

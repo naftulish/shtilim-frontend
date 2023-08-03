@@ -1,6 +1,6 @@
 
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, SyntheticEvent } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
   TextField,
@@ -13,19 +13,20 @@ import {
   Select,
   MenuItem,
 } from '@mui/material';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { useForm } from 'react-hook-form';
 import GroupService from '../../Services/GroupService';
-import Group from '../../Models/IGroupModel';
+import IGroupModel from '../../Models/IGroupModel';
 import useTitle from '../../hooks/useTitle';
 import IUserModel from '../../Models/IUserModel';
 import UserService from '../../Services/UserService';
-
-const defaultTheme = createTheme();
+import notification from '../../Services/Notification';
 
 const UpdateGroup = () => {
+
   const { id } = useParams();
+  const navigate = useNavigate();
   const [users, setUsers] = useState<IUserModel[]>([]);
+  const [group, setGroup] = useState<IGroupModel>({_id: "", name: "", teacher: ""});
+  useTitle("כיתות");
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -34,23 +35,10 @@ const UpdateGroup = () => {
         setUsers(fetchedUsers);
       } catch (error) {
         console.error('Failed to fetch users:', error);
-        // You can add additional error handling here if needed
       }
     };
-  
     fetchUsers();
   }, []);
-  const [group, setGroup] = useState<Group>({
-    _id: '',
-    name: '',
-    teacher: '',
-  });
-  
-  useTitle("כיתות");
-
-
-  const navigate = useNavigate();
-  const { register, handleSubmit, setValue } = useForm<Group>();
 
   useEffect(() => {
     const fetchGroup = async () => {
@@ -58,45 +46,29 @@ const UpdateGroup = () => {
         if (id) {
           const fetchedGroup = await GroupService.getGroup(id);
           setGroup(fetchedGroup);
-          setValue('name', fetchedGroup.name);
-          setValue('teacher', fetchedGroup.teacher);
         }
       } catch (error) {
         console.log(error);
-        alert('Failed to fetch the group!');
+        alert('ארעה שגיאה לא ידועה');
       }
     };
 
     fetchGroup();
   }, []);
 
-  const handleFormSubmit = async (data: Group) => {
+  const handleFormSubmit = async (event: SyntheticEvent) => {
+    event.preventDefault();
     try {
-      const updatedGroup = {
-        _id: group._id,
-        name: data.name,
-        teacher: data.teacher,
-      };
-
-      await GroupService.updateGroup(group._id, updatedGroup);
-      alert('You have successfully updated the group!');
+      await GroupService.updateGroup( group );
+      notification.success('עדכון כיתה הושלם בהצלחה');
       navigate('/groups');
     } catch (error) {
-      if ((error as any).response) {
-        console.log('Error response:', (error as any).response.data);
-        console.log('Error status code:', (error as any).response.status);
-      } else {
-        console.log('Error:', (error as any).message);
-      }
+      notification.error()
     }
   };
 
-  const handleGoBack = () => {
-    navigate('/groups');
-  };
 
   return (
-    <ThemeProvider theme={defaultTheme}>
       <Container maxWidth="xs">
         <Box
           sx={{
@@ -106,32 +78,27 @@ const UpdateGroup = () => {
             alignItems: 'center',
           }}
         >
-          {/* <Avatar sx={{ m: 1, bgcolor: green[500] }}>
-            <EditIcon />
-          </Avatar> */}
           <Typography component="h1" variant="h5">
             עדכון כיתה
           </Typography>
           {group && (
-            <form onSubmit={handleSubmit(handleFormSubmit)}>
+            <form onSubmit={handleFormSubmit}>
               <TextField
                 margin="normal"
                 fullWidth
                 id="name"
                 label="שם כיתה"
-                defaultValue={group.name}
+                value={group.name}
                 autoFocus
-                {...register('name')}
+                onChange={e => setGroup( {...group, name: e.target.value })}
               />
-              
-
               <FormControl margin="normal" required fullWidth>
                 <InputLabel id="teacher-label">מורה</InputLabel>
                 <Select
                   labelId="teacher-label"
                   id="teacher"
-                  {...register('teacher')}
-                  defaultValue={group.teacher}
+                  value={group.teacher}
+                  onChange={e => setGroup( {...group, teacher: e.target.value })}
                   label="מורה / גננת"
                 >
                   {users.map((user) => (
@@ -142,17 +109,19 @@ const UpdateGroup = () => {
                 </Select>
               </FormControl>
 
-              <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
-                עדכון
-              </Button>
-              <Button fullWidth variant="contained" onClick={handleGoBack}>
+              <FormControl className='flex space row gap-10' fullWidth sx={{ mt: 3, mb: 2 }}>
+              <Button fullWidth variant="outlined" onClick={() => navigate('/groups')} dir="rtl">
                 ביטול
               </Button>
+              <Button fullWidth type="submit" variant="contained" dir="rtl">
+                שמירה
+              </Button>
+            </FormControl>
+            
             </form>
           )}
         </Box>
       </Container>
-    </ThemeProvider>
   );
 };
 

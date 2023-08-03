@@ -1,6 +1,3 @@
-
-
-
 import React, { useState } from 'react';
 import {  useNavigate } from 'react-router-dom';
 import userServise from '../../../Services/UserService';
@@ -12,44 +9,27 @@ import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { ThemeProvider } from '@mui/material/styles';
-import Snackbar from '@mui/material/Snackbar';
-import MuiAlert, { AlertColor } from '@mui/material/Alert';
 import logo from "../../../Assets/logo.png";
-
+import 'react-notifications-component/dist/theme.css'
+import notification from '../../../Services/Notification';
 
 const Login = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState('');
-  const [snackbarSeverity, setSnackbarSeverity] = useState<AlertColor | undefined>('success');
-
-  const handleSnackbarClose = () => {
-    setSnackbarOpen(false);
-  };
+  const [err, setErr] = useState('');
 
   const onLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      
+      setErr("");
       const token = await userServise.login(email, password);
       localStorage.setItem('token', token);
-      setSnackbarMessage('התחברות בוצעה בהצלחה.');
-      setSnackbarSeverity('success');
-      setSnackbarOpen(true);
-      
-      setTimeout(() => {
-        navigate('/'); 
-      }, 2000); 
-      
+      setErr("התחברתם בהצלחה");
+      setTimeout( () => navigate('/') , 500);
     } catch (error) {
-      console.error(error);
-      setSnackbarMessage('אחד או יותר נתונים שהקשת שגויים.');
-      setSnackbarSeverity('error');
-      setSnackbarOpen(true);
+      setErr('אחד או יותר מהנתונים שגויים.')
+      notification.error('אחד או יותר מהנתונים שגויים.');      
     }
   };
 
@@ -105,7 +85,12 @@ const Login = () => {
             >
               התחברות
             </Button>
-            <Grid container>
+
+            <Typography>
+              {err}
+            </Typography>
+
+            <Grid container justifyContent={'center'}>
             <div className="login credit">
           <div>
             <span>פותח בשיתוף</span>
@@ -116,13 +101,8 @@ const Login = () => {
             </Grid>
           </Box>
         </Box>
+        
       </Container>
-
-      <Snackbar open={snackbarOpen} autoHideDuration={2500} onClose={handleSnackbarClose}>
-        <MuiAlert onClose={handleSnackbarClose} severity={snackbarSeverity} sx={{ width: '100%' }}>
-          {snackbarMessage}
-        </MuiAlert>
-      </Snackbar>
     </>
   );
 };

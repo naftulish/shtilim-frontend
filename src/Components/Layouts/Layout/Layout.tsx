@@ -5,6 +5,9 @@ import jwtDecode from "jwt-decode";
 import Main from "../Main/Main";
 import Aside from "../Aside/Aside";
 import "./Layout.css";
+import { ReactNotifications } from "react-notifications-component";
+import 'react-notifications-component/dist/theme.css'
+
 
 export function Layout() {
   const token = localStorage.getItem("token");
@@ -41,6 +44,7 @@ export function Layout() {
     <div className="Layout">
       <Aside user={user} />
       <Main />
+      <ReactNotifications />
     </div>
   );
 }

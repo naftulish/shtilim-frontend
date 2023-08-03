@@ -1,6 +1,7 @@
 {
   "name": "northwind-app",
   "version": "0.1.0",
+  "homepage": "https://shtilim.web.app/",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.11.0",
@@ -22,6 +23,7 @@
     "react-dom": "^18.2.0",
     "react-error-boundary": "^4.0.10",
     "react-hook-form": "^7.43.9",
+    "react-notifications-component": "^4.0.1",
     "react-pro-sidebar": "^1.1.0-alpha.1",
     "react-router-dom": "^6.11.1",
     "react-scripts": "5.0.1",
@@ -58,6 +60,7 @@
   },
   "devDependencies": {
     "@types/axios": "^0.14.0",
+    "@types/react-notifications-component": "^3.1.1",
     "@types/stylis": "^4.2.0"
   }
 }

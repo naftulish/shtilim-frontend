@@ -1,5 +1,5 @@
 
-import React, {useState} from 'react';
+import React from 'react';
 import { useForm } from 'react-hook-form';
 import { TextField, Button, Box, Container, Typography, InputLabel, Select, FormControl, MenuItem, Snackbar } from '@mui/material';
 import IUserModel, { Role } from '../../../Models/IUserModel';
@@ -7,13 +7,12 @@ import userServise from '../../../Services/UserService';
 import { ArrowBack } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import useTitle from '../../../hooks/useTitle';
-
+import notification from '../../../Services/Notification';
 
 const AddUser = () => {
+
   const { register, handleSubmit } = useForm<IUserModel>();
   const navigate = useNavigate();
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState('');
 
   useTitle("משתמשים");
 
@@ -21,14 +20,10 @@ const AddUser = () => {
   const save = async (user: IUserModel) => {
     try {
       await userServise.addUser(user);
-      setSnackbarMessage('המשתמש נשמר בהצלחה');
-      setSnackbarOpen(true);
-      setTimeout(() => {
-        navigate("/users")
-      }, 1500 );
+      notification.success('המשתמש נשמר בהצלחה');
+      setTimeout(() => navigate("/users"), 500 );
     } catch (error) {
-      setSnackbarMessage('ארעה שגיאה בשמירת המשתמש');
-      setSnackbarOpen(true);
+      notification.error('ארעה שגיאה בשמירת המשתמש');
     }
   };
 
@@ -92,7 +87,6 @@ const AddUser = () => {
             </Box>
           </Box>
         </Container>
-        <Snackbar open={snackbarOpen} message={snackbarMessage} />
 
     </>
   );

@@ -26,6 +26,11 @@ class StudentService {
     await axios.post<IStudentModel[]>(appConfig.students, student);
   }
 
+  async importStudents(data:FormData): Promise<IStudentModel[]> {
+    const response = await axios.post<IStudentModel[]>(appConfig.students + "importExcel", data );
+    return response.data;
+  }
+
   async addPlanToStudent(_id: string, plan: string): Promise<IStudentModel> {
     const response = await axios.put<IStudentModel>(appConfig.students + "add-plan-to-student/" + _id, { plan });
     return response.data;

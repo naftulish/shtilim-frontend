@@ -13,15 +13,14 @@ import DialogActions from '@mui/material/DialogActions';
 import PlanService from '../../../Services/PlanService';
 import { IPlanModel } from '../../../Models/IPlanModel';
 import useTitle from '../../../hooks/useTitle';
-import SnackbarMessage from '../../SnackbarMessage/SnackbarMessage';
 import heILGrid from '../../../Utils/HebrewIL';
+import notification from '../../../Services/Notification';
 
 const Plans = () => {
+  
   const [plans, setPlans] = useState<IPlanModel[]>([]);
   const [selectedPlan, setSelectedPlan] = useState<IPlanModel | null>(null);
   const [deleteConfirmationOpen, setDeleteConfirmationOpen] = useState(false);
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState('');
   const navigate = useNavigate();
   useTitle("תוכניות");
 
@@ -35,7 +34,7 @@ const Plans = () => {
         }));
         setPlans(plansWithIds);
       } catch (error: any) {
-        console.error('Failed to fetch plans:', error);
+        notification.error('Failed to fetch plans:', error);
       }
     };
 
@@ -54,11 +53,9 @@ const Plans = () => {
         setDeleteConfirmationOpen(false);
         setSelectedPlan(null);
         setPlans(plans.filter((plan) => plan._id !== selectedPlan._id));
-        setSnackbarMessage('Plan deleted successfully.');
-        setSnackbarOpen(true);
+        notification.success("התוכנית נשמרה בהצלחה")
       } catch (error) {
-        setSnackbarMessage('Failed to delete plan.');
-        setSnackbarOpen(true);
+        notification.error();
       }
     }
   };
@@ -68,14 +65,15 @@ const Plans = () => {
     setSelectedPlan(null);
   };
 
-  const handleSnackbarClose = () => {
-    setSnackbarOpen(false);
-  };
-
   const columns: GridColDef[] = [
     {
       field: 'name',
       headerName: 'שם תוכנית',
+      width: 200,
+    },
+    {
+      field: 'description',
+      headerName: 'תאור תוכנית',
       width: 200,
     },
     {
@@ -108,8 +106,6 @@ const Plans = () => {
     <GridToolbarContainer>
       <GridToolbarExport
         csvOptions={{
-
-          delimiter: ';',
           utf8WithBom: true,
         }}
         printOptions={{ disableToolbarButton: true }}
@@ -153,13 +149,7 @@ const Plans = () => {
             </Button>
           </DialogActions>
         </Dialog>
-        <SnackbarMessage
-          open={snackbarOpen}
-          message={snackbarMessage}
-          onClose={handleSnackbarClose}
-          severity="success"
-          autoHideDuration={3000}
-        />
+      
       </div>
     </div>
   );

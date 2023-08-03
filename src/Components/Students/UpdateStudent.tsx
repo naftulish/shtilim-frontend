@@ -1,7 +1,7 @@
 
 
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, SyntheticEvent } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
   TextField,
@@ -14,12 +14,12 @@ import {
   Select,
   MenuItem,
 } from '@mui/material';
-import { useForm } from 'react-hook-form';
 import IStudentModel from '../../Models/IStudentModel';
 import StudentService from '../../Services/StudentService';
 import IGroupModel from '../../Models/IGroupModel';
 import GroupService from '../../Services/GroupService';
 import useTitle from '../../hooks/useTitle';
+import notification from '../../Services/Notification';
 
 
 const UpdateStudent = () => {
@@ -28,18 +28,16 @@ const UpdateStudent = () => {
     _id: '',
     firstName: '',
     lastName: '',
-    dateOfBirth: new Date(),
+    dateOfBirth: '',
     gender: '',
     address: '',
     plans: [],
     group: '',
   });
-
-  useTitle("תלמידים");
-
   const navigate = useNavigate();
-  const { register, handleSubmit, setValue } = useForm<IStudentModel>();
   const [groups, setGroups] = useState<IGroupModel[]>([]);
+  
+  useTitle("תלמידים");
 
   useEffect(() => {
     const fetchStudent = async () => {
@@ -47,14 +45,6 @@ const UpdateStudent = () => {
         if (id) {
           const fetchedStudent = await StudentService.getStudent(id);
           setStudent(fetchedStudent);
-          setValue('firstName', fetchedStudent.firstName);
-          setValue('lastName', fetchedStudent.lastName);
-          setValue('dateOfBirth', fetchedStudent.dateOfBirth);
-          setValue('gender', fetchedStudent.gender);
-          setValue('plans', fetchedStudent.plans);
-          setValue('group', fetchedStudent.group);
-          setValue('address', fetchedStudent.address);
-          
         }
       } catch (error) {
         alert('Failed to fetch the student!');
@@ -62,8 +52,17 @@ const UpdateStudent = () => {
     };
   
     fetchStudent();
-  }, [id, setValue]);
+  }, []);
 
+
+  const getDate = ( str:string ) => {
+    var now = new Date(str);
+
+    var day = ("0" + now.getDate()).slice(-2);
+    var month = ("0" + (now.getMonth() + 1)).slice(-2);
+    
+    return now.getFullYear()+"-"+(month)+"-"+(day) ;
+  }
   
 
   useEffect(() => {
@@ -72,42 +71,22 @@ const UpdateStudent = () => {
         const fetchedGroups = await GroupService.getAllGroups();
         setGroups(fetchedGroups);
       } catch (error) {
-        console.log(error);
-        alert('Failed to fetch the groups!');
+        notification.error();
       }
     };
 
     fetchGroups();
   }, []);
 
-  const handleFormSubmit = async (data: IStudentModel) => {
+  const save = async (event: SyntheticEvent ) => {
+    event.preventDefault();
     try {
-      const updatedStudent = {
-        _id: student._id,
-        firstName: data.firstName,
-        lastName: data.lastName,
-        dateOfBirth: data.dateOfBirth,
-        gender: data.gender,
-        address: data.address,
-        plans: data.plans,
-        group: data.group,
-      };
-
-      await StudentService.updateOneStudent(student._id, updatedStudent);
-      alert('You have successfully updated the student!');
+      await StudentService.updateOneStudent(student._id, student);
+      notification.success("העדכון בוצע בהצלחה");
       navigate('/students');
     } catch (error: any) {
-      if (error.response) {
-        console.log('Error response:', error.response.data);
-        console.log('Error status code:', error.response.status);
-      } else {
-        console.log('Error:', error.message);
-      }
+      notification.error();
     }
-  };
-
-  const handleGoBack = () => {
-    navigate('/students');
   };
 
   return (
@@ -124,16 +103,16 @@ const UpdateStudent = () => {
             עדכון תלמיד
           </Typography>
           {student && (
-            <form onSubmit={handleSubmit(handleFormSubmit)}>
+            <form onSubmit={save}>
               <TextField
                 margin="normal"
                 required
                 fullWidth
                 id="firstName"
                 label="שם פרטי"
-                defaultValue={student.firstName}
                 autoFocus
-                {...register('firstName')}
+                value={student.firstName}
+                onChange={e => setStudent( {...student, firstName: e.target.value })}
               />
 
               <TextField
@@ -142,8 +121,8 @@ const UpdateStudent = () => {
                 fullWidth
                 id="lastName"
                 label="שם משפחה"
-                defaultValue={student.lastName}
-                {...register('lastName')}
+                value={student.lastName}
+                onChange={e => setStudent( {...student, lastName : e.target.value })}
               />
 
               <TextField
@@ -153,11 +132,9 @@ const UpdateStudent = () => {
                 id="dateOfBirth"
                 label="תאריך לידה"
                 type="date"
-                defaultValue={student.dateOfBirth}
-                {...register('dateOfBirth')}
-                InputLabelProps={{
-                  shrink: true,
-                }}
+                value={getDate(student.dateOfBirth)}
+                onChange={e => setStudent( {...student, dateOfBirth: e.target.value })}
+
               />
 
               <FormControl margin="normal" required fullWidth>
@@ -165,8 +142,8 @@ const UpdateStudent = () => {
                 <Select
                   labelId="gender-label"
                   id="gender"
-                  {...register('gender')}
-                  defaultValue={student.gender}
+                  value={student.gender}
+                onChange={e => setStudent( {...student, gender: e.target.value })}
                   label="מין"
                 >
                   <MenuItem value="זכר">זכר</MenuItem>
@@ -179,8 +156,8 @@ const UpdateStudent = () => {
                 <Select
                   labelId="group-label"
                   id="group"
-                  {...register('group')}
-                  defaultValue={student.group}
+                  value={student.group}
+                  onChange={e => setStudent( {...student, group: e.target.value })}
                   label="כיתה"
                 >
                   {groups.map((group) => (
@@ -197,8 +174,8 @@ const UpdateStudent = () => {
                 fullWidth
                 id="address"
                 label="כתובת"
-                defaultValue={student.address}
-                {...register('address')}
+                value={student.address}
+                onChange={e => setStudent( {...student, address: e.target.value })}
               />
               <FormControl className='flex space row gap-10' fullWidth sx={{ mt: 3, mb: 2 }}>
                 <Button fullWidth variant="outlined" onClick={ () => navigate('/students')}>

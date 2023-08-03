@@ -15,14 +15,12 @@ import useTitle from '../../hooks/useTitle';
 import IUserModel from '../../Models/IUserModel';
 import UserService from '../../Services/UserService';
 import heILGrid from '../../Utils/HebrewIL';
+import notification from '../../Services/Notification';
 
 const Groups = () => {
   const [groups, setGroups] = useState<IGroupModel[]>([]);
   const [selectedGroup, setSelectedGroup] = useState<IGroupModel | null>(null);
   const [deleteConfirmationOpen, setDeleteConfirmationOpen] = useState(false);
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState('');
-  const [showReports, setShowReports] = useState(false);
   const navigate = useNavigate();
   useTitle("כיתות");
 
@@ -55,8 +53,7 @@ const Groups = () => {
           userMap[user._id] = `${user.firstName} ${user.lastName}`;
         });
       } catch (error) {
-        console.error('Failed to fetch users:', error);
-        // You can add additional error handling here if needed
+        notification.error();
       }
     };
   
@@ -72,15 +69,13 @@ const Groups = () => {
   const handleConfirmDelete = async () => {
     if (selectedGroup) {
       try {
-        await GroupService.deleteGroup(selectedGroup._id);
+        await GroupService.deleteGroup(selectedGroup._id || "" );
         setDeleteConfirmationOpen(false);
         setSelectedGroup(null);
         setGroups(groups.filter((group) => group._id !== selectedGroup._id));
-        setSnackbarMessage('Group deleted successfully.');
-        setSnackbarOpen(true);
+        notification.success("הכיתה נמחקה בהצלחה");
       } catch (error) {
-        setSnackbarMessage('Failed to delete group.');
-        setSnackbarOpen(true);
+        notification.error();
       }
     }
   };
@@ -88,10 +83,6 @@ const Groups = () => {
   const handleCancelDelete = () => {
     setDeleteConfirmationOpen(false);
     setSelectedGroup(null);
-  };
-
-  const handleSnackbarClose = () => {
-    setSnackbarOpen(false);
   };
 
   const columns: GridColDef[] = [
@@ -134,8 +125,6 @@ const Groups = () => {
     <GridToolbarContainer>
       <GridToolbarExport
         csvOptions={{
-
-          delimiter: ';',
           utf8WithBom: true,
         }}
         printOptions={{ disableToolbarButton: true }}
@@ -168,7 +157,6 @@ const Groups = () => {
           }}
         />
 
-      <Snackbar open={snackbarOpen} message={snackbarMessage} onClose={handleSnackbarClose} />
       <Dialog open={deleteConfirmationOpen} onClose={handleCancelDelete}>
         <DialogTitle>מחק כיתה</DialogTitle>
         <DialogContent>אתה בטוח שברצונך למחוק את הקבוצה הזו?</DialogContent>

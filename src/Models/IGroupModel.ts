@@ -4,3 +4,4 @@ interface Group{
     teacher: string,
 }
 export default Group;
+

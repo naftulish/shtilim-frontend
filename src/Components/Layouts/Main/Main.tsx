@@ -39,8 +39,7 @@ function Main(): JSX.Element {
         {isAdmin && <Route path="/import" element={<Import />} />}
         {isAdmin && <Route path="/add-user" element={<AddUser />} />}
         {isAdmin && <Route path="/update-user/:id" element={<UpdateUser />} />}
-        {isAdmin && <Route path="/plans" element={<Plans />} />}
-        {isAdmin && <Route path="/add-plan" element={<AddPlan />} />}
+        
         {isAdmin && <Route path="/groups" element={<Groups />} />}
         {isAdmin && <Route path="/add-group" element={<AddGroup />} />}
         {isAdmin && <Route path="/update-group/:id" element={<UpdateGroup />} />}
@@ -50,6 +49,8 @@ function Main(): JSX.Element {
             <Route path="/students" element={<Students />} />
             <Route path="/update-student/:id" element={<UpdateStudent />} />
             <Route path="/add-student" element={<AddStudent />} />
+            <Route path="/plans" element={<Plans />} />
+            <Route path="/add-plan" element={<AddPlan />} />
           </>
         )}
 

@@ -7,3 +7,4 @@ interface IActivityModel{
     userId: string
 }
 export default IActivityModel;
+

@@ -98,7 +98,7 @@ const AddStudent = () => {
                 </Select>
               </FormControl>
 
-              <FormControl margin="normal" required fullWidth>
+              <FormControl margin="normal"  fullWidth>
                 <InputLabel id="group-label">כיתה</InputLabel>
                 <Select
                   labelId="group-label"
